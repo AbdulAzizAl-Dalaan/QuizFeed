@@ -1,4 +1,51 @@
-# Getting Started with Create React App
+[![React](https://skillicons.dev/icons?i=react)](https://reactjs.org/docs/hello-world.html)
+[![Bootstrap](https://skillicons.dev/icons?i=bootstrap)](https://react-bootstrap.github.io/getting-started/introduction/)
+
+# Using React Router
+`index.js`\
+This file handles all URL routing.
+Use the following to add a new route:
+```
+<Route path='' element={} />
+```
+
+If you nest routes, the paths will stack.<br><br>
+**Example:**\
+account/sign-in, account/view, and account/sign-out are all separate pages:
+```
+<Route path="account">
+    <Route path="sign-in" element={<SignIn />} />
+    <Route path="view" element={<AccountView />} />
+    <Route path="sign-out" element={<SignOut />} />
+</Route>
+```
+If you nest routes, and include an element in the parent Route, you can have its children still render using React Router's [Outlet](https://reactrouter.com/en/6.8.2/components/outlet).
+
+<br>
+
+# Using Font Awesome
+Find an icon you want to use [here](https://fontawesome.com/search?o=r&s=solid%2Cregular).
+
+Then in your file, make sure to import FontAwesome:
+```
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+```
+as well as icon you want to use from either the solid or regular library, replacing NAME with the icon's name in PascalCase:
+```
+import { faNAME } from '@fortawesome/free-solid-svg-icons'
+or
+import { faNAME } from '@fortawesome/free-regular-svg-icons'
+```
+<br>
+
+**Example:**\
+Wanting to import ["rotate-left"](https://fontawesome.com/icons/rotate-left?s=solid&f=classic).
+```
+import { faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+```
+<br>
+
+# Using React
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
