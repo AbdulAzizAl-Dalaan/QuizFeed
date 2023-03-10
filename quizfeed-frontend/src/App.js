@@ -1,3 +1,4 @@
+import './App.css';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import GlobalNavbar from './components/GlobalNavbar';

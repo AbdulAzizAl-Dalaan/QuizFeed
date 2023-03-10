@@ -1,0 +1,15 @@
+.q-darkBlue {
+    border-radius: 25px;
+    background-color: #0D1821;
+    color: #F0F4EF;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+.q-mediumBlue {
+    border-radius: 25px;
+    background-color: #344966;
+    color: #F0F4EF;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}

@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App';
+// Routing
+import QuizDisplay from './components/quiz/QuizDisplay';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,6 +16,7 @@ ReactDOM.render(
       <Routes>
         <Route path='/' element={<App />}>
           {/* Default page: can make it home page when that's created -- <Route index element={ } /> */}
+          <Route path='quiz' element={<QuizDisplay />} />
         </Route>
       </Routes>
     </Router>

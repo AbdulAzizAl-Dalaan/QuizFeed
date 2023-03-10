@@ -1,0 +1,49 @@
+.b-mediumBlue {
+    background-color: #344966;
+    border-color: #B4CDED;
+    border-width: 2px;
+    color: #B4CDED;
+}
+
+.b-mediumBlue:active,
+.b-mediumBlue:active:focus,
+.b-mediumBlue:focus {
+    background-color: #4b6180;
+    border-color: #B4CDED;
+    border-width: 2px;
+    color: #B4CDED;
+    box-shadow: 0 0 5px 1px #4b6180;
+}
+
+.b-mediumBlue:hover,
+.b-mediumBlue:hover:active:focus {
+    background-color: #4b6180;
+    border-color: #B4CDED;
+    border-width: 2px;
+    color: #B4CDED;
+}
+
+.b-lightBlue {
+    background-color: #B4CDED;
+    border-color: #F0F4EF;
+    border-width: 2px;
+    color: #344966;
+}
+
+.b-lightBlue:active,
+.b-lightBlue:active:focus,
+.b-lightBlue:focus {
+    background-color: #c5d8f1;
+    border-color: #F0F4EF;
+    border-width: 2px;
+    color: #344966;
+    box-shadow: 0 0 5px 1px #c5d8f1;
+}
+
+.b-lightBlue:hover,
+.b-lightBlue:hover:active:focus {
+    background-color: #c5d8f1;
+    border-color: #F0F4EF;
+    border-width: 2px;
+    color: #344966;
+}
