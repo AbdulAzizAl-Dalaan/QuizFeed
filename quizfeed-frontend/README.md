@@ -45,6 +45,27 @@ import { faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 ```
 <br>
 
+# Communicating with Backend
+
+We can utilize the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch).
+
+**Example:**\
+If the backend looks like this:
+```
+router.get('/test', function (req, res, next) {
+  res.send('test');
+});
+```
+You can get the string 'test' by:
+```
+React.useEffect(() => {
+    fetch('/test')
+    .then(res => res.text())
+    .then(res => [insert code here w/o brackets for what you want to do with the string]);
+}, []);
+```
+<br>
+
 # Using React
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

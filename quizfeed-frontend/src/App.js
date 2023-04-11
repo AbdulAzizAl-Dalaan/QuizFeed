@@ -6,7 +6,7 @@ import GlobalNavbar from './components/GlobalNavbar';
 
 export default function App() {
     return (
-        <div className="App">
+        <div className='App'>
             <GlobalNavbar />
             <Outlet />
             {/* <Footer /> */}
