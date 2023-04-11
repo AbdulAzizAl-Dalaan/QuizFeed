@@ -5,70 +5,61 @@ var router = express.Router();
 
 /* GET home page. */
 
-router.get('/', function(req, res, next) {
-  if(req.query.msg)
-  {
+router.get('/', function (req, res, next) {
+  if (req.query.msg) {
     res.locals.msg = req.query.msg
   }
-  res.render('index');
 });
 
-router.post('/login', async function(req, res, next) {
+router.post('/login', async function (req, res, next) {
   const user = await User.findUser(req.body.username, req.body.password)
-  if(user !== null)
-  {
+  if (user !== null) {
     req.session.user = user
     res.redirect("/home")
   }
-  else
-  {
+  else {
     res.redirect("/?msg=fail")
   }
 });
 
-router.get('/register', function(req, res, next) {
+router.get('/register', function (req, res, next) {
   res.render('register');
 });
 
-router.post('/register', async function(req, res, next) {
+router.post('/register', async function (req, res, next) {
   const user = await User.findByPk(req.body.username);
-  const email = await User.findOne({where: {email: req.body.email}})
-  if(user !== null)
-  {
+  const email = await User.findOne({ where: { email: req.body.email } })
+  if (user !== null) {
     console.log("User Already Exists: " + req.body.username);
     res.redirect('/register?msg=username+already+exists')
   }
-  else if (email !== null)
-  {
+  else if (email !== null) {
     console.log("Email Already Exists: " + req.body.email);
     res.redirect('/register?msg=email+already+exists')
   }
-  else
-  {
+  else {
     console.log("Creating User: " + req.body.username)
     await User.create({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        number: req.body.number
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email,
+      number: req.body.number
     })
     res.redirect('/')
   }
 });
 
 
-router.get('/settings', async function(req, res, next) {
+router.get('/settings', async function (req, res, next) {
   console.log("SESSION USER IS " + req.session.user)
   const user = await User.findByPk(req.session.user.username)
   console.log("USER IS " + user.username)
-  if (user)
-  {
-    res.render('settings', {user});
+  if (user) {
+    res.render('settings', { user });
   }
-  else
-  {
+  else {
     res.redirect('/')
   }
 });
@@ -76,13 +67,12 @@ router.get('/settings', async function(req, res, next) {
 
 
 
-router.post('/settings', async function(req, res, next) {
+router.post('/settings', async function (req, res, next) {
   const user = await User.findByPk(req.session.user.username)
   const checkUser = await User.findByPk(req.body.username)
-  const checkEmail = await User.findOne({where: {email: req.body.email}})
+  const checkEmail = await User.findOne({ where: { email: req.body.email } })
 
-  if (req.session.user)
-  {
+  if (req.session.user) {
 
     if (req.body.username !== req.session.user.username && checkUser) // Check if username is being changed
     {
@@ -96,8 +86,7 @@ router.post('/settings', async function(req, res, next) {
     {
       res.redirect('/settings?msg=passwords+do+not+match')
     }
-    else
-    {
+    else {
       if (req.body.username !== '' && req.body.username !== req.session.user.username) //  username is being changed
       {
         console.log("DESTROYING AND CREATING USER: " + req.body.username)
@@ -113,15 +102,14 @@ router.post('/settings', async function(req, res, next) {
         req.session.destroy()
         res.redirect('/?msg=account+updated+please+login+again')
       }
-      else
-      {
+      else {
         console.log("UPDATING USER: " + req.body.username)
         await User.update({
-            firstname: req.body.firstname ? req.body.firstname : user.firstname,
-            lastname: req.body.lastname ? req.body.lastname : user.lastname,
-            password: req.body.password ? req.body.password : user.password,
-            email: req.body.email ? req.body.email : user.email,
-            number: req.body.number ? req.body.number : user.number
+          firstname: req.body.firstname ? req.body.firstname : user.firstname,
+          lastname: req.body.lastname ? req.body.lastname : user.lastname,
+          password: req.body.password ? req.body.password : user.password,
+          email: req.body.email ? req.body.email : user.email,
+          number: req.body.number ? req.body.number : user.number
         }, {
           where: {
             username: req.session.user.username
@@ -131,18 +119,16 @@ router.post('/settings', async function(req, res, next) {
       }
     }
   }
-  else
-  {
+  else {
     res.redirect('/')
   }
 
 });
 
 
-router.post('/deleteaccount', async function(req, res, next) {
+router.post('/deleteaccount', async function (req, res, next) {
   console.log("SESSION USER IS " + req.session.user)
-  if (req.session.user)
-  {
+  if (req.session.user) {
     await User.destroy({
       where: {
         username: req.session.user.username
@@ -151,44 +137,37 @@ router.post('/deleteaccount', async function(req, res, next) {
     req.session.destroy()
     res.redirect('/')
   }
-  else
-  {
+  else {
     res.redirect('/')
   }
 });
 
-router.get('/logout', function(req, res, next) {
-  if (req.session.user)
-  {
+router.get('/logout', function (req, res, next) {
+  if (req.session.user) {
     req.session.destroy()
     res.redirect("/?msg=logout")
   }
-  else
-  {
+  else {
     res.redirect("/")
   }
 });
 
-router.get('/forgotpassword', function(req, res, next) {
+router.get('/forgotpassword', function (req, res, next) {
   res.render('forgotpassword');
 });
 
-router.post('/forgotpassword', async function(req, res, next) {
-  const user = await User.findOne({where: {email: req.body.email}})
+router.post('/forgotpassword', async function (req, res, next) {
+  const user = await User.findOne({ where: { email: req.body.email } })
   console.log(req.body.password + " " + req.body.password2)
   console.log(req.body.password !== req.body.password2)
-  if (!user)
-  {
+  if (!user) {
     res.redirect('/forgotpassword?msg=email+not+found')
   }
-  else
-  {
-    if (req.body.password !== req.body.password2)
-    {
+  else {
+    if (req.body.password !== req.body.password2) {
       res.redirect('/forgotpassword?msg=passwords+do+not+match')
     }
-    else
-    {
+    else {
       await User.update({
         password: req.body.password
       }, {
@@ -202,19 +181,19 @@ router.post('/forgotpassword', async function(req, res, next) {
 });
 
 
-router.post('/search', async function(req, res, next) {
+router.post('/search', async function (req, res, next) {
   res.redirect('/search')
 });
 
-router.post('/friends', async function(req, res, next) {
+router.post('/friends', async function (req, res, next) {
   res.redirect('/friends')
 });
 
-router.post('/newquizzes', async function(req, res, next) {
+router.post('/newquizzes', async function (req, res, next) {
   res.redirect('/newquizzes')
 });
 
-router.post('/trendingquizzes', async function(req, res, next) {
+router.post('/trendingquizzes', async function (req, res, next) {
   res.redirect('/trendingquizzes')
 });
 
