@@ -3,10 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const session = require('express-session')
+const session = require('express-session');
 const sequelize = require('./db');
-const User = require('./models/User')
-const Friends = require('./models/Friends')
+const User = require('./models/User');
+const Friends = require('./models/Friends');
 
 var indexRouter = require('./routes/index');
 var homeRouter = require('./routes/home');
@@ -34,7 +34,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
-}))
+}));
 
 app.use('/', indexRouter);
 app.use('/home', homeRouter);
@@ -44,12 +44,12 @@ app.use('/newquizzes', newQuizzesRouter);
 app.use('/trendingquizzes', trendingQuizzesRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -60,15 +60,15 @@ app.use(function(err, req, res, next) {
 });
 
 async function setup() {
-  const subu = await User.create({firstname: 'subu',lastname:"Kandasawny", username: 'subu', password: '1234', email: 'subu@wsu.edu', number: '123-456-7890'})
-  const user1 = await User.create({firstname: 'Jon',lastname:"Doe", username: 'JDoe', password: '1234', email: 'JDoe@gmail.com', number: '123-456-7899'})
-  const user2 = await User.create({firstname: 'Sam',lastname:"Hawkins", username: 'SHawk', password: '1234', email: 'Shawk@gmail.com' , number: '123-456-7898'})
+  const subu = await User.create({ firstname: 'subu', lastname: "Kandasawny", username: 'subu', password: '1234', email: 'subu@wsu.edu', number: '123-456-7890' })
+  const user1 = await User.create({ firstname: 'Jon', lastname: "Doe", username: 'JDoe', password: '1234', email: 'JDoe@gmail.com', number: '123-456-7899' })
+  const user2 = await User.create({ firstname: 'Sam', lastname: "Hawkins", username: 'SHawk', password: '1234', email: 'Shawk@gmail.com', number: '123-456-7898' })
   console.log("User created")
 }
 
-sequelize.sync({force: true}).then(()=>{
+sequelize.sync({ force: true }).then(() => {
   console.log("Database synced")
-  setup().then(()=>console.log("Setup completed"))
-})
+  setup().then(() => console.log("Setup completed"))
+});
 
 module.exports = app;
