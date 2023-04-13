@@ -23,7 +23,7 @@ function StyledButton({ redirectPath, onClick, variant, size, disabled, children
 
     return (
         <Button
-            className={variant}
+            className={variant ? variant : 'b-mediumBlue'}
             size={size}
             onClick={onClick === 'none' ? redirect : onClick}
             disabled={disabled}

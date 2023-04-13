@@ -2,38 +2,45 @@ import './Question.css';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Stack from 'react-bootstrap/Stack';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import StyledButton from '../StyledButton';
 
 /*
 * Individual question
 * number: What number question
-* questionVariant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
-* buttonVariants: Array of styles for the buttons (see StyledButton for variant options)
+* text: What question
+* choices: Available options to pick for question
+* variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
+* onClick: What should happen when one of the question's choices is selected
 */
-function Question({ number, questionVariant, buttonVariants }) {
-
+function Question({ number, text, choices, variant, onClick }) {
     return (
         <Container>
-            <Stack className={questionVariant} gap={1}>
-                <h1 className='ms-5 mt-4' style={{ 'font-family': 'Montagu Slab, serif' }} >Question {number}</h1>
+            <Stack className={variant ? variant : 'q-darkBlue'} gap={1}>
+                <h1 className='ms-5 mt-4' style={{ 'fontFamily': 'Montagu Slab, serif' }} >Question {number + 1}</h1>
                 <div className='text-center fs-3 mb-3'>
-                    Question question question?
+                    {text}
                 </div>
-                <Stack className='justify-content-center mb-4' direction='horizontal' gap={3}>
-                    <StyledButton variant={buttonVariants[0]}>Option 1</StyledButton>
-                    <StyledButton variant={buttonVariants[1]}>Option 2</StyledButton>
-                    <StyledButton variant={buttonVariants[2]}>Option 3</StyledButton>
-                    <StyledButton variant={buttonVariants[3]}>Option 4</StyledButton>
-                </Stack>
+                <Row className='justify-content-center mb-4 choices' md='auto'>
+                    {choices ?
+                        choices.map((choice, idx) => {
+                            return (
+                                <Col key={idx} className='mb-4' md='auto'>
+                                    <StyledButton variant={choice.variant} onClick={(e) => onClick(e, number, idx)}>{choice.text}</StyledButton>
+                                </Col>
+                            );
+                        })
+                        : <div />}
+                </Row>
             </Stack>
-        </Container>
+        </Container >
     );
 }
 
 Question.defaultProps = {
     number: 0,
-    questionVariant: 'q-darkBlue',
-    buttonVariants: ['b-mediumBlue', 'b-mediumBlue', 'b-mediumBlue', 'b-mediumBlue']
+    variant: 'q-darkBlue'
 };
 
 export default Question;
