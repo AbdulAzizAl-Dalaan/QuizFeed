@@ -12,7 +12,10 @@ export default function QuizDisplay() {
     const urlParams = useParams();
     const navigate = useNavigate();
     const [quizData, setQuizData] = React.useState();
+    // keeps track of what answers the user has selected
     const [userAnswers, setUserAnswers] = React.useState();
+    // used to determine if the submit button should be enabled (only if all questions have been answered)
+    const [answerCounter, setAnswerCounter] = React.useState(false);
 
     // Load the quiz questions and initialize the user's answers to nothing
     React.useEffect(() => {
@@ -29,6 +32,10 @@ export default function QuizDisplay() {
     function onClickChoice(e, question, newAnswer) {
         e.preventDefault();
 
+        // if a choice had not been previously chosen for this question, increment counter
+        // this way when answerCounter equals number of questions, the user can submit
+        if (userAnswers[question] === -1) setAnswerCounter(answerCounter + 1);
+
         setUserAnswers(
             userAnswers.map((answer, idx) => {
                 return (idx === question) ? newAnswer : answer;
@@ -40,6 +47,11 @@ export default function QuizDisplay() {
     // It checks to make sure all questions have been answered, and if so, calculates the result and redirects accordingly
     function onClickSubmit(e) {
         e.preventDefault();
+
+        // check to make sure all questions have been answered
+        if (!userAnswers.every((answer) => answer !== -1)) {
+            return;
+        }
 
         let totalPoints = new Array(quizData.results.length).fill(0);
         for (let question = 0; question < quizData.questions.length; question++) {
@@ -77,6 +89,8 @@ export default function QuizDisplay() {
                         <StyledButton
                             variant='b-mediumBlue'
                             onClick={onClickSubmit}
+                            disabled={answerCounter !== quizData.questions.length}
+                            tooltip='Answer all questions to continue'
                         >Generate Results</StyledButton>
                     </div>
                 </Stack>}

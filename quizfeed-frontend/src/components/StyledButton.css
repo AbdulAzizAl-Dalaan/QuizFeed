@@ -5,6 +5,13 @@
     color: #B4CDED;
 }
 
+.b-mediumBlue:disabled {
+    background-color: #35537c;
+    border-color: #445468;
+    border-width: 2px;
+    color: #8597af;
+}
+
 .b-mediumBlue:active,
 .b-mediumBlue:active:focus,
 .b-mediumBlue:focus {
