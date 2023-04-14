@@ -14,7 +14,7 @@ import StyledButton from '../StyledButton';
 * variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
 * onClick: What should happen when one of the question's choices is selected
 */
-function Question({ number, text, choices, variant, onClick }) {
+function Question({ number, text, choices, chosenChoice, variant, onClick }) {
     return (
         <Container>
             <Stack className={variant ? variant : 'q-darkBlue'} gap={1}>
@@ -23,15 +23,21 @@ function Question({ number, text, choices, variant, onClick }) {
                     {text}
                 </div>
                 <Row className='justify-content-center mb-4 choices' md='auto'>
-                    {choices ?
+                    {choices &&
                         choices.map((choice, idx) => {
                             return (
                                 <Col key={idx} className='mb-4' md='auto'>
-                                    <StyledButton variant={choice.variant} onClick={(e) => onClick(e, number, idx)}>{choice.text}</StyledButton>
+                                    {/* only change to a new styling if one has been chosen and it's not the current one */}
+                                    <StyledButton
+                                        variant={chosenChoice === -1 || chosenChoice === idx ?
+                                            choice.variant :
+                                            choice.variant + '-notChosen'}
+                                        onClick={(e) => onClick(e, number, idx)}>
+                                        {choice.text}
+                                    </StyledButton>
                                 </Col>
                             );
-                        })
-                        : <div />}
+                        })}
                 </Row>
             </Stack>
         </Container >

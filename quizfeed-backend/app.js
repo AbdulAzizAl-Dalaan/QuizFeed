@@ -79,64 +79,33 @@ async function setup() {
         text: 'question question?',
         variant: 'q-mediumBlue',
         choices: [
-          { text: 'choice 1', variant: 'b-lightBlue' },
-          { text: 'choice 2' },
+          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
+          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
+          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
         ]
       },
       {
         text: 'question?',
+        variant: 'q-mediumBlue',
         choices: [
-          { text: 'choice 3' },
-          { text: 'choice 4' }
-        ]
-      },
-      {
-        text: 'question?',
-        choices: [
-          { text: 'choice 3' },
-          { text: 'choice 4' },
-          { text: 'choice' },
-          { text: 'choice' }
-        ]
-      }, {
-        text: 'question?',
-        choices: [
-          { text: 'choice 3' },
-          { text: 'choice 4' },
-          { text: 'choice' }
-        ]
-      }, {
-        text: 'question?',
-        choices: [
-          { text: 'choice 3' },
-          { text: 'choice 4' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' }
-        ]
-      }, {
-        text: 'question?',
-        choices: [
-          { text: 'this is one option' },
-          { text: 'choice' },
-          { text: 'here is another one thats a bit longer' },
-          { text: 'bigger one yet again' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'this is testing the limits' },
-          { text: 'choice' },
-          { text: 'choice' },
-          { text: 'choice' }
+          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
+          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
+          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
         ]
       }
     ],
+    results: [
+      {
+        title: 'Result 1',
+        description: 'Description 1'
+      },
+      {
+        title: 'Result 2',
+        description: 'Description 2'
+      }
+    ]
   }, {
-    include: [{ association: 'questions', include: ['choices'] }]
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
   });
   console.log("Quiz created");
 }

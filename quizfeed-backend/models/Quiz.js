@@ -67,7 +67,7 @@ Question.init({
     },
     variant: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     }
 }, {
     sequelize,
@@ -90,11 +90,39 @@ Choice.init({
     },
     variant: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false
+    },
+    points: {
+        // only a string because since sqlite does not support arrays
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     sequelize,
     modelName: 'Choice'
+});
+
+class Result extends Model {
+}
+
+Result.init({
+    id: {
+        primaryKey: true,
+        autoIncrement: true,
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+}, {
+    sequelize,
+    modelName: 'Result'
 });
 
 Quiz.hasMany(Question, { as: 'questions' });
@@ -102,4 +130,7 @@ Question.belongsTo(Quiz);
 Question.hasMany(Choice, { as: 'choices' });
 Choice.belongsTo(Question);
 
-module.exports = { Quiz, Question, Choice };
+Quiz.hasMany(Result, { as: 'results' });
+Result.belongsTo(Quiz);
+
+module.exports = { Quiz, Question, Choice, Result };
