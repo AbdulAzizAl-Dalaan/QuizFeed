@@ -72,8 +72,9 @@ async function setup() {
     title: 'Quiz Title',
     creatorUsername: 'user who created quiz',
     description: 'quiz description',
-    takenNum: 0,
-    approval: 56,
+    takenNum: 30,
+    upvotes: 10,
+    downvotes: 1,
     questions: [
       {
         text: 'question question?',

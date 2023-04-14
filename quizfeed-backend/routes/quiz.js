@@ -12,4 +12,14 @@ router.get('/:id/:result', async function (req, res, next) {
         .then(result => res.json(result));
 });
 
+// create quiz
+router.post('/', async function (req, res, next) {
+    Quiz.create(
+        req.body,
+        {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]}
+    )
+    .then(quiz => res.json(quiz))
+    .catch((err)=>res.status(500).json(err));
+});
+
 module.exports = router;

@@ -2,6 +2,13 @@ const sequelize = require('../db');
 const { Model, DataTypes } = require('sequelize');
 
 class Quiz extends Model {
+    // returns approval rating percentage in range [0,1]
+    // returns null if there are no votes
+    approval()
+    {
+        // shortcircuiting: if both upvotes and downvotes are null return null, otherwise return computation
+        return (this.upvotes || this.downvotes) && this.upvotes / (this.upvotes + this.downvotes);
+    }
 }
 
 Quiz.init({
@@ -25,11 +32,18 @@ Quiz.init({
     },
     takenNum: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
     },
-    approval: {
-        type: DataTypes.FLOAT,
-        allowNull: false
+    upvotes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    downvotes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -71,7 +85,8 @@ Question.init({
     }
 }, {
     sequelize,
-    modelName: 'Question'
+    modelName: 'Question',
+    timestamps: false
 });
 
 class Choice extends Model {
@@ -99,7 +114,8 @@ Choice.init({
     }
 }, {
     sequelize,
-    modelName: 'Choice'
+    modelName: 'Choice',
+    timestamps: false
 });
 
 class Result extends Model {
@@ -122,7 +138,8 @@ Result.init({
     }
 }, {
     sequelize,
-    modelName: 'Result'
+    modelName: 'Result',
+    timestamps: false
 });
 
 Quiz.hasMany(Question, { as: 'questions' });
