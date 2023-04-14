@@ -25,11 +25,13 @@ Quiz.init({
     },
     takenNum: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
     },
     approval: {
         type: DataTypes.FLOAT,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -119,6 +121,11 @@ Result.init({
     description: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    receivedNum: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     }
 }, {
     sequelize,

@@ -1,8 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import QuizInfo from './QuizInfo';
 
+// Displays the results page for a quiz, and does so in a way that allows for the url to be shared and it works
 export default function QuizDisplay() {
     const urlParams = useParams();
+    const [quizData, setQuizData] = React.useState();
     const [resultData, setResultData] = React.useState();
 
     // Load the results
@@ -10,15 +13,16 @@ export default function QuizDisplay() {
         fetch('/quiz/' + urlParams.id + '/' + urlParams.result)
             .then(res => res.json())
             .then(data => {
-                setResultData(data);
-                console.log(data);
+                setQuizData(data);
+                setResultData(data.results[urlParams.result - 1]);
             });
     }, [urlParams]);
 
     return (
         <div>
-            {resultData &&
+            {quizData &&
                 <div>
+                    <QuizInfo quizData={quizData} />
                     <h1>{resultData.title}</h1>
                     <h2>{resultData.description}</h2>
                 </div>

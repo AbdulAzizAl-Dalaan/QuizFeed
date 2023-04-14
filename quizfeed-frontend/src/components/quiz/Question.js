@@ -11,6 +11,7 @@ import StyledButton from '../StyledButton';
 * number: What number question
 * text: What question
 * choices: Available options to pick for question
+* chosenChoice: -1 if none have been chosen, otherwise should be index of chosen choice
 * variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
 * onClick: What should happen when one of the question's choices is selected
 */
