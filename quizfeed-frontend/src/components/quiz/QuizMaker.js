@@ -9,33 +9,57 @@ import StyledButton from '../StyledButton';
 
 // todo: pass in initial values for quiz - will allow editing
 export default function QuizMaker() {
-    const [quizData, setQuizData] = React.useState(
-      {
-        CreatorUsername: "",
+    const [quizData, setQuizData] = React.useState({
+        creatorUsername: "generic", // fake username so we can post
         title: "Title",
         description: "Description",
         questions: [],
         results: []
-      }
-    );
+    });
+
+     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    async function postData(url = "", data = {})
+    {
+        const response = await fetch(url, {
+            method: "POST",
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json"},
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
 
     // convert data to format required by database
-    // function prepDataForSave()
-    // {
-    //     // convert each points array to comma separated string
-    //     return {...quizData, questions: questions}
-    // }
+    function prepDataForSave()
+    {
+        // convert each points array to comma separated string
+        let questions = quizData.questions.map((q_v) => {
+            let c = q_v.choices.map((c_v) => {
+                return {...c_v, points: c_v.points.join(",")}
+            });
+            return {...q_v, choices: c};
+        });
+        return {...quizData, questions: questions}
+    }
 
     // function onClickAddTag(e) {
     // }
 
     function onClickPublish(e) {
+        // set quiz to published status
         // save
-        // set to published status
+        postData("/quiz/", prepDataForSave())
+        .then((ret)=>console.log(ret))
+        .catch((err)=>console.log(err));
     }
 
     function onClickSave(e) {
-        // save
+        postData("/quiz/", prepDataForSave())
+        .then((ret)=>console.log(ret))
+        .catch((err)=>console.log(err));
     }
 
     function onClickAddResult(e) {

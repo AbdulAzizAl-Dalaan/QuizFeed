@@ -63,9 +63,9 @@ app.use(function (err, req, res, next) {
 });
 
 async function setup() {
-  const subu = await User.create({ firstname: 'subu', lastname: "Kandasawny", username: 'subu', password: '1234', email: 'subu@wsu.edu', number: '123-456-7890' })
-  const user1 = await User.create({ firstname: 'Jon', lastname: "Doe", username: 'JDoe', password: '1234', email: 'JDoe@gmail.com', number: '123-456-7899' })
-  const user2 = await User.create({ firstname: 'Sam', lastname: "Hawkins", username: 'SHawk', password: '1234', email: 'Shawk@gmail.com', number: '123-456-7898' })
+  const subu = await User.findOrCreate({where: { firstname: 'subu', lastname: "Kandasawny", username: 'subu', password: '1234', email: 'subu@wsu.edu', number: '123-456-7890' }})
+  const user1 = await User.findOrCreate({where: { firstname: 'Jon', lastname: "Doe", username: 'JDoe', password: '1234', email: 'JDoe@gmail.com', number: '123-456-7899' }})
+  const user2 = await User.findOrCreate({where: { firstname: 'Sam', lastname: "Hawkins", username: 'SHawk', password: '1234', email: 'Shawk@gmail.com', number: '123-456-7898' }})
   console.log("User created")
   const quiz1 = await Quiz.create({
     id: 0,
