@@ -10,6 +10,7 @@ import App from './App';
 // Routing
 import QuizDisplay from './components/quiz/QuizDisplay';
 import QuizResult from './components/quiz/QuizResult';
+import QuizMaker from './components/quiz/QuizMaker';
 
 const root = ReactDOMClient.createRoot(document.getElementById('root'));
 
@@ -21,6 +22,7 @@ root.render(
           {/* Default page: can make it home page when that's created -- <Route index element={ } /> */}
           <Route path='quiz/:id' element={<QuizDisplay />} />
           <Route path='quiz/:id/:result' element={<QuizResult />} />
+          <Route path='quiz/new' element={<QuizMaker/>} />
         </Route>
       </Routes>
     </Router>
