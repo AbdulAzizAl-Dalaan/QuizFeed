@@ -11,12 +11,20 @@ import Stack from 'react-bootstrap/Stack';
 * choices: Available options to pick for question
 * variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
 */
-function OptionMaker({ number, text, variant, points, updateChoiceText, updateChoicePoints }) {
+function OptionMaker({ number, text, variant, points, results, updateChoiceText, updateChoicePoints }) {
     return (
         <Container>
             <Stack className={variant ? variant : 'q-mediumBlue'} gap={1}>
                 <p onBlur={updateChoiceText} contentEditable suppressContentEditableWarning={true}>{text}</p>
-                <p onBlur={updateChoicePoints} contentEditable suppressContentEditableWarning={true}>{points}</p>
+                { results &&
+                      results.map((result, idx)=>{
+                          return(
+                              <div key={idx}>
+                                  {result.title}: <span onBlur={(e)=>updateChoicePoints(idx)(e)} contentEditable suppressContentEditableWarning={true}>{points[idx]}</span>
+                              </div>
+                          )
+                      })
+                }
             </Stack>
         </Container >
     );

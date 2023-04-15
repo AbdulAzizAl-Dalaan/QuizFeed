@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 * choices: Available options to pick for question
 * variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
 */
-function ResultMaker({ number, title, desc, variant, updateResultTitle, updateResultDesc }) {
+function ResultMaker({ number, title, desc, updateResultTitle, updateResultDesc }) {
     return (
         <div className="q-darkBlue">
             <h1 className='ms-5 mt-4' style={{ 'fontFamily': 'Montagu Slab, serif' }}>Result {number + 1}</h1>

@@ -16,7 +16,7 @@ import OptionMaker from './OptionMaker';
 * choices: Available options to pick for question
 * variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
 */
-function QuestionMaker({ number, text, choices, variant, onClick, updateQuestionText, updateChoiceText, updateChoicePoints }) {
+function QuestionMaker({ number, text, choices, results, variant, onClick, updateQuestionText, updateChoiceText, updateChoicePoints }) {
     return (
         <Container>
             <Stack className={variant ? variant : 'q-darkBlue'} gap={1}>
@@ -35,6 +35,7 @@ function QuestionMaker({ number, text, choices, variant, onClick, updateQuestion
                                         text={choice.text}
                                         variant={choice.variant}
                                         points={choice.points}
+                                        results={results}
                                         updateChoiceText={updateChoiceText(idx)}
                                         updateChoicePoints={updateChoicePoints(idx)} 
                                     />

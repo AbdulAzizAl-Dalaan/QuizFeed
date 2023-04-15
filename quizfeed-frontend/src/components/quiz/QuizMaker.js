@@ -19,6 +19,13 @@ export default function QuizMaker() {
       }
     );
 
+    // convert data to format required by database
+    // function prepDataForSave()
+    // {
+    //     // convert each points array to comma separated string
+    //     return {...quizData, questions: questions}
+    // }
+
     // function onClickAddTag(e) {
     // }
 
@@ -37,8 +44,15 @@ export default function QuizMaker() {
             "title": "Title",
             "description": "Description"
         };
+        let questions = quizData.questions.map((q_v) => {
+            let c = q_v.choices.map((c_v) => {
+                return {...c_v, points: [...c_v.points, 0]}
+            });
+            return {...q_v, choices: c};
+        });
         setQuizData({
             ...quizData,
+            questions: questions,
             results: [...quizData.results, result]
         });
     }
@@ -49,8 +63,8 @@ export default function QuizMaker() {
             "text": "Question?",
             "variant": "q-mediumBlue",
             "choices": [
-              { "text": "choice", "variant": "b-mediumBlue", "points": "0,0" },
-              { "text": "choice", "variant": "b-mediumBlue", "points": "0,0" },
+              { "text": "choice", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
+              { "text": "choice", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
             ]
         };
         setQuizData({
@@ -62,7 +76,7 @@ export default function QuizMaker() {
     // given question index, return a callback function that will add an option to that question
     function onClickAddOption(question_index) {
         return ((e) => {
-            let option = {"text": "choice", "variant": "b-mediumBlue", "points": "0,0" };
+            let option = {"text": "choice", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) };
             let questions = quizData.questions.map((v, i) => {
                 return i !== question_index ?  v : {...v, choices: v.choices.concat([option])};
             });
@@ -143,21 +157,44 @@ export default function QuizMaker() {
         });
     }
 
+    // if new value is not valid, return old value, otherwise return new value as a number
+    function updatePoint(old_value, e)
+    {
+        let val = Number(txt(e));
+        if (isNaN(val) || val === null || val === undefined)
+        {
+          e.target.textContent = old_value;
+          return old_value;
+        }
+        e.target.textContent = val;
+        return val;
+    }
+
+    // horrible horrible biting gnawing
     function updateChoicePoints(question_index) {
         return ((choice_index) => {
-            return ((e) => {
-                let questions = quizData.questions.map((q_v, q_i) => {
-                    if (q_i !== question_index) {
-                        return q_v;
-                    }
-                    let c = q_v.choices.map((c_v, c_i) => {
-                        return c_i !== choice_index ? c_v : {...c_v, points: txt(e)}
+            return ((point_index) => {
+                return ((e) => {
+                    let questions = quizData.questions.map((q_v, q_i) => {
+                        if (q_i !== question_index) {
+                            return q_v;
+                        }
+                        let c = q_v.choices.map((c_v, c_i) => {
+                            if (c_i !== choice_index)
+                            {
+                                return c_v;
+                            }
+                            let points = c_v.points.map((p_v, p_i) => {
+                                return (p_i !== point_index) ? p_v : updatePoint(p_v, e);
+                            });
+                            return {...c_v, points: points};
+                        });
+                        return {...q_v, choices: c};
                     });
-                    return {...q_v, choices: c};
-                });
-                setQuizData({
-                    ...quizData,
-                    questions: questions
+                    setQuizData({
+                        ...quizData,
+                        questions: questions
+                    });
                 });
             });
         });
@@ -236,6 +273,7 @@ export default function QuizMaker() {
                                 number={idx}
                                 text={question.text}
                                 choices={question.choices}
+                                results={quizData.results}
                                 variant={question.variant}
                                 onClick={onClickAddOption(idx)}
                                 updateQuestionText={updateQuestionText(idx)}
