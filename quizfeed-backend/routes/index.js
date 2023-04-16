@@ -1,5 +1,8 @@
 var express = require('express');
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 const User = require('../models/User')
+
 var router = express.Router();
 
 
@@ -11,14 +14,28 @@ router.get('/', function (req, res, next) {
   }
 });
 
-router.post('/login', async function (req, res, next) {
-  const user = await User.findUser(req.body.username, req.body.password)
-  if (user !== null) {
-    req.session.user = user
-    res.redirect("/home")
+router.post('/login', async function(req, res, next) {
+  const user = await User.findByPk(req.body.username)
+  if (user === null)
+  {
+    res.redirect('/?msg=fail')
   }
-  else {
-    res.redirect("/?msg=fail")
+  else
+  {
+    bcrypt.compare(req.body.password, user.password, function(err, result) {
+      if(result)
+      {
+        req.session.user = user
+        console.log("Password Match")
+        res.redirect("/home")
+      }
+      else
+      {
+        console.log("Password Does Not Match")
+        res.redirect('/?msg=fail')
+      }
+    });
+
   }
 });
 
@@ -37,15 +54,17 @@ router.post('/register', async function (req, res, next) {
     console.log("Email Already Exists: " + req.body.email);
     res.redirect('/register?msg=email+already+exists')
   }
-  else {
-    console.log("Creating User: " + req.body.username)
+  else
+  {
+    console.log("Creating User: " + req.body.username);
+    hash = await bcrypt.hash(req.body.password, saltRounds)
     await User.create({
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
-      number: req.body.number
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        username: req.body.username,
+        password: hash,
+        email: req.body.email,
+        number: req.body.number
     })
     res.redirect('/')
   }
@@ -86,7 +105,13 @@ router.post('/settings', async function (req, res, next) {
     {
       res.redirect('/settings?msg=passwords+do+not+match')
     }
-    else {
+    else
+    {
+      if (req.body.password !== '') // Check if password is being changed
+      {
+        req.body.password = await bcrypt.hash(req.body.password, saltRounds)
+      }
+
       if (req.body.username !== '' && req.body.username !== req.session.user.username) //  username is being changed
       {
         console.log("DESTROYING AND CREATING USER: " + req.body.username)
@@ -167,7 +192,9 @@ router.post('/forgotpassword', async function (req, res, next) {
     if (req.body.password !== req.body.password2) {
       res.redirect('/forgotpassword?msg=passwords+do+not+match')
     }
-    else {
+    else
+    {
+      req.body.password = await bcrypt.hash(req.body.password, saltRounds)
       await User.update({
         password: req.body.password
       }, {
