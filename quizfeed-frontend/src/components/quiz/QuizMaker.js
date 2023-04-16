@@ -9,7 +9,7 @@ import StyledButton from '../StyledButton';
 
 // todo: pass in initial values for quiz - will allow editing
 export default function QuizMaker() {
-    const [quizData, setQuizData] = React.useState({
+    let [quizData, setQuizData] = React.useState({
         creatorUsername: "generic", // fake username so we can post
         title: "Title",
         description: "Description",
@@ -17,7 +17,7 @@ export default function QuizMaker() {
         results: []
     });
 
-     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     async function postData(url = "", data = {})
     {
         const response = await fetch(url, {
@@ -28,38 +28,80 @@ export default function QuizMaker() {
             referrerPolicy: "no-referrer",
             body: JSON.stringify(data), // body data type must match "Content-Type" header
         });
+        if (!response.ok) {
+            throw new Error(JSON.stringify(response));
+        }
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
+    async function patchData(url = "", data = {})
+    {
+        const response = await fetch(url, {
+            method: "PATCH",
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json"},
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
+        if (!response.ok) {
+            throw new Error(JSON.stringify(response));
+        }
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
 
     // convert data to format required by database
-    function prepDataForSave()
+    function packData(data)
     {
         // convert each points array to comma separated string
-        let questions = quizData.questions.map((q_v) => {
+        let questions = data.questions.map((q_v) => {
             let c = q_v.choices.map((c_v) => {
                 return {...c_v, points: c_v.points.join(",")}
             });
             return {...q_v, choices: c};
         });
-        return {...quizData, questions: questions}
+        return {...data, questions: questions}
+    }
+
+    // convert database format to usable format
+    function unpackData(data)
+    {
+        // convert each points array from comma separated string to array
+        let questions = data.questions.map((q_v) => {
+            let c = q_v.choices.map((c_v) => {
+                return {...c_v, points: c_v.points.split(",")}
+            });
+            return {...q_v, choices: c};
+        });
+        return {...data, questions: questions}
+    }
+
+    function saveQuiz(data) {
+        // no id: create quiz, get id
+        if (quizData.id == null)
+        {
+            postData("/quiz/", packData(data))
+            .then((resData)=>{setQuizData(unpackData(resData))})
+            .catch((err)=>console.log(err));
+        }
+        // id: update quiz using id
+        else
+        {
+            patchData(`/quiz/${data.id}`, packData(data))
+            .then((resData)=>{setQuizData(unpackData(resData))})
+            .catch((err)=>console.log(err));
+        }
     }
 
     // function onClickAddTag(e) {
     // }
 
     function onClickPublish(e) {
-        // set quiz to published status
-        // save
-        postData("/quiz/", prepDataForSave())
-        .then((ret)=>console.log(ret))
-        .catch((err)=>console.log(err));
+        saveQuiz({...quizData, publishedAt: Date.now()});
     }
 
     function onClickSave(e) {
-        postData("/quiz/", prepDataForSave())
-        .then((ret)=>console.log(ret))
-        .catch((err)=>console.log(err));
+        saveQuiz(quizData);
     }
 
     function onClickAddResult(e) {

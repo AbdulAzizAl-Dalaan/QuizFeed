@@ -22,4 +22,30 @@ router.post('/', async function (req, res, next) {
     .catch((err)=>res.status(500).json(err));
 });
 
+// update quiz
+// TODO: fix this !!!
+router.patch('/:id', async function (req, res, next) {
+    const filter = {
+        where: {id: req.params.id},
+        include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+    }
+    console.log("?????");
+    Quiz.findByPk(filter)
+    .then((quiz) => {quiz.updateAttributes(req.body)})
+    .then(quiz => res.json(quiz))
+    .catch((err)=>res.status(500).json(err));
+
+    
+
+    // may need to update each table manually; has many will have to create tables potentially
+
+    // Quiz.update(
+    //     req.body,
+    //     {where: {id: req.params.id},
+    //     include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]}
+    // )
+    // .then(quiz => res.json(quiz))
+    // .catch((err)=>res.status(500).json(err));
+});
+
 module.exports = router;
