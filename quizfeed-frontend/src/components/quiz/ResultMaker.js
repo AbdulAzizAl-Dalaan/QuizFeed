@@ -1,32 +1,48 @@
 import './ResultMaker.css';
-import React from 'react';
+import React, {useContext} from 'react';
 import Row from 'react-bootstrap/Row';
+import { QuizMakerContext } from './QuizMaker';
 
 
 /*
-* Individual question
-* number: What number question
-* text: What question
-* choices: Available options to pick for question
-* variant: Style of question (available styles include q-darkBlue and q-mediumBlue) (default is q-darkBlue)
+* Individual result
+* index:  The given result's index in the result array
+* result: The given result
 */
-function ResultMaker({ number, title, desc, updateResultTitle, updateResultDesc }) {
+function ResultMaker({ index, result }) {
+    const [quizData, setQuizData, txt] = useContext(QuizMakerContext);
+
+    function updateResultTitle(e) {
+        let results = quizData.results.map((v, i) => {
+            return i !== index ?  v : {...v, title: txt(e)};
+        });
+        setQuizData({
+            ...quizData,
+            results: results
+        });
+    }
+
+    function updateResultDesc(e) {
+        let results = quizData.results.map((v, i) => {
+            return i !== index ?  v : {...v, description: txt(e)};
+        });
+        setQuizData({
+            ...quizData,
+            results: results
+        });
+    }
+
     return (
         <div className="q-darkBlue">
-            <h1 className='ms-5 mt-4' style={{ 'fontFamily': 'Montagu Slab, serif' }}>Result {number + 1}</h1>
+            <h1 className='ms-5 mt-4' style={{ 'fontFamily': 'Montagu Slab, serif' }}>Result {index + 1}</h1>
             <Row className='justify-content-center mb-4' md='auto'>
-                <div onBlur={updateResultTitle} className='text-center fs-3 mb-3' contentEditable suppressContentEditableWarning={true}>{title}</div>
+                <div onBlur={updateResultTitle} className='text-center fs-3 mb-3' contentEditable suppressContentEditableWarning={true}>{result.title}</div>
             </Row>
             <Row className='justify-content-center mb-4' md='auto'>
-                <p onBlur={updateResultDesc} contentEditable suppressContentEditableWarning={true}>{desc}</p>
+                <p onBlur={updateResultDesc} contentEditable suppressContentEditableWarning={true}>{result.description}</p>
             </Row>
         </div>
     );
 }
-
-ResultMaker.defaultProps = {
-    number: 0,
-    variant: 'q-darkBlue'
-};
 
 export default ResultMaker;
