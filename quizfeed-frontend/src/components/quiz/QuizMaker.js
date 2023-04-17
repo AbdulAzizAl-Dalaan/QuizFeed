@@ -2,6 +2,7 @@ import './QuizMaker.css';
 import React, {createContext} from 'react';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
+import { useNavigate } from "react-router-dom";
 import QuestionMaker from './QuestionMaker';
 import ResultMaker from './ResultMaker';
 import StyledButton from '../StyledButton';
@@ -15,6 +16,7 @@ export const QuizMakerContext = createContext();
 */
 function QuizMaker({ quiz }) {
     let [quizData, setQuizData] = React.useState(quiz);
+    const navigate = useNavigate();
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     async function postData(url = "", data = {})
@@ -42,6 +44,22 @@ function QuizMaker({ quiz }) {
             redirect: "follow",
             referrerPolicy: "no-referrer",
             body: JSON.stringify(data), // body data type must match "Content-Type" header
+        });
+        if (!response.ok) {
+            throw new Error(JSON.stringify(response));
+        }
+        return response.json(); // parses JSON response into native JavaScript objects
+    }
+
+    async function deleteData(url = "")
+    {
+        const response = await fetch(url, {
+            method: "DELETE",
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json"},
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            // body: "", // body data type must match "Content-Type" header
         });
         if (!response.ok) {
             throw new Error(JSON.stringify(response));
@@ -77,7 +95,7 @@ function QuizMaker({ quiz }) {
 
     function saveQuiz(data) {
         // no id: create quiz, get id
-        if (quizData.id == null)
+        if (data.id == null)
         {
             postData("/quiz/", packData(data))
             .then((resData)=>{setQuizData(unpackData(resData))})
@@ -101,6 +119,17 @@ function QuizMaker({ quiz }) {
 
     function onClickSave(e) {
         saveQuiz(quizData);
+    }
+
+    function onClickDelete(e) {
+        // has id: exists in database and must be deleted from database
+        if (quizData.id !== null)
+        {
+            deleteData(`/quiz/${quizData.id}`)
+            .then((res)=>{console.log(res)})
+            .then(navigate("/"))
+            .catch((err)=>console.log(err));
+        }
     }
 
     function onClickAddResult(e) {
@@ -194,6 +223,10 @@ function QuizMaker({ quiz }) {
                                     variant='b-mediumBlue'
                                     onClick={onClickSave}
                                 >Save</StyledButton>
+                                <StyledButton
+                                    variant='b-mediumBlue'
+                                    onClick={onClickDelete}
+                                >Delete</StyledButton>
                             </div>
                         </div>
                         <div>

@@ -142,12 +142,12 @@ Result.init({
     timestamps: false
 });
 
-Quiz.hasMany(Question, { as: 'questions' });
+Quiz.hasMany(Question, { as: 'questions', onDelete: 'cascade', onUpdate: 'cascade' });
 Question.belongsTo(Quiz);
-Question.hasMany(Choice, { as: 'choices' });
+Question.hasMany(Choice, { as: 'choices', onDelete: 'cascade', onUpdate: 'cascade' });
 Choice.belongsTo(Question);
 
-Quiz.hasMany(Result, { as: 'results' });
+Quiz.hasMany(Result, { as: 'results', onDelete: 'cascade', onUpdate: 'cascade' });
 Result.belongsTo(Quiz);
 
 module.exports = { Quiz, Question, Choice, Result };
