@@ -1,24 +1,27 @@
 const sequelize = require('../db');
 const { Model, DataTypes } = require('sequelize');
 
-class History extends Model {
+class Question extends Model {
 }
 
-History.init({
+Question.init({
     id: {
         primaryKey: true,
         autoIncrement: true,
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    visible: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
+    text: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    variant: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     sequelize,
-    modelName: 'History'
+    modelName: 'Question'
 });
 
-module.exports = History;
+module.exports = Question;

@@ -1,15 +1,48 @@
 import './Quiz.css';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
 
-export default function Comments({ onClickSubmitComment, onClickDeleteComment, comments }) {
+// Pass in enableRefresh to allow site to update when backend is affected
+export default function Comments({ comments, enableRefresh }) {
+    const urlParams = useParams();
+
+    // When the 'submit' comment button is clicked, add comment
+    function onClickSubmitComment(e) {
+        e.preventDefault();
+
+        if (e.target.comment.value === '') {
+            return;
+        }
+
+        // Add comment
+        fetch('/quiz/comment/' + urlParams.id, {
+            method: 'POST',
+            body: JSON.stringify({
+                username: 'subu',
+                text: e.target.comment.value
+            }),
+            headers: { 'Content-type': 'application/json' }
+        }).then(enableRefresh(true));
+
+        e.target.comment.value = '';
+    }
+
+    // When the 'x' comment button is clicked, delete that comment
+    function onClickDeleteComment(e, id) {
+        e.preventDefault();
+
+        fetch('/quiz/comment/' + urlParams.id + '/' + id, {
+            method: 'DELETE'
+        }).then(enableRefresh(true));
+    }
+
     return (
         <div>
             <h3 className='display mt-3'>Comments</h3>

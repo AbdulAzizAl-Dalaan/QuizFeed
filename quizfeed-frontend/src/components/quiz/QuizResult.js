@@ -23,6 +23,7 @@ export default function QuizDisplay() {
     const urlParams = useParams();
     const [quizData, setQuizData] = React.useState();
     const [resultData, setResultData] = React.useState();
+    const [formattedDescription, setFormattedDescription] = React.useState();
 
     const [refresh, enableRefresh] = React.useState(false);
 
@@ -34,13 +35,14 @@ export default function QuizDisplay() {
                 .then(data => {
                     setQuizData(data);
                     setResultData(data.results[urlParams.result - 1]);
+                    setFormattedDescription(formatString(data.results[urlParams.result - 1].description));
                 });
         }
 
         setData();
     }, [urlParams]);
 
-    // Refresh data (so user can see changes reflected in frontend, too)
+    // If refresh is changed to true, refresh data (so user can see changes reflected in frontend, too)
     React.useEffect(() => {
         if (refresh) {
             refreshData();
@@ -84,34 +86,39 @@ export default function QuizDisplay() {
         }).then(enableRefresh(true));
     }
 
-    // When the 'submit' comment button is clicked, add comment
-    function onClickSubmitComment(e) {
-        e.preventDefault();
+    // Allows for HTML elements in strings stored in backend
+    function formatString(toFormat) {
+        const elements = toFormat.match(/<[^<>]+>/g);
 
-        if (e.target.comment.value === '') {
-            return;
+        function returnElement(element) {
+            element = element.replace('<', '').replace('/>', '').trim();
+            switch (element) {
+                case "br":
+                    return <br />;
+            }
         }
 
-        // Add comment
-        fetch('/quiz/comment/' + urlParams.id, {
-            method: 'POST',
-            body: JSON.stringify({
-                username: 'subu',
-                text: e.target.comment.value
-            }),
-            headers: { 'Content-type': 'application/json' }
-        }).then(enableRefresh(true));
+        return (
+            <p>
+                {elements ?
+                    elements.map((element, idx) => {
+                        const i = toFormat.search(element);
+                        const substring = toFormat.substring(0, i);
+                        // Remove element and string leading up to element
+                        toFormat = toFormat.substring(i + element.length).replace(element, '');
 
-        e.target.comment.value = '';
-    }
-
-    // When the 'x' comment button is clicked, delete that comment
-    function onClickDeleteComment(e, id) {
-        e.preventDefault();
-
-        fetch('/quiz/comment/' + urlParams.id + '/' + id, {
-            method: 'DELETE'
-        }).then(enableRefresh(true));
+                        let leftover = ""; // if there are no more elements
+                        if (idx + 1 === elements.length) leftover = toFormat;
+                        return (
+                            <span key={idx}>
+                                {substring}{returnElement(element)}{leftover}
+                            </span>
+                        );
+                    })
+                    : toFormat
+                }
+            </p >
+        );
     }
 
     return (
@@ -123,7 +130,7 @@ export default function QuizDisplay() {
                     <Stack gap={3} className='q-darkBlue text-center py-4'>
                         <h3 className='display'>Results</h3>
                         <h1>{resultData.title}</h1><br />
-                        <h4>{resultData.description}</h4><br /><br />
+                        <h4>{formattedDescription}</h4><br /><br />
                         <p style={{ 'fontSize': '80%' }}>
                             {quizData.takenNum !== 0 ? Math.round(resultData.receivedNum / quizData.takenNum * 100) : 0}% of all quiz takers got the same result
                         </p>
@@ -169,7 +176,7 @@ export default function QuizDisplay() {
                         </Stack>
                     </Form>
 
-                    <Comments onClickSubmitComment={onClickSubmitComment} onClickDeleteComment={onClickDeleteComment} comments={quizData.comments} />
+                    <Comments comments={quizData.comments} enableRefresh={enableRefresh} />
                 </Stack>
             }
         </Container>);

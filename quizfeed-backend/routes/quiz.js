@@ -1,6 +1,7 @@
 var express = require('express');
-const { Quiz, Result, Comment } = require('../models/Quiz');
-const History = require('../models/History');
+const Quiz = require('../models/Quiz');
+const Result = require('../models/Result');
+const Comment = require('../models/Comment');
 var router = express.Router();
 
 // **** GET ****
