@@ -60,8 +60,21 @@ export default function QuizDisplay() {
             const parsedPoints = points.split(',').map(Number);
             totalPoints = totalPoints.map((curPoints, i) => curPoints + parsedPoints[i]);
         }
-        // find index of highest element and that is your result
-        const result = quizData.results[totalPoints.indexOf(Math.max(...totalPoints))].id;
+        // find index of highest element to get result pos, and use that to find result id
+        const resultId = quizData.results[totalPoints.indexOf(Math.max(...totalPoints))].id;
+
+        // No longer needed I think, since we're returning results ordered by position, but just in case I'm leaving it here...
+        /*
+        let resultId = -1;
+        const resultPos = totalPoints.indexOf(Math.max(...totalPoints));
+
+        for (const result of quizData.results) {
+            if (result.position === resultPos) {
+                resultId = result.id;
+                break;
+            }
+        }
+        */
 
         // update user's results
         fetch('/history/' + urlParams.id + '/' + 'subu')
@@ -70,7 +83,7 @@ export default function QuizDisplay() {
                 // If user has not taken it before
                 if (data.length === 0) {
                     // then create history
-                    fetch('/history/' + urlParams.id + '/' + result, {
+                    fetch('/history/' + urlParams.id + '/' + resultId, {
                         method: 'POST', body: JSON.stringify({ username: 'subu' }),
                         headers: { 'Content-type': 'application/json' }
                     });
@@ -78,9 +91,9 @@ export default function QuizDisplay() {
             });
 
         // update quiz stats
-        fetch('/quiz/stats/' + urlParams.id + '/' + result, { method: 'PATCH' });
+        fetch('/quiz/stats/' + urlParams.id + '/' + resultId, { method: 'PATCH' });
         // redirect to the correct results page
-        navigate('/quiz/' + urlParams.id + '/' + result);
+        navigate('/quiz/' + urlParams.id + '/' + resultId);
     }
 
     return (

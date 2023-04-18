@@ -1,7 +1,9 @@
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import '@fontsource/montserrat';
+import '@fontsource/montserrat/variable.css';
 import '@fontsource/montagu-slab';
+import '@fontsource/montagu-slab/variable.css';
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';

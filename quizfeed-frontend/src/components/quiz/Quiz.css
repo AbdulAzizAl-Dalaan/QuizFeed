@@ -7,14 +7,24 @@
 }
 
 @supports (font-variation-settings: normal) {
+    .display {
+        font-family: 'Montagu SlabVariable';
+        font-variation-settings: "wght" 400;
+    }
+
     .display-bold {
         font-family: 'Montagu SlabVariable';
+        font-variation-settings: "wght" 500;
+    }
+
+    .readable {
+        font-family: 'MontserratVariable';
         font-variation-settings: "wght" 300;
     }
 
     .readable-bold {
         font-family: 'MontserratVariable';
-        font-variation-settings: "wght" 300;
+        font-variation-settings: "wght" 500;
     }
 }
 
@@ -38,6 +48,14 @@
     border-radius: 25px;
     background-color: #344966;
     color: #F0F4EF;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+.q-lightBlue {
+    border-radius: 25px;
+    background-color: #B4CDED;
+    color: #112746;
     font-family: 'Montserrat';
     font-weight: 900;
 }

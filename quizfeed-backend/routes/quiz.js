@@ -8,13 +8,34 @@ var router = express.Router();
 
 // With the quiz id given, return the Quiz with Questions, Choices, and Results all included
 router.get('/:id', async function (req, res, next) {
-    Quiz.findByPk(req.params.id, { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }] })
+    Quiz.findByPk(req.params.id, {
+        include: [{
+            association: 'questions',
+            include: [{
+                association: 'choices',
+                separate: true,
+                order: [['position']],
+            }]
+        }, {
+            association: 'results',
+            seperate: true,
+            order: [['position']],
+        }]
+    })
         .then(quiz => res.json(quiz))
 });
 
 // With the quiz id and result id given, return the Quiz with Results and Comments
 router.get('/:id/:result', async function (req, res, next) {
-    Quiz.findByPk(req.params.id, { include: [{ association: 'results' }, { association: 'comments' }] })
+    Quiz.findByPk(req.params.id, {
+        include: [{
+            association: 'results'
+        }, {
+            association: 'comments',
+            separate: true,
+            order: [['publishedAt', 'DESC']]
+        }]
+    })
         .then(result => res.json(result))
 });
 

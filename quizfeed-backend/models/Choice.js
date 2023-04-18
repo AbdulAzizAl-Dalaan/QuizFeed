@@ -11,13 +11,18 @@ Choice.init({
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    // Represents what order the choices appear
+    position: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     text: {
         type: DataTypes.STRING,
         allowNull: false
     },
     variant: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     points: {
         // only a string because since sqlite does not support arrays

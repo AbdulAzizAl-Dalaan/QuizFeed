@@ -8,16 +8,27 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
+import Alert from 'react-bootstrap/Alert';
+import Stack from 'react-bootstrap/Stack';
+
+// https://github.com/react-bootstrap/react-overlays/issues/312
+// Errors appear in console when a user hovers over their own comment, I believe it has to do with the above linked issue
 
 // Pass in enableRefresh to allow site to update when backend is affected
 export default function Comments({ comments, enableRefresh }) {
     const urlParams = useParams();
+    const [showMessage, setShowMessage] = React.useState('');
 
     // When the 'submit' comment button is clicked, add comment
     function onClickSubmitComment(e) {
         e.preventDefault();
 
         if (e.target.comment.value === '') {
+            setShowMessage('Comment cannot be empty');
+            return;
+        }
+        else if (e.target.comment.value.length > 200) {
+            setShowMessage('Comment cannot be more than 200 characters');
             return;
         }
 
@@ -47,14 +58,24 @@ export default function Comments({ comments, enableRefresh }) {
         <div>
             <h3 className='display mt-3'>Comments</h3>
             <Row className='mb-3 align-items-center' lg='7'>
-                <Form className='w-25' onSubmit={onClickSubmitComment}>
-                    <InputGroup>
-                        <Form.Control name='comment' placeholder='Enter comment here' as="textarea" aria-label="With textarea" />
-                        <Button variant='outline-secondary' id='new-comment' type='submit'>
-                            Submit
-                        </Button>
-                    </InputGroup>
-                </Form>
+                <Col md='auto'>
+                    <Stack gap={2}>
+                        <Form onSubmit={onClickSubmitComment}>
+                            <InputGroup>
+                                <Form.Control name='comment' placeholder='Enter comment here' as="textarea" aria-label="With textarea" />
+                                <Button variant='outline-secondary' id='new-comment' type='submit'>
+                                    Submit
+                                </Button>
+                            </InputGroup>
+                        </Form>
+                        {showMessage !== '' &&
+                            <Alert variant='danger' onClose={() => setShowMessage('')} dismissible>
+                                <p>
+                                    {showMessage}
+                                </p>
+                            </Alert>}
+                    </Stack>
+                </Col>
                 {comments && comments.length > 0 ?
                     comments.map((comment, idx) => {
                         return (

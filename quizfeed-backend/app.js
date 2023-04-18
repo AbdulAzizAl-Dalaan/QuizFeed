@@ -101,57 +101,57 @@ async function setup() {
     questions: [
       {
         text: 'It\'s a Friday night. You\'re probably...',
-        variant: 'q-mediumBlue',
         choices: [
-          { text: 'hanging out at home', variant: 'b-mediumBlue', points: '0,1,0,1' },
-          { text: 'hosting friends/family', variant: 'b-mediumBlue', points: '0,0,2,0' },
-          { text: 'at a local restaurant', variant: 'b-mediumBlue', points: '1,0,0,0' },
+          { position: 0, text: 'hanging out at home', points: '0,1,0,1' },
+          { position: 1, text: 'hosting friends/family', points: '0,0,2,0' },
+          { position: 2, text: 'at a local restaurant', points: '1,0,0,0' },
         ]
       },
       {
         text: 'Your friend calls you in a panic. How do you respond?',
-        variant: 'q-mediumBlue',
         choices: [
-          { text: 'Comfort them', variant: 'b-mediumBlue', points: '2,0,0,0' },
-          { text: 'Think of solutions to their problem', variant: 'b-mediumBlue', points: '0,0,0,1' },
-          { text: 'Distract them', variant: 'b-mediumBlue', points: '0,0,1,0' },
-          { text: 'Tell them I\'m on my way', variant: 'b-mediumBlue', points: '0,2,0,0' },
+          { position: 0, text: 'Comfort them', points: '2,0,0,0' },
+          { position: 1, text: 'Think of solutions to their problem', points: '0,0,0,1' },
+          { position: 2, text: 'Distract them', points: '0,0,1,0' },
+          { position: 3, text: 'Tell them I\'m on my way', points: '0,2,0,0' },
         ]
       },
       {
         text: 'Out of these options, what is your favorite condiment?',
-        variant: 'q-mediumBlue',
         choices: [
-          { text: 'Ketchup', variant: 'b-mediumBlue', points: '0,1,0,0' },
-          { text: 'BBQ sauce', variant: 'b-mediumBlue', points: '1,0,1,0' },
-          { text: 'Hot sauce', variant: 'b-mediumBlue', points: '0,0,0,1' },
+          { position: 0, text: 'Ketchup', points: '0,1,0,0' },
+          { position: 1, text: 'BBQ sauce', points: '1,0,1,0' },
+          { position: 2, text: 'Hot sauce', points: '0,0,0,1' },
         ]
       },
       {
         text: 'Overnight you gained a super power of your choosing. Which one would you pick?',
-        variant: 'q-mediumBlue',
         choices: [
-          { text: 'Teleportation', variant: 'b-mediumBlue', points: '0,0,1,0' },
-          { text: 'Shapeshifting', variant: 'b-mediumBlue', points: '0,0,0,2' },
-          { text: 'Superhuman strength', variant: 'b-mediumBlue', points: '0,1,0,0' },
-          { text: 'Mindreading', variant: 'b-mediumBlue', points: '1,0,0,0' },
+          { position: 0, text: 'Teleportation', points: '0,0,1,0' },
+          { position: 1, text: 'Shapeshifting', points: '0,0,0,2' },
+          { position: 2, text: 'Superhuman strength', points: '0,1,0,0' },
+          { position: 3, text: 'Mindreading', points: '1,0,0,0' },
         ]
       }
     ],
     results: [
       {
+        position: 0,
         title: 'Strawberry',
         description: 'You\'re sweet, just like a strawberry!<br/>You are a friendly and outgoing person who brightens up everyone\'s day.'
       },
       {
+        position: 1,
         title: 'Apple',
         description: 'You\'re dependable, just like an apple!<br/>You are a reliable and generous person who is always there for everyone, no matter the occassion.'
       },
       {
+        position: 2,
         title: 'Banana',
         description: 'You\'re wacky, just like a banana!<br/>You are a hilarious and energetic person who loves to entertain their friends and family.'
       },
       {
+        position: 3,
         title: 'Pomegranate',
         description: 'You\'re enchanting, just like a pomegranate!<br/>You are an insightful and unique person who gives the best advice, no matter the scenario.'
       },

@@ -17,7 +17,7 @@ Question.init({
     },
     variant: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }
 }, {
     sequelize,

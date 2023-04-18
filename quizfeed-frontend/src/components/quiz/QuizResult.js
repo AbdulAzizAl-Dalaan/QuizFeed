@@ -8,9 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-import CloseButton from 'react-bootstrap/CloseButton';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QuizInfo from './QuizInfo';
 import Comments from './Comments';
 import StyledButton from '../StyledButton';
@@ -45,19 +43,18 @@ export default function QuizDisplay() {
     // If refresh is changed to true, refresh data (so user can see changes reflected in frontend, too)
     React.useEffect(() => {
         if (refresh) {
+            async function refreshData() {
+                await fetch('/quiz/' + urlParams.id + '/' + urlParams.result)
+                    .then(res => res.json())
+                    .then(data => {
+                        setQuizData(data);
+                    });
+            }
+
             refreshData();
             enableRefresh(false);
         }
-    }, [refresh]);
-
-    // Allows for user to see input changed on screen
-    async function refreshData() {
-        await fetch('/quiz/' + urlParams.id + '/' + urlParams.result)
-            .then(res => res.json())
-            .then(data => {
-                setQuizData(data);
-            });
-    }
+    }, [refresh, urlParams]);
 
     // When the "display on profile" switch is toggled, update history
     function onToggle(e) {
@@ -95,6 +92,8 @@ export default function QuizDisplay() {
             switch (element) {
                 case "br":
                     return <br />;
+                default:
+                    return;
             }
         }
 
@@ -129,8 +128,8 @@ export default function QuizDisplay() {
 
                     <Stack gap={3} className='q-darkBlue text-center py-4'>
                         <h3 className='display'>Results</h3>
-                        <h1>{resultData.title}</h1><br />
-                        <h4>{formattedDescription}</h4><br /><br />
+                        <h1 className='readable'>{resultData.title}</h1><br />
+                        <h4 className='readable'>{formattedDescription}</h4><br /><br />
                         <p style={{ 'fontSize': '80%' }}>
                             {quizData.takenNum !== 0 ? Math.round(resultData.receivedNum / quizData.takenNum * 100) : 0}% of all quiz takers got the same result
                         </p>
@@ -138,7 +137,9 @@ export default function QuizDisplay() {
 
                     <Row className='mt-3'>
                         <Col className='d-flex justify-content-end align-items-center'>
-                            <StyledButton>Share results via url</StyledButton>
+                            <CopyToClipboard text={window.location.href}>
+                                <StyledButton>Share results via url</StyledButton>
+                            </CopyToClipboard>
                         </Col>
                         <Col lg={2}>
                             <Stack className='text-center' style={{ 'fontSize': '150%' }}>
