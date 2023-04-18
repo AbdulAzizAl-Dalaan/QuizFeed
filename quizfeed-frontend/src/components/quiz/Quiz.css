@@ -1,0 +1,71 @@
+.display {
+    font-family: 'Montagu Slab';
+}
+
+.readable {
+    font-family: 'Montserrat';
+}
+
+@supports (font-variation-settings: normal) {
+    .display-bold {
+        font-family: 'Montagu SlabVariable';
+        font-variation-settings: "wght" 300;
+    }
+
+    .readable-bold {
+        font-family: 'MontserratVariable';
+        font-variation-settings: "wght" 300;
+    }
+}
+
+.quiz-header {
+    border-radius: 25px;
+    background-color: #8b8bae14;
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+.q-darkBlue {
+    border-radius: 25px;
+    background-color: #0D1821;
+    color: #F0F4EF;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+.q-mediumBlue {
+    border-radius: 25px;
+    background-color: #344966;
+    color: #F0F4EF;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+.q-mediumGray {
+    border-radius: 25px;
+    background-color: #5c6066;
+    color: #F0F4EF;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+.choices {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.f-toggle,
+.f-toggle:active,
+.f-toggle:active:focus,
+.f-toggle:focus {
+    background-color: #92979b;
+    box-shadow: none;
+}
+
+.f-toggle:checked,
+.f-toggle:checked:active,
+.f-toggle:checked:active:focus {
+    background-color: #0D1821;
+    box-shadow: none;
+}

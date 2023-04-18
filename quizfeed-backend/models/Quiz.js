@@ -28,8 +28,13 @@ Quiz.init({
         allowNull: false,
         defaultValue: 0
     },
-    approval: {
-        type: DataTypes.FLOAT,
+    likes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    dislikes: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
     },
@@ -132,6 +137,40 @@ Result.init({
     modelName: 'Result'
 });
 
+class Comment extends Model {
+}
+
+Comment.init({
+    id: {
+        primaryKey: true,
+        autoIncrement: true,
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    creatorUsername: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    text: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    publishedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NULL
+    }
+}, {
+    sequelize,
+    modelName: 'Comment'
+});
+
+
 Quiz.hasMany(Question, { as: 'questions' });
 Question.belongsTo(Quiz);
 Question.hasMany(Choice, { as: 'choices' });
@@ -140,4 +179,7 @@ Choice.belongsTo(Question);
 Quiz.hasMany(Result, { as: 'results' });
 Result.belongsTo(Quiz);
 
-module.exports = { Quiz, Question, Choice, Result };
+Quiz.hasMany(Comment, { as: 'comments' });
+Comment.belongsTo(Quiz);
+
+module.exports = { Quiz, Question, Choice, Result, Comment };

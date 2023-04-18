@@ -1,4 +1,3 @@
-import './QuizDisplay.css';
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Stack from 'react-bootstrap/Stack';
@@ -45,7 +44,7 @@ export default function QuizDisplay() {
 
     // When the user is ready to receive their results, this method is called
     // It checks to make sure all questions have been answered, and if so, calculates the result and redirects accordingly
-    function onClickSubmit(e) {
+    async function onClickSubmit(e) {
         e.preventDefault();
 
         // check to make sure all questions have been answered
@@ -63,8 +62,23 @@ export default function QuizDisplay() {
         }
         // find index of highest element and that is your result
         const result = quizData.results[totalPoints.indexOf(Math.max(...totalPoints))].id;
+
+        // update user's results
+        fetch('/history/' + urlParams.id + '/' + 'subu')
+            .then(res => res.json())
+            .then(data => {
+                // If user has not taken it before
+                if (data.length === 0) {
+                    // then create history
+                    fetch('/history/' + urlParams.id + '/' + result, {
+                        method: 'POST', body: JSON.stringify({ username: 'subu' }),
+                        headers: { 'Content-type': 'application/json' }
+                    });
+                }
+            });
+
         // update quiz stats
-        fetch('/quiz/' + urlParams.id + '/' + result, { method: 'PATCH' });
+        fetch('/quiz/stats/' + urlParams.id + '/' + result, { method: 'PATCH' });
         // redirect to the correct results page
         navigate('/quiz/' + urlParams.id + '/' + result);
     }

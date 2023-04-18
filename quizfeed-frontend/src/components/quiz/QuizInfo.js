@@ -1,4 +1,4 @@
-import './QuizDisplay.css';
+import './Quiz.css';
 import React from 'react';
 import Stack from 'react-bootstrap/Stack';
 
@@ -9,11 +9,15 @@ export default function QuizInfo({ quizData }) {
         <Stack gap={2}>
             {quizData &&
                 <div className='quiz-header mt-3 pt-3 mb-2'>
-                    <h1 style={{ 'fontFamily': 'Montagu Slab, serif' }} >{quizData.title}</h1>
+                    <h1 className='display'>{quizData.title}</h1>
                     {quizData.creatorUsername}<br /><br />
                     <p>{quizData.description}</p>
-                    {quizData.takenNum} {quizData.takenNum === 1 ? 'user has' : 'users have'} taken this quiz - {quizData.approval}% approval<br /><br />
+                    <p style={{ 'fontSize': '80%' }}>
+                        {quizData.takenNum} {quizData.takenNum === 1 ? 'user has' : 'users have'} taken this quiz -&nbsp;
+                        {quizData.likes !== 0 && quizData.dislikes !== 0 ?
+                            Math.round(quizData.likes / (quizData.likes + quizData.dislikes) * 100) : 0}% approval ({quizData.likes} likes)
+                    </p>
                 </div>}
         </Stack>
     );
-}
+} 

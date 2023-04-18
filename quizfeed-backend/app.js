@@ -16,7 +16,7 @@ var friendsRouter = require('./routes/friends');
 var newQuizzesRouter = require('./routes/newquizzes');
 var trendingQuizzesRouter = require('./routes/trendingquizzes');
 var quizRouter = require('./routes/quiz');
-
+var historyRouter = require('./routes/history');
 
 var app = express();
 
@@ -45,6 +45,7 @@ app.use('/friends', friendsRouter);
 app.use('/newquizzes', newQuizzesRouter);
 app.use('/trendingquizzes', trendingQuizzesRouter);
 app.use('/quiz', quizRouter);
+app.use('/history', historyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -103,9 +104,19 @@ async function setup() {
         title: 'Result 2',
         description: 'Description 2'
       }
+    ],
+    comments: [
+      {
+        creatorUsername: 'mikalooloo',
+        text: 'i got my fav character yay'
+      },
+      {
+        creatorUsername: 'legionas56',
+        text: 'this was a great quiz!!'
+      }
     ]
   }, {
-    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: 'comments' }]
   });
   console.log("Quiz created");
 }
