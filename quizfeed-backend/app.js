@@ -9,6 +9,7 @@ const session = require('express-session');
 const sequelize = require('./db');
 const User = require('./models/User');
 const Friends = require('./models/Friends');
+const { Quiz } = require('./models/Quiz');
 const Message = require('./models/Message');
 
 var indexRouter = require('./routes/index');
@@ -17,6 +18,7 @@ var searchRouter = require('./routes/search');
 var friendsRouter = require('./routes/friends');
 var newQuizzesRouter = require('./routes/newquizzes');
 var trendingQuizzesRouter = require('./routes/trendingquizzes');
+var quizRouter = require('./routes/quiz');
 
 
 var app = express();
@@ -45,6 +47,7 @@ app.use('/search', searchRouter);
 app.use('/friends', friendsRouter);
 app.use('/newquizzes', newQuizzesRouter);
 app.use('/trendingquizzes', trendingQuizzesRouter);
+app.use('/quiz', quizRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -84,6 +87,47 @@ async function setup() {
   const message2 = await Message.create({sender: 'JDoe', receiver: 'subu', content: 'Hi'})
   const message3 = await Message.create({sender: 'subu', receiver: 'JDoe', content: 'How are you?'})
   console.log("User created")
+  const quiz1 = await Quiz.create({
+    id: 0,
+    title: 'Quiz Title',
+    creatorUsername: 'user who created quiz',
+    description: 'quiz description',
+    takenNum: 0,
+    approval: 56,
+    questions: [
+      {
+        text: 'question question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
+          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
+          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
+        ]
+      },
+      {
+        text: 'question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
+          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
+          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
+        ]
+      }
+    ],
+    results: [
+      {
+        title: 'Result 1',
+        description: 'Description 1'
+      },
+      {
+        title: 'Result 2',
+        description: 'Description 2'
+      }
+    ]
+  }, {
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+  });
+  console.log("Quiz created");
 }
 
 sequelize.sync({ force: true }).then(() => {
