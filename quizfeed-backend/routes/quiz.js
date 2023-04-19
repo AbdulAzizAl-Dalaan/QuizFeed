@@ -2,6 +2,11 @@ var express = require('express');
 const { Quiz, Result } = require('../models/Quiz');
 var router = express.Router();
 
+// With a filter given, return all the Quizzes satisfying the filter
+router.get('/', async function (req, res, next) {
+    Quiz.findAll().then(output => res.json(output))
+});
+
 // With the id given, return the Quiz with Questions, Choices, and Results all included
 router.get('/:id', async function (req, res, next) {
     Quiz.findByPk(req.params.id, { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }] })

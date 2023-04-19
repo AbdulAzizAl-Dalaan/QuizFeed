@@ -1,0 +1,23 @@
+.list-background {
+    background-color: #8b8bae14;
+}
+
+.list-item {
+    background: rgb(2,0,36);
+    background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(0,212,255,1) 100%);
+    color: #F0F4EF;
+}
+
+.list-option {
+    background-color: #38384714;
+}
+
+.list-header {
+    background-color: #8b8bae14;
+}
+
+.list-header-text {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat';
+}
