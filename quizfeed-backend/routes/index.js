@@ -18,7 +18,8 @@ router.post('/login', async function(req, res, next) {
   const user = await User.findByPk(req.body.username)
   if (user === null)
   {
-    res.redirect('/?msg=fail')
+    res.status(400).json({ success: false, message: "Invalid Username or Password" })
+    // res.redirect('/?msg=fail')
   }
   else
   {
@@ -27,12 +28,14 @@ router.post('/login', async function(req, res, next) {
       {
         req.session.user = user
         console.log("Password Match")
-        res.redirect("/home")
+        res.json({ success: true, message: "Login Successful", user: user })
+        // res.redirect("/home")
       }
       else
       {
         console.log("Password Does Not Match")
-        res.redirect('/?msg=fail')
+        res.status(400).json({ success: false, message: "Password does not match" })
+        // res.redirect('/?msg=fail')
       }
     });
 
@@ -48,11 +51,13 @@ router.post('/register', async function (req, res, next) {
   const email = await User.findOne({ where: { email: req.body.email } })
   if (user !== null) {
     console.log("User Already Exists: " + req.body.username);
-    res.redirect('/register?msg=username+already+exists')
+    // res.redirect('/register?msg=username+already+exists')
+    res.status(400).json({ success: false, message: "Username already exists, please enter another" })
   }
   else if (email !== null) {
     console.log("Email Already Exists: " + req.body.email);
-    res.redirect('/register?msg=email+already+exists')
+    // res.redirect('/register?msg=email+already+exists')
+    res.status(400).json({ success: false, message: "Email already exists, please enter another" })
   }
   else
   {
@@ -66,7 +71,8 @@ router.post('/register', async function (req, res, next) {
         email: req.body.email,
         number: req.body.number
     })
-    res.redirect('/')
+    // res.redirect('/')
+    res.json({ success: true, message: "User created" })
   }
 });
 
@@ -76,10 +82,12 @@ router.get('/settings', async function (req, res, next) {
   const user = await User.findByPk(req.session.user.username)
   console.log("USER IS " + user.username)
   if (user) {
-    res.render('settings', { user });
+    // res.render('settings', { user });
+    res.json({ success: true, user: user, message: "User found" })
   }
   else {
-    res.redirect('/')
+    // res.redirect('/')
+    res.status(400).json({ success: false, message: "User not found" })
   }
 });
 
@@ -95,15 +103,18 @@ router.post('/settings', async function (req, res, next) {
 
     if (req.body.username !== req.session.user.username && checkUser) // Check if username is being changed
     {
-      res.redirect('/settings?msg=username+already+exists')
+      // res.redirect('/settings?msg=username+already+exists')
+      res.status(400).json({ success: false, message: "Username already exists" })
     }
     else if (req.body.email !== req.session.user.email && checkEmail) // Check if email is being changed
     {
-      res.redirect('/settings?msg=email+already+exists')
+      // res.redirect('/settings?msg=email+already+exists')
+      res.status(400).json({ success: false, message: "Email already exists" })
     }
     else if (req.body.password !== req.body.password2) // Check if New passwords match
     {
-      res.redirect('/settings?msg=passwords+do+not+match')
+      // res.redirect('/settings?msg=passwords+do+not+match')
+      res.status(400).json({ success: false, message: "Passwords do not match" })
     }
     else
     {
@@ -125,7 +136,8 @@ router.post('/settings', async function (req, res, next) {
         })
         await User.destroy({ where: { username: req.session.user.username } })
         req.session.destroy()
-        res.redirect('/?msg=account+updated+please+login+again')
+        // res.redirect('/?msg=account+updated+please+login+again')
+        res.json({ success: true, message: "Account updated, please login again" })
       }
       else {
         console.log("UPDATING USER: " + req.body.username)
@@ -140,12 +152,14 @@ router.post('/settings', async function (req, res, next) {
             username: req.session.user.username
           }
         })
-        res.redirect('/settings?msg=updated')
+        // res.redirect('/settings?msg=updated')
+        res.json({ success: true, message: "Account updated" })
       }
     }
   }
   else {
-    res.redirect('/')
+    // res.redirect('/')
+    res.status(400).json({ success: false, message: "User not found" })
   }
 
 });
@@ -186,11 +200,13 @@ router.post('/forgotpassword', async function (req, res, next) {
   console.log(req.body.password + " " + req.body.password2)
   console.log(req.body.password !== req.body.password2)
   if (!user) {
-    res.redirect('/forgotpassword?msg=email+not+found')
+    // res.redirect('/forgotpassword?msg=email+not+found')
+    res.status(400).json({ success: false, message: "Email not found" })
   }
   else {
     if (req.body.password !== req.body.password2) {
-      res.redirect('/forgotpassword?msg=passwords+do+not+match')
+      // res.redirect('/forgotpassword?msg=passwords+do+not+match')
+      res.status(400).json({ success: false, message: "Passwords do not match" })
     }
     else
     {
@@ -202,7 +218,8 @@ router.post('/forgotpassword', async function (req, res, next) {
           email: req.body.email
         }
       })
-      res.redirect('/?msg=password+updated')
+      // res.redirect('/?msg=password+updated')
+      res.json({ success: true, message: "Password updated" })
     }
   }
 });

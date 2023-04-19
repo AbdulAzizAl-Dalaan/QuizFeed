@@ -25,11 +25,12 @@ router.get('/', async function(req, res, next) {
     const pending_requests_list = await Friends.findPendingFriends(req.session.user.username)
     const my_friend_requests = await Friends.findPendingRequests(req.session.user.username)
 
-    res.render('friends', {friends_list, pending_requests_list, my_friend_requests});
+    // res.render('friends', {friends_list, pending_requests_list, my_friend_requests});
+    res.json({friends_list, pending_requests_list, my_friend_requests})
 });
 
 
-router.get('/acceptfriend/:username', async function(req, res, next) {
+router.post('/acceptfriend/:username', async function(req, res, next) {
   const friend = await Friends.update({
     is_pending: false,
     is_friend: true
@@ -40,21 +41,11 @@ router.get('/acceptfriend/:username', async function(req, res, next) {
       is_pending: true
     }
   });
-  res.redirect('/friends?msg=af')
+  // res.redirect('/friends?msg=af')
+  res.json({success: true, message: "Friend request accepted"})
 });
 
-router.get('/rejectfriend/:username', async function(req, res, next) {
-  const friend = await Friends.destroy({
-    where: {
-      sender: req.params.username,
-      receiver: req.session.user.username,
-      is_pending: true
-    }
-  });
-  res.redirect('/friends?msg=rf')
-});
-
-router.get('/removefriend/:username', async function(req, res, next) {
+router.post('/removefriend/:username', async function(req, res, next) {
   const friend = await Friends.destroy({
     where: {
       [Op.or]: [
@@ -71,19 +62,23 @@ router.get('/removefriend/:username', async function(req, res, next) {
       ]
     }
   });
-  res.redirect('/friends?msg=rf')
+  // res.redirect('/friends?msg=rf')
+  res.json({success: true, message: "Friend removed"})
 });
 
-router.post('/sendfriendrequest/', async function(req, res, next) {
+router.post('/sendfriendrequest/:username', async function(req, res, next) {
   if (req.body.friend_request === req.session.user.username)
   {
-    res.redirect('/friends?msg=err')
+    // res.redirect('/friends?msg=err')
+    res.json({success: false, message: "You cannot send a friend request to yourself"})
   }
   else {
     const friend = await User.findByPk(req.body.friend_request)
     if (friend === null)
     {
-      res.redirect('/friends?msg=err')
+      // res.redirect('/friends?msg=err')
+      console.log("User does not exist: " + req.body.friend_request)
+      res.json({success: false, message: "User does not exist"})
     }
     else
     {
@@ -93,7 +88,8 @@ router.post('/sendfriendrequest/', async function(req, res, next) {
         is_pending: true,
         is_friend: false
       });
-      res.redirect('/friends?msg=sfr')
+      // res.redirect('/friends?msg=sfr')
+      res.json({success: true, message: "Friend request sent"})
     }
   }
 });
@@ -104,21 +100,29 @@ router.get('/message/:username', async function(req, res, next) {
   {
     const user = req.session.user.username
     const friend = req.params.username
-    res.render('message', {messages, user, friend});
+    // res.render('message', {messages, user, friend});
+    res.json({success: true, message: "none", messages, user, friend})
   }
   else
   {
-    res.redirect('/friends?msg=err')
+    // res.redirect('/friends?msg=err')
+    res.json({success: true, message: "No messages found", messages: [], user: "", friend: ""})
   }
 });
 
 router.post('/message/sendmessage/:username', async function(req, res, next) {
+  console.log("SENDING MESSAGE")
+  console.log("1" + req.session.user.username)
+  console.log("1" + req.params.username)
+  console.log("1" + req.body.message)
+  console.log("1" + req.body.content)
   const message = await Message.create({
     sender: req.session.user.username,
     receiver: req.params.username,
     content: req.body.message
   });
-  res.redirect('/friends/message/' + req.params.username)
+  // res.redirect('/friends/message/' + req.params.username)
+  res.json({success: true, message: "Message sent"})
 });
 
 

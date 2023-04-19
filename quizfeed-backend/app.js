@@ -82,6 +82,7 @@ async function setup() {
   const friend1 = await Friends.create({sender: 'subu', receiver: 'JDoe', is_friend: true, is_pending: false})
   const friend2 = await Friends.create({sender: 'SHawk', receiver: 'subu', is_friend: true, is_pending: false})
   const friend3 = await Friends.create({sender: 'Johnny', receiver: 'subu', is_friend: false, is_pending: true})
+  const friend4 = await Friends.create({sender: 'subu', receiver: 'hp', is_friend: false, is_pending: true})
 
   const message1 = await Message.create({sender: 'subu', receiver: 'JDoe', content: 'Hello'})
   const message2 = await Message.create({sender: 'JDoe', receiver: 'subu', content: 'Hi'})
