@@ -1,3 +1,22 @@
+.container-margin {
+  margin-top: 100px; 
+}
+
+.Card-Header {
+    background-color: #0D1821;
+    border-color: #ffff;
+    color: #fff;
+}
+
+.account-btn {
+    background-color: #0D1821;
+}
+
+
+.Table {
+    background-color: #B4CDED;   
+}
+
 .tables-container {
     display: flex;
     justify-content: space-between;

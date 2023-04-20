@@ -18,7 +18,7 @@ router.post('/login', async function(req, res, next) {
   const user = await User.findByPk(req.body.username)
   if (user === null)
   {
-    res.status(400).json({ success: false, message: "Invalid Username or Password" })
+    res.status(400).json({ success: false, message: "This username does not exist" })
     // res.redirect('/?msg=fail')
   }
   else
@@ -184,10 +184,12 @@ router.post('/deleteaccount', async function (req, res, next) {
 router.get('/logout', function (req, res, next) {
   if (req.session.user) {
     req.session.destroy()
-    res.redirect("/?msg=logout")
+    // res.redirect("/?msg=logout")
+    res.json({ success: true, message: "Logout" })
   }
   else {
-    res.redirect("/")
+    // res.redirect("/")
+    res.status(400).json({ success: false, message: "User not found" })
   }
 });
 
