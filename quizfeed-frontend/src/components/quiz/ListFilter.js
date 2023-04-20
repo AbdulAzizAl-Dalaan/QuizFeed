@@ -33,20 +33,4 @@ export default function ListFilter(def='') {
         </Container>
 
     )
-    /*
-    <Grid spacing={2}>
-                    <Grid item xs={4}>
-                        <div>Filter by:</div>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Dropdown>
-                            <Dropdown.Toggle>Filter</Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Alphabetical</Dropdown.Item>
-                                <Dropdown.Item>Popularity</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </Grid>
-                </Grid>
-                */
 }

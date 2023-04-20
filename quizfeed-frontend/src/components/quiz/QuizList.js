@@ -19,12 +19,12 @@ export default function QuizList() {
             });
     }, []);
 
-    console.log(quizData);
+    
 
     let quizListItems=quizData?.map(quiz => 
     {
         return <QuizListItem quizData={quiz} />
-    });
+    }).sort();
 
     return (
         <Container>
@@ -33,7 +33,7 @@ export default function QuizList() {
                     <div class='col'>
                         <h3 class='list-header-text'>Title</h3>
                     </div>
-                    <div class='col-3'><ListOrder /></div>
+                    <div class='col-3'><ListOrder id='order' /></div>
                 </div>
             </Container>
             <Container className="list-background">
