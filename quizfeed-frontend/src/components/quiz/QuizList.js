@@ -5,6 +5,7 @@ import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import QuizListItem from './QuizListItem';
 import ListFilter from './ListFilter';
+import ListOrder from './ListOrder';
 
 export default function QuizList() {
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function QuizList() {
                     <div class='col'>
                         <h3 class='list-header-text'>Title</h3>
                     </div>
-                    <div class='col-3'><ListFilter /></div>
+                    <div class='col-3'><ListOrder /></div>
                 </div>
             </Container>
             <Container className="list-background">

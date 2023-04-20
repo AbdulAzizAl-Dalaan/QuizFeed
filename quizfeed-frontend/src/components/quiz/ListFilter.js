@@ -10,8 +10,8 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 export default function ListFilter(def='') {
     
     function DropdownItemClick(item) {
-        var filterText = document.getElementById('filterText').innerText;
-        filterText = item;
+        var filterText = document.getElementById('filterText');
+        filterText.innerText = item;
     }
 
     return (
@@ -20,10 +20,12 @@ export default function ListFilter(def='') {
                 <div class='col-4 list-header-text'>Filter by:</div>
                 <div class='col-6'>
                 <Dropdown>
-                    <Dropdown.Toggle id='filterText'>Filter</Dropdown.Toggle>
+                    <Dropdown.Toggle>
+                        <span id='filterText'>Filter</span>
+                    </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick('Alphabetical')}>Alphabeticl</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target.value)}>Popularity</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target.innerText)}>Alphabetical</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target.innerText)}>Popularity</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 </div>
