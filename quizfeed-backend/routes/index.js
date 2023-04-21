@@ -174,10 +174,12 @@ router.post('/deleteaccount', async function (req, res, next) {
       }
     })
     req.session.destroy()
-    res.redirect('/')
+    // res.redirect('/')
+    res.json({ success: true, message: "Account deleted" })
   }
   else {
-    res.redirect('/')
+    // res.redirect('/')
+    res.status(400).json({ success: false, message: "User not found" })
   }
 });
 

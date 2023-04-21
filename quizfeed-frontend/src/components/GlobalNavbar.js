@@ -2,12 +2,25 @@ import './GlobalNavbar.css';
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 export default function GlobalNavbar() {
+
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+      try {
+        const response = await fetch('/logout', {
+          method: 'GET',
+        });
+        navigate('/login');
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <Navbar className='globalNav' bg='dark' variant='dark' expand='lg' sticky='top'>
@@ -29,7 +42,7 @@ export default function GlobalNavbar() {
                     <Nav.Link as={NavLink} to='/profile'>
                         <FontAwesomeIcon icon={faUser} />
                     </Nav.Link>
-                    <Nav.Link as={NavLink} to='/logout' className='mx-3'>LOGOUT</Nav.Link>
+                    <Nav.Link as={NavLink} to='/logout' className='mx-3' onClick={handleLogout}>LOGOUT</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

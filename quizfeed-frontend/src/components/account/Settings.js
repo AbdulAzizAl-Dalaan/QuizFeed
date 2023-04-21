@@ -9,6 +9,7 @@ import {
   Button,
   Alert,
   InputGroup,
+  Modal,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,6 +29,9 @@ function Settings() {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [message, setMessage] = useState(null);
+
+  const [setStatusMessage, setSetStatusMessage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -93,6 +97,31 @@ function Settings() {
       setMessage(err.name + ": " + err.message);
     }
   };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch("/deleteaccount", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      navigate("/login");
+      const data = await response.json();
+
+      if (data.success) {
+        setStatusMessage("Account deleted successfully. Redirecting...");
+        navigate("/login");
+      } else {
+        setStatusMessage("Error deleting account. Please try again.");
+      }
+    } catch (error) {
+      setStatusMessage("Error deleting account. Please try again.");
+    }
+  };
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   return (
     <Container className="container-margin">
@@ -191,10 +220,36 @@ function Settings() {
             </InputGroup>
             <div className="d-grid">
               <Button className="account-btn" type="submit">
-                Register
+                Save Changes
               </Button>
             </div>
           </Form>
+          <br />
+          <div className="d-grid">
+            <Button variant="danger" onClick={handleShow}>
+              Delete Account
+            </Button>
+            {setStatusMessage && (
+              <Alert variant="danger">{setStatusMessage}</Alert>
+            )}
+            <Modal show={showModal} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>Warning</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Are you sure you want to delete your account? This action cannot
+                be undone.
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button variant="danger" onClick={handleDeleteAccount}>
+                  Delete Account
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
           <br />
           {message && <Alert variant="danger">{message}</Alert>}
         </Col>
