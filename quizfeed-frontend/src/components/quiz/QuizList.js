@@ -1,27 +1,13 @@
 import './QuizList.css'
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import QuizListItem from './QuizListItem';
-import ListFilter from './ListFilter';
 import ListOrder from './ListOrder';
 
-function byPopularity(a, b) {
-    if(a.approval > b.approval)
-    {
-        return 1;
-    }
-    if(a.approval < b.approval)
-    {
-        return -1;
-    }
-    return 0; 
-}
-
-export default function QuizList({order = (a, b) => {return 0}}) {
-    const navigate = useNavigate();
+export default function QuizList({defaultOrder = (a, b) => {return 0}}) {
     const [quizData, setQuizData] = React.useState();
+    const [order, setOrder] = React.useState(() => defaultOrder);
 
     React.useEffect(() => {
         fetch('/quiz')
@@ -29,23 +15,20 @@ export default function QuizList({order = (a, b) => {return 0}}) {
             .then(data => {
                 setQuizData(data);
             });
-    }, [order]);
+    }, []);
 
-    console.log(order)
+    console.log(order);
+    let quizListItems=quizData?.map(quiz => {
+        return [quiz, <QuizListItem quizData={quiz} />]
+    }).sort(order);
 
-    let quizListItems=quizData?.map(quiz => 
-    {
-        return <QuizListItem quizData={quiz} />
-    }).sort(byPopularity)
+    let quizListItemElements = quizListItems?.map(quizItem => {
+        return quizItem[1];
+    });
 
     function resort(newOrder) {
-        order = newOrder;
-        /*
-        quizListItems=quizData?.map(quiz => 
-        {
-            return <QuizListItem quizData={quiz} />
-        }).sort(newOrder);
-        */
+        setOrder(newOrder);
+        console.log(order);
     }
 
     return (
@@ -55,13 +38,13 @@ export default function QuizList({order = (a, b) => {return 0}}) {
                     <div class='col'>
                         <h3 class='list-header-text'>Title</h3>
                     </div>
-                    <div class='col-3'><ListOrder id='order' def={order} update={resort}/></div>
+                    <div class='col-3'><ListOrder id='order' update={resort}/></div>
                 </div>
             </Container>
             <Container className="list-background">
                 {quizData && 
                     <Stack>
-                    {quizListItems}
+                    {quizListItemElements}
                     </Stack>
                 }
             </Container>

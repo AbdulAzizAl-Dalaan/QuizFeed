@@ -1,28 +1,22 @@
 import './QuizList.css'
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import Stack from 'react-bootstrap/Stack';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
-import QuizListItem from './QuizListItem';
-import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
-export default function ListOrder({def= (a, b) => {return 0}, update}) {
+export default function ListOrder({update}) {
     
-    function DropdownItemClick(item) {
-        var order = document.getElementById('order');
+    function DropdownItemClick(item, orderFunction) {
+        var order = document.getElementById('orderDropdownText');
         order.innerText = item.innerText;
-        order.src = item.src;
-        console.log(update);
-        update(document.getElementById("order").src);
+        update(orderFunction);
     }
 
     function byTitle(a, b) {
-        if(a.title > b.title)
+        if(a[0].title > b[0].title)
         {
             return 1;
         }
-        if(a.title < b.title)
+        if(a[0].title < b[0].title)
         {
             return -1;
         }
@@ -30,23 +24,24 @@ export default function ListOrder({def= (a, b) => {return 0}, update}) {
     }
 
     function byPopularity(a, b) {
-        if(a.approval > b.approval)
-        {
-            return 1;
-        }
-        if(a.approval < b.approval)
+        console.log(a);
+        if(a[0].approval > b[0].approval)
         {
             return -1;
+        }
+        if(a[0].approval < b[0].approval)
+        {
+            return 1;
         }
         return 0; 
     }
 
     function byUsername(a, b) {
-        if(a.creatorUsername > b.creatorUsername)
+        if(a[0].creatorUsername > b[0].creatorUsername)
         {
             return 1;
         }
-        if(a.creatorUsername < b.creatorUsername)
+        if(a[0].creatorUsername < b[0].creatorUsername)
         {
             return -1;
         }
@@ -62,12 +57,12 @@ export default function ListOrder({def= (a, b) => {return 0}, update}) {
                 <div class='col-6'>
                 <Dropdown>
                     <Dropdown.Toggle>
-                        <span id='order' src={ def }>Order</span>
+                        <span id='orderDropdownText'>Order</span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target)} src={ byTitle }>Title</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target)} src={ byPopularity }>Popularity</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target)} src={ byUsername }>Username</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, () => byTitle)}>Title</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, () => byPopularity)}>Popularity</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, () => byUsername)}>Username</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 </div>

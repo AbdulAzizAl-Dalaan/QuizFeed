@@ -1,6 +1,5 @@
 import './QuizList.css'
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import Stack from 'react-bootstrap/esm/Stack';
 
 export default function QuizListItem({ quizData }) {

@@ -109,8 +109,8 @@ async function setup() {
   });
   const quiz2 = await Quiz.create({
     id: 1,
-    title: 'Quiz Title 2',
-    creatorUsername: 'user who created quiz',
+    title: 'Zuiz Title 2',
+    creatorUsername: 'bruser who created quiz',
     description: 'better qhiz description',
     takenNum: 0,
     approval: 64,
