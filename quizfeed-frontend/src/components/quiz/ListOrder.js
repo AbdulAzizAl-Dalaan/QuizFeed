@@ -7,22 +7,24 @@ import Container from 'react-bootstrap/Container';
 import QuizListItem from './QuizListItem';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
-export default function ListOrder(def=function(a, b) {return 0}) {
+export default function ListOrder({def= (a, b) => {return 0}, update}) {
     
     function DropdownItemClick(item) {
         var order = document.getElementById('order');
         order.innerText = item.innerText;
         order.src = item.src;
+        console.log(update);
+        update(document.getElementById("order").src);
     }
 
     function byTitle(a, b) {
         if(a.title > b.title)
         {
-            return -1;
+            return 1;
         }
         if(a.title < b.title)
         {
-            return 1;
+            return -1;
         }
         return 0; 
     }
@@ -30,11 +32,11 @@ export default function ListOrder(def=function(a, b) {return 0}) {
     function byPopularity(a, b) {
         if(a.approval > b.approval)
         {
-            return -1;
+            return 1;
         }
         if(a.approval < b.approval)
         {
-            return 1;
+            return -1;
         }
         return 0; 
     }
@@ -42,11 +44,11 @@ export default function ListOrder(def=function(a, b) {return 0}) {
     function byUsername(a, b) {
         if(a.creatorUsername > b.creatorUsername)
         {
-            return -1;
+            return 1;
         }
         if(a.creatorUsername < b.creatorUsername)
         {
-            return 1;
+            return -1;
         }
         return 0; 
     }
@@ -60,7 +62,7 @@ export default function ListOrder(def=function(a, b) {return 0}) {
                 <div class='col-6'>
                 <Dropdown>
                     <Dropdown.Toggle>
-                        <span id='order' src={ def }>Filter</span>
+                        <span id='order' src={ def }>Order</span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target)} src={ byTitle }>Title</Dropdown.Item>

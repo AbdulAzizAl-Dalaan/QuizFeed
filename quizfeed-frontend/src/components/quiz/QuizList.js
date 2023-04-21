@@ -7,7 +7,19 @@ import QuizListItem from './QuizListItem';
 import ListFilter from './ListFilter';
 import ListOrder from './ListOrder';
 
-export default function QuizList() {
+function byPopularity(a, b) {
+    if(a.approval > b.approval)
+    {
+        return 1;
+    }
+    if(a.approval < b.approval)
+    {
+        return -1;
+    }
+    return 0; 
+}
+
+export default function QuizList({order = (a, b) => {return 0}}) {
     const navigate = useNavigate();
     const [quizData, setQuizData] = React.useState();
 
@@ -17,14 +29,24 @@ export default function QuizList() {
             .then(data => {
                 setQuizData(data);
             });
-    }, []);
+    }, [order]);
 
-    
+    console.log(order)
 
     let quizListItems=quizData?.map(quiz => 
     {
         return <QuizListItem quizData={quiz} />
-    }).sort();
+    }).sort(byPopularity)
+
+    function resort(newOrder) {
+        order = newOrder;
+        /*
+        quizListItems=quizData?.map(quiz => 
+        {
+            return <QuizListItem quizData={quiz} />
+        }).sort(newOrder);
+        */
+    }
 
     return (
         <Container>
@@ -33,7 +55,7 @@ export default function QuizList() {
                     <div class='col'>
                         <h3 class='list-header-text'>Title</h3>
                     </div>
-                    <div class='col-3'><ListOrder id='order' /></div>
+                    <div class='col-3'><ListOrder id='order' def={order} update={resort}/></div>
                 </div>
             </Container>
             <Container className="list-background">
