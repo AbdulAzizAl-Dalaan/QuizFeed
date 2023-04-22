@@ -3,52 +3,41 @@ import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 
-export default function ListOrder({update}) {
+//small => large
+function defaultOrderFunction(a, b, key) {
+    console.log(a);
+    if(a[key] > b[key])
+    {
+        return 1;
+    }
+    if(a[key] < b[key])
+    {
+        return -1;
+    }
+    return 0; 
+}
+
+//large => small
+function inverseOrder(a, b, key) {
+    if(a[key] > b[key])
+    {
+        return -1;
+    }
+    if(a[key] < b[key])
+    {
+        return 1;
+    }
+    return 0; 
+}
+
+function ListOrder({updateFunction, updateKey}) {
     
-    function DropdownItemClick(item, orderFunction) {
+    function DropdownItemClick(item, orderKey, orderFunction=defaultOrderFunction) {
         var order = document.getElementById('orderDropdownText');
         order.innerText = item.innerText;
-        update(orderFunction);
-    }
-
-    function byTitle(a, b) {
-        if(a[0].title > b[0].title)
-        {
-            return 1;
-        }
-        if(a[0].title < b[0].title)
-        {
-            return -1;
-        }
-        return 0; 
-    }
-
-    function byPopularity(a, b) {
-        console.log(a);
-        if(a[0].approval > b[0].approval)
-        {
-            return -1;
-        }
-        if(a[0].approval < b[0].approval)
-        {
-            return 1;
-        }
-        return 0; 
-    }
-
-    function byUsername(a, b) {
-        if(a[0].creatorUsername > b[0].creatorUsername)
-        {
-            return 1;
-        }
-        if(a[0].creatorUsername < b[0].creatorUsername)
-        {
-            return -1;
-        }
-        return 0; 
-    }
-
-    
+        updateFunction(() => orderFunction);
+        updateKey(orderKey)
+    } 
 
     return (
         <Container className="mt-2">
@@ -60,9 +49,9 @@ export default function ListOrder({update}) {
                         <span id='orderDropdownText'>Order</span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, () => byTitle)}>Title</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, () => byPopularity)}>Popularity</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, () => byUsername)}>Username</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, 'title')}>Title</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, 'approval', inverseOrder)}>Popularity</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, 'creatorUsername')}>Username</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 </div>
@@ -71,3 +60,5 @@ export default function ListOrder({update}) {
 
     )
 }
+
+export {ListOrder, defaultOrderFunction};

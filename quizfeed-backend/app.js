@@ -147,6 +147,166 @@ async function setup() {
   }, {
     include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
   })
+  const quiz3 = await Quiz.create({
+    id: 2,
+    title: 'Cuiz Title 2',
+    creatorUsername: 'large guy',
+    description: 'its a quiz',
+    takenNum: 0,
+    approval: 30,
+    questions: [
+      {
+        text: 'question question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
+          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
+          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
+        ]
+      },
+      {
+        text: 'question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
+          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
+          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
+        ]
+      }
+    ],
+    results: [
+      {
+        title: 'Result 1',
+        description: 'Description 1'
+      },
+      {
+        title: 'Result 2',
+        description: 'Description 2'
+      }
+    ]
+  }, {
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+  })
+  const quiz4 = await Quiz.create({
+    id: 3,
+    title: 'Buiz Title',
+    creatorUsername: 'lil guy',
+    description: 'itsnot a quiz',
+    takenNum: 0,
+    approval: 98,
+    questions: [
+      {
+        text: 'question question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
+          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
+          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
+        ]
+      },
+      {
+        text: 'question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
+          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
+          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
+        ]
+      }
+    ],
+    results: [
+      {
+        title: 'Result 1',
+        description: 'Description 1'
+      },
+      {
+        title: 'Result 2',
+        description: 'Description 2'
+      }
+    ]
+  }, {
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+  })
+  const quiz5 = await Quiz.create({
+    id: 4,
+    title: 'Muiz Title 2',
+    creatorUsername: 'medium sized guy',
+    description: 'it is impossible to determine the quizness of this item',
+    takenNum: 0,
+    approval: 42,
+    questions: [
+      {
+        text: 'question question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
+          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
+          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
+        ]
+      },
+      {
+        text: 'question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
+          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
+          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
+        ]
+      }
+    ],
+    results: [
+      {
+        title: 'Result 1',
+        description: 'Description 1'
+      },
+      {
+        title: 'Result 2',
+        description: 'Description 2'
+      }
+    ]
+  }, {
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+  })
+  const quiz6 = await Quiz.create({
+    id: 5,
+    title: 'Puiz Title 2',
+    creatorUsername: 'maybe a below average sized guy?',
+    description: 'it has a below average chance of being a quiz',
+    takenNum: 0,
+    approval: 12,
+    questions: [
+      {
+        text: 'question question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
+          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
+          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
+        ]
+      },
+      {
+        text: 'question?',
+        variant: 'q-mediumBlue',
+        choices: [
+          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
+          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
+          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
+        ]
+      }
+    ],
+    results: [
+      {
+        title: 'Result 1',
+        description: 'Description 1'
+      },
+      {
+        title: 'Result 2',
+        description: 'Description 2'
+      }
+    ]
+  }, {
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+  })
   console.log("Quiz created");
 }
 

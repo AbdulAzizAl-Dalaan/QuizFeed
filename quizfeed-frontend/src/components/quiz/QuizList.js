@@ -3,11 +3,34 @@ import React from 'react';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import QuizListItem from './QuizListItem';
-import ListOrder from './ListOrder';
+import {ListOrder, defaultOrderFunction} from './ListOrder';
 
-export default function QuizList({defaultOrder = (a, b) => {return 0}}) {
+function defaultFilterFunction(item, key, value){
+    if(key == '' || value == '')
+    {
+        return true;
+    }
+    if(item[key].includes(value))
+    {
+        return true;
+    }
+    return false;
+}
+
+export default function QuizList({title="Default Title", 
+    height=600, 
+    customOrderFunction = defaultOrderFunction,
+    customOrderKey = '',
+    customFilter = defaultFilterFunction, 
+    customFilterKey = '', 
+    customFilterValue = ''
+    }) {
     const [quizData, setQuizData] = React.useState();
-    const [order, setOrder] = React.useState(() => defaultOrder);
+    const [orderFunction, setOrderFunction] = React.useState(() => customOrderFunction);
+    const [orderKey, setOrderKey] = React.useState(customOrderKey);
+    const [filterFunction, setFilterFunction] = React.useState(() => customFilter);
+    const [filterKey, setFilterKey] = React.useState(customFilterKey);
+    const [filterValue, setFilterValue] = React.useState(customFilterValue);
 
     React.useEffect(() => {
         fetch('/quiz')
@@ -17,37 +40,28 @@ export default function QuizList({defaultOrder = (a, b) => {return 0}}) {
             });
     }, []);
 
-    console.log(order);
     let quizListItems=quizData?.map(quiz => {
-        return [quiz, <QuizListItem quizData={quiz} />]
-    }).sort(order);
-
-    let quizListItemElements = quizListItems?.map(quizItem => {
-        return quizItem[1];
-    });
-
-    function resort(newOrder) {
-        setOrder(newOrder);
-        console.log(order);
-    }
+        return <QuizListItem quizData={quiz} />
+    }).filter((item) => filterFunction(item.props.quizData, filterKey, filterValue))
+    .sort((a, b) => orderFunction(a.props.quizData, b.props.quizData, orderKey));
 
     return (
         <Container>
             <Container className="list-header mt-3 pb-3">
-                <div class="row list-header">
+                <div class="row">
                     <div class='col'>
-                        <h3 class='list-header-text'>Title</h3>
+                        <h3 class='list-header-text' style={{margin: '5px'}}>{title}</h3>
                     </div>
-                    <div class='col-3'><ListOrder id='order' update={resort}/></div>
+                    <div class='col-3'><ListOrder id='order' updateFunction={setOrderFunction} updateKey={setOrderKey}/></div>
                 </div>
             </Container>
-            <Container className="list-background">
+            <div className="list-background" style={{height: height.toString() + "px"}}>
                 {quizData && 
                     <Stack>
-                    {quizListItemElements}
+                    {quizListItems}
                     </Stack>
                 }
-            </Container>
+            </div>
         </Container>
 
     )

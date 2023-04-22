@@ -1,5 +1,10 @@
 .list-background {
     background-color: #8b8bae14;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-bottom: solid 2px #2a2a3314;
+    border-left: solid 2px #2a2a3314;
+    border-right: solid 2px #2a2a3314;
 }
 
 .list-item {
@@ -13,7 +18,7 @@
 }
 
 .list-header {
-    background-color: #8b8bae14;
+    background-color: #2a2a3314;
 }
 
 .list-header-text {
