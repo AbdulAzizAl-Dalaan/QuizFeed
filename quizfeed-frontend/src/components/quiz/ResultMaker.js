@@ -1,3 +1,4 @@
+import './Question.css'; // .q-darkBlue, .q-mediumBlue
 import './ResultMaker.css';
 import './QuizMaker.css';  // .quiz-exit-btn
 import React, {useContext} from 'react';
@@ -46,9 +47,8 @@ function ResultMaker({ index, result }) {
 
     return (
         <Container className="q-darkBlue result-content">
-            <Row
-                className='justify-content-between'
-            >
+            <div className='quiz-exit-btn' onClick={deleteResult}>X</div>
+            <Row>
                 <Col
                     className='justify-content-left mb-4 result-title'
                     md='auto'
@@ -58,12 +58,11 @@ function ResultMaker({ index, result }) {
                 >
                     {result.title}
                 </Col>
-                <Col className='quiz-exit-btn' onClick={deleteResult}>
-                    X
-                </Col>
-                {/* <div onBlur={updateResultTitle} className='text-center fs-3 mb-3' contentEditable suppressContentEditableWarning={true}>{result.title}</div> */}
             </Row>
-            <Row className='justify-content-left mb-4' md='auto'>
+            <Row
+                className='justify-content-left result-desc'
+                md='auto'
+            >
                 <p onBlur={updateResultDesc} contentEditable suppressContentEditableWarning={true}>{result.description}</p>
             </Row>
         </Container>

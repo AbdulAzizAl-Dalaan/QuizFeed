@@ -84,22 +84,19 @@ function OptionMaker({ index, question_index, choice }) {
 
     return (
         <div className={(choice.variant ? choice.variant : 'q-mediumBlue') + " choice-content"}>
+            <div className='quiz-exit-btn' onClick={deleteOption}>X</div>
             <Container>
                 <Row>
                     <Col
+                        className='justify-content-left choice-title'
+                        md='auto'
                         onBlur={updateChoiceText}
                         contentEditable
                         suppressContentEditableWarning={true}
-                        className="choice-title"
                     >
                         {choice.text}
                     </Col>
-                    <Col className='quiz-exit-btn' onClick={deleteOption} >
-                        X
-                    </Col>
                 </Row>
-            </Container>
-            <Container>
                 <Row className="sm result-impact">
                     <Col>RESULT</Col>
                     <Col>POINTS</Col>

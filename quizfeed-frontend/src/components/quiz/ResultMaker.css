@@ -1,23 +1,21 @@
-.q-darkBlue {
-  border-radius: 25px;
-  background-color: #0D1821;
-  color: #F0F4EF;
-  font-family: 'Montserrat';
-  font-weight: 900;
-}
-
-.q-mediumBlue {
-  border-radius: 25px;
-  background-color: #344966;
-  color: #F0F4EF;
-  font-family: 'Montserrat';
-  font-weight: 900;
-}
-
 .result-content {
-  padding: 10px 10px 0px 10px;
+  padding: 5px 7px 0px 7px;
+  border-radius: 15px;
+  position: relative;
 }
 
 .result-title {
-  font-family: 'Montagu Slab, serif'
+  font-family: 'Montagu Slab, serif';
+  width: 88%;
+  font-size: large;
+  text-align: center;
+}
+
+.result-force-right {
+  position: relative;
+  background-color: red;
+}
+
+.result-desc p {
+  width:100%;
 }

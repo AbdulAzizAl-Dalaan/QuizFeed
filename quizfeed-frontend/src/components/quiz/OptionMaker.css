@@ -2,11 +2,13 @@
   padding: 5px;
   border-radius: 10px;
   min-width: 210px;
+  position: relative;
 }
 
 .choice-title {
   text-align: center;
   font-size: large;
+  width: 88%;
 }
 
 .q-darkBlue .result-impact, .q-mediumBlue .result-impact {

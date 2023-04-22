@@ -28,14 +28,26 @@
 }
 
 .quiz-exit-btn {
+  border: solid 1px grey;
   justify-content: right;
   text-align: right;
-  color: white;
+  color: grey;
+  width:fit-content;
+  background-color: rgb(95, 8, 8);
+  border-radius: 5px;
+  padding: 0px 5px;
+
+  position: absolute;
+  right: 5px;
+  float: right;
 }
 
 .quiz-exit-btn:hover {
   cursor: pointer;
-  color: red;
+  color: white;
+  border-color: white;
+  background-color: rgb(175, 15, 4);
+  box-shadow:rgb(5, 2, 32) 0px 2px 10px;
 }
 
 /* The slider */

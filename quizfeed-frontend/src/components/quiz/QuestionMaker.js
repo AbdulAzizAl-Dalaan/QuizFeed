@@ -50,51 +50,47 @@ function QuestionMaker({ index, question }) {
 
     return (
         <Container className={(question.variant ? question.variant : 'q-darkBlue') + " question-content"}>
-            {/* <Stack className={question.variant ? question.variant : 'q-darkBlue'} gap={1}> */}
-                <Row className="question-header">
-                    <Col>
-                        <h1 className='question-title' >Question {index + 1}</h1>
-                    </Col>
-                    <Col className='quiz-exit-btn' onClick={deleteQuestion} >
-                        X
-                    </Col>
-                </Row>
-                <Row>
-                    <Col
-                        onBlur={updateQuestionText}
-                        className='text-center fs-3 mb-3'
-                        contentEditable
-                        suppressContentEditableWarning={true}
-                    >
-                        {question.text}
-                    </Col>
-                </Row>
-                <Row
-                    className='justify-content-center mb-4 choices'
-                    md='auto'
+            <div className='quiz-exit-btn' onClick={deleteQuestion}>X</div>
+            <Row className='question-header' >
+                <Col className='question-title' >
+                    Question {index + 1}
+                </Col>
+            </Row>
+            <Row>
+                <Col
+                    onBlur={updateQuestionText}
+                    className='text-center fs-3 mb-3'
+                    contentEditable
+                    suppressContentEditableWarning={true}
                 >
-                    {question.choices &&
-                        question.choices.map((choice, idx) => {
-                            return (
-                                <Col key={idx} className='mb-4' md='auto'>
-                                    <OptionMaker
-                                        key={idx}
-                                        index={idx}
-                                        question_index={index}
-                                        choice={choice}
-                                    />
-                                </Col>
-                            );
-                        })}
-                        <Col>
-                            <StyledButton
-                                variant='b-mediumBlue'
-                                onClick={onClickAddOption}>
-                                Add another option
-                            </StyledButton>
-                        </Col>
-                </Row>
-            {/* </Stack> */}
+                    {question.text}
+                </Col>
+            </Row>
+            <Row
+                className='justify-content-center mb-4 choices'
+                md='auto'
+            >
+                {question.choices &&
+                    question.choices.map((choice, idx) => {
+                        return (
+                            <Col key={idx} className='mb-4' md='auto'>
+                                <OptionMaker
+                                    key={idx}
+                                    index={idx}
+                                    question_index={index}
+                                    choice={choice}
+                                />
+                            </Col>
+                        );
+                    })}
+                    <Col>
+                        <StyledButton
+                            variant='b-mediumBlue'
+                            onClick={onClickAddOption}>
+                            Add another option
+                        </StyledButton>
+                    </Col>
+            </Row>
         </Container >
     );
 }
