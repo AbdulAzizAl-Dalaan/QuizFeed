@@ -1,4 +1,5 @@
-import './Question.css'; // .q-darkBlue, .q-mediumBlue
+import './Question.css';   // .q-darkBlue, .q-mediumBlue
+import './QuizMaker.css';  // .quiz-exit-btn
 import './OptionMaker.css';
 import React, {useContext} from 'react';
 import Container from 'react-bootstrap/Container';
@@ -45,6 +46,18 @@ function OptionMaker({ index, question_index, choice }) {
         return val;
     }
 
+    function deleteOption(e) {
+        const choices_left = quizData.questions[question_index].choices.slice(0, index);
+        const choices_right = quizData.questions[question_index].choices.slice(index + 1, quizData.questions[question_index].choices.length);
+        let questions = quizData.questions.map((v, i) => {
+            return i !== question_index ?  v : {...v, choices: choices_left.concat(choices_right)};
+        });
+        setQuizData({
+            ...quizData,
+            questions: questions
+        });
+    }
+
     // horrible horrible biting gnawing
     function updateChoicePoints(e, point_index) {
         let questions = quizData.questions.map((q_v, q_i) => {
@@ -71,14 +84,21 @@ function OptionMaker({ index, question_index, choice }) {
 
     return (
         <div className={(choice.variant ? choice.variant : 'q-mediumBlue') + " choice-content"}>
-            <p
-                onBlur={updateChoiceText}
-                contentEditable
-                suppressContentEditableWarning={true}
-                className="choice-title"
-            >
-                {choice.text}
-            </p>
+            <Container>
+                <Row>
+                    <Col
+                        onBlur={updateChoiceText}
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                        className="choice-title"
+                    >
+                        {choice.text}
+                    </Col>
+                    <Col className='quiz-exit-btn' onClick={deleteOption} >
+                        X
+                    </Col>
+                </Row>
+            </Container>
             <Container>
                 <Row className="sm result-impact">
                     <Col>RESULT</Col>

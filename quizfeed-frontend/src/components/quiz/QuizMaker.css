@@ -27,6 +27,17 @@
   height: 0;
 }
 
+.quiz-exit-btn {
+  justify-content: right;
+  text-align: right;
+  color: white;
+}
+
+.quiz-exit-btn:hover {
+  cursor: pointer;
+  color: red;
+}
+
 /* The slider */
 .slider {
   position: absolute;

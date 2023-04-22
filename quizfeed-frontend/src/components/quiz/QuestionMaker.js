@@ -2,7 +2,6 @@ import './Question.css'; // .q-darkBlue, .q-mediumBlue
 import './QuestionMaker.css';
 import React, {useContext} from 'react';
 import Container from 'react-bootstrap/Container';
-import Stack from 'react-bootstrap/Stack';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import StyledButton from '../StyledButton';
@@ -40,14 +39,40 @@ function QuestionMaker({ index, question }) {
         });
     }
 
+    function deleteQuestion(e) {
+        const left = quizData.questions.slice(0, index);
+        const right = quizData.questions.slice(index + 1, quizData.questions.length);
+        setQuizData({
+            ...quizData,
+            questions: left.concat(right)
+        });
+    }
+
     return (
-        <Container>
-            <Stack className={question.variant ? question.variant : 'q-darkBlue'} gap={1}>
-                <h1 className='ms-5 mt-4' style={{ 'fontFamily': 'Montagu Slab, serif' }} >Question {index + 1}</h1>
-                <div onBlur={updateQuestionText} className='text-center fs-3 mb-3' contentEditable suppressContentEditableWarning={true}>
-                    {question.text}
-                </div>
-                <Row className='justify-content-center mb-4 choices' md='auto'>
+        <Container className={(question.variant ? question.variant : 'q-darkBlue') + " question-content"}>
+            {/* <Stack className={question.variant ? question.variant : 'q-darkBlue'} gap={1}> */}
+                <Row className="question-header">
+                    <Col>
+                        <h1 className='question-title' >Question {index + 1}</h1>
+                    </Col>
+                    <Col className='quiz-exit-btn' onClick={deleteQuestion} >
+                        X
+                    </Col>
+                </Row>
+                <Row>
+                    <Col
+                        onBlur={updateQuestionText}
+                        className='text-center fs-3 mb-3'
+                        contentEditable
+                        suppressContentEditableWarning={true}
+                    >
+                        {question.text}
+                    </Col>
+                </Row>
+                <Row
+                    className='justify-content-center mb-4 choices'
+                    md='auto'
+                >
                     {question.choices &&
                         question.choices.map((choice, idx) => {
                             return (
@@ -69,7 +94,7 @@ function QuestionMaker({ index, question }) {
                             </StyledButton>
                         </Col>
                 </Row>
-            </Stack>
+            {/* </Stack> */}
         </Container >
     );
 }
