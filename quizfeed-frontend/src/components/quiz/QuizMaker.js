@@ -1,23 +1,60 @@
 import './Question.css'; // .q-darkBlue, .q-mediumBlue
 import './QuizMaker.css';
-import React, {createContext} from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QuestionMaker from './QuestionMaker';
 import ResultMaker from './ResultMaker';
 import StyledButton from '../StyledButton';
 
 export const QuizMakerContext = createContext();
 
-// todo: pass in initial values for quiz - will allow editing
 /*
 * QuizMaker
 * quiz: Initial quiz data
 */
-function QuizMaker({ quiz }) {
-    let [quizData, setQuizData] = React.useState(quiz);
+function QuizMaker() {
+    const urlParams = useParams();
     const navigate = useNavigate();
+    const [quizData, setQuizData] = useState({});
+
+    // initialize quiz given url
+    useEffect(() => {
+        // if quiz ID is given, initialize quiz data with quiz from database
+        if (urlParams.id) {
+            fetch('/quiz/' + urlParams.id)
+            .then(res => {
+                if (!res.ok) {
+                    throw Error(res); // this will send entire object
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data) {
+                    setQuizData(unpackData(data));
+                }
+                else {
+                    throw Error(`ERROR: quiz with could not load quiz data for quiz with id ${urlParams.id}`);
+                }
+            })
+            .catch((err) => {
+                console.log(err); // TODO make this an error message
+                navigate("/");
+            });
+        } else { // id not given: initilize quiz data with empty quiz
+            const quiz = {
+                // TODO: replace fake username with user's genuine username
+                creatorUsername: "generic", // fake username so we can post
+                title: "Title",
+                description: "Description",
+                questions: [],
+                results: []
+            }
+            setQuizData(quiz);
+        }
+        
+    }, [navigate, urlParams]);
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     async function postData(url = "", data = {})
@@ -287,16 +324,5 @@ function QuizMaker({ quiz }) {
         </QuizMakerContext.Provider>
     );
 }
-
-QuizMaker.defaultProps = {
-    quiz: {
-        // TODO: replace fake username with user's genuine username
-        creatorUsername: "generic", // fake username so we can post
-        title: "Title",
-        description: "Description",
-        questions: [],
-        results: []
-    }
-};
 
 export default QuizMaker;

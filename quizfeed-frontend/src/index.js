@@ -20,9 +20,10 @@ root.render(
       <Routes>
         <Route path='/' element={<App />}>
           {/* Default page: can make it home page when that's created -- <Route index element={ } /> */}
+          <Route path='quiz/new' element={<QuizMaker />} />
           <Route path='quiz/:id' element={<QuizDisplay />} />
           <Route path='quiz/:id/:result' element={<QuizResult />} />
-          <Route path='quiz/new' element={<QuizMaker/>} />
+          <Route path='quiz/:id/edit' element={<QuizMaker />} />
         </Route>
       </Routes>
     </Router>
