@@ -1,20 +1,25 @@
-.q-darkBlue {
-  border-radius: 25px;
-  background-color: #0D1821;
-  color: #F0F4EF;
-  font-family: 'Montserrat';
-  font-weight: 900;
+.choice-content {
+  padding: 5px;
+  border-radius: 10px;
+  min-width: 210px;
 }
 
-.q-mediumBlue {
-  border-radius: 25px;
-  background-color: #344966;
-  color: #F0F4EF;
-  font-family: 'Montserrat';
-  font-weight: 900;
+.choice-title {
+  text-align: center;
+  font-size: large;
 }
 
-.choices {
-  margin-left: 10%;
-  margin-right: 10%;
+.q-darkBlue .result-impact, .q-mediumBlue .result-impact {
+  border-radius: 0px;
+}
+
+.result-impact {
+  text-align: center;
+  margin: 5px 0px;
+  font-size: small;
+  padding: 2px;
+}
+
+.sm {
+  font-size: xx-small;
 }

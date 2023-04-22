@@ -1,5 +1,6 @@
 import './ResultMaker.css';
 import React, {useContext} from 'react';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { QuizMakerContext } from './QuizMaker';
 
@@ -33,15 +34,14 @@ function ResultMaker({ index, result }) {
     }
 
     return (
-        <div className="q-darkBlue">
-            <h1 className='ms-5 mt-4' style={{ 'fontFamily': 'Montagu Slab, serif' }}>Result {index + 1}</h1>
-            <Row className='justify-content-center mb-4' md='auto'>
+        <Container className="q-darkBlue result-content">
+            <Row className='justify-content-center mb-4 result-title' md='auto'>
                 <div onBlur={updateResultTitle} className='text-center fs-3 mb-3' contentEditable suppressContentEditableWarning={true}>{result.title}</div>
             </Row>
-            <Row className='justify-content-center mb-4' md='auto'>
+            <Row className='justify-content-left mb-4' md='auto'>
                 <p onBlur={updateResultDesc} contentEditable suppressContentEditableWarning={true}>{result.description}</p>
             </Row>
-        </div>
+        </Container>
     );
 }
 

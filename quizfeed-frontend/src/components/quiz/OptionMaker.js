@@ -1,7 +1,9 @@
+import './Question.css'; // .q-darkBlue, .q-mediumBlue
 import './OptionMaker.css';
 import React, {useContext} from 'react';
 import Container from 'react-bootstrap/Container';
-import Stack from 'react-bootstrap/Stack';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { QuizMakerContext } from './QuizMaker';
 
 
@@ -68,20 +70,38 @@ function OptionMaker({ index, question_index, choice }) {
     }
 
     return (
-        <Container>
-            <Stack className={choice.variant ? choice.variant : 'q-mediumBlue'} gap={1}>
-                <p onBlur={updateChoiceText} contentEditable suppressContentEditableWarning={true}>{choice.text}</p>
+        <div className={(choice.variant ? choice.variant : 'q-mediumBlue') + " choice-content"}>
+            <p
+                onBlur={updateChoiceText}
+                contentEditable
+                suppressContentEditableWarning={true}
+                className="choice-title"
+            >
+                {choice.text}
+            </p>
+            <Container>
+                <Row className="sm result-impact">
+                    <Col>RESULT</Col>
+                    <Col>POINTS</Col>
+                </Row>
                 { quizData.results &&
-                      quizData.results.map((result, idx)=>{
-                          return(
-                              <div key={idx}>
-                                  {result.title}: <span onBlur={(e)=>updateChoicePoints(e, idx)} contentEditable suppressContentEditableWarning={true}>{choice.points[idx]}</span>
-                              </div>
-                          )
-                      })
+                        quizData.results.map((result, idx)=>{
+                            return(
+                                <Row key={idx} className="result-impact q-darkBlue">
+                                    <Col>{result.title}</Col>
+                                    <Col
+                                        onBlur={(e)=>updateChoicePoints(e, idx)}
+                                        contentEditable
+                                        suppressContentEditableWarning={true}
+                                    >
+                                        {choice.points[idx]}
+                                    </Col>
+                                </Row>
+                            )
+                        })
                 }
-            </Stack>
-        </Container >
+            </Container>
+        </div>
     );
 }
 

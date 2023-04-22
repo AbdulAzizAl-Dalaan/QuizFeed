@@ -1,3 +1,4 @@
+import './Question.css'; // .q-darkBlue, .q-mediumBlue
 import './QuestionMaker.css';
 import React, {useContext} from 'react';
 import Container from 'react-bootstrap/Container';
@@ -19,9 +20,9 @@ function QuestionMaker({ index, question }) {
 
     // add another option to question
     function onClickAddOption(e) {
-        let option = {"text": "choice", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) };
+        let option = (i)=>({"text": `Option ${i}`, "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) });
         let questions = quizData.questions.map((v, i) => {
-            return i !== index ?  v : {...v, choices: v.choices.concat([option])};
+            return i !== index ?  v : {...v, choices: v.choices.concat([option(v.choices.length + 1)])};
         });
         setQuizData({
             ...quizData,

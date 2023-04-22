@@ -14,7 +14,10 @@
   font-weight: 900;
 }
 
-.choices {
-  margin-left: 10%;
-  margin-right: 10%;
+.result-content {
+  padding: 10px 10px 0px 10px;
+}
+
+.result-title {
+  font-family: 'Montagu Slab, serif'
 }

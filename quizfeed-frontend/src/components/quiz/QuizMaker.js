@@ -1,3 +1,4 @@
+import './Question.css'; // .q-darkBlue, .q-mediumBlue
 import './QuizMaker.css';
 import React, {createContext} from 'react';
 import Stack from 'react-bootstrap/Stack';
@@ -132,12 +133,16 @@ function QuizMaker({ quiz }) {
         }
     }
 
+    function onClickCancel(e) {
+        navigate("/");
+    }
+
     function onClickAddResult(e) {
         e.preventDefault();
-        let result = {
-            "title": "Title",
+        let result = (i) => ({
+            "title": `Result ${i}`,
             "description": "Description"
-        };
+        });
         let questions = quizData.questions.map((q_v) => {
             let c = q_v.choices.map((c_v) => {
                 return {...c_v, points: [...c_v.points, 0]}
@@ -147,7 +152,7 @@ function QuizMaker({ quiz }) {
         setQuizData({
             ...quizData,
             questions: questions,
-            results: [...quizData.results, result]
+            results: [...quizData.results, result(quizData.results.length + 1)]
         });
     }
 
@@ -155,10 +160,10 @@ function QuizMaker({ quiz }) {
         e.preventDefault();
         let question = {
             "text": "Question?",
-            "variant": "q-mediumBlue",
+            "variant": "q-darkBlue",
             "choices": [
-              { "text": "choice", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
-              { "text": "choice", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
+              { "text": "Option 1", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
+              { "text": "Option 2", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
             ]
         };
         setQuizData({
@@ -195,6 +200,10 @@ function QuizMaker({ quiz }) {
                             <div>
                                 <StyledButton
                                     variant='b-mediumBlue'
+                                    onClick={onClickSave}
+                                >Save</StyledButton>
+                                <StyledButton
+                                    variant='b-mediumBlue'
                                     onClick={onClickPublish}
                                 >Publish</StyledButton>
                             </div>
@@ -219,10 +228,13 @@ function QuizMaker({ quiz }) {
                                 </p>
                             </div>
                             <div>
+                                {/* discard current changes */}
                                 <StyledButton
                                     variant='b-mediumBlue'
-                                    onClick={onClickSave}
-                                >Save</StyledButton>
+                                    onClick={onClickCancel}
+                                >Cancel</StyledButton>
+
+                                {/* destroy quiz in database */}
                                 <StyledButton
                                     variant='b-mediumBlue'
                                     onClick={onClickDelete}
