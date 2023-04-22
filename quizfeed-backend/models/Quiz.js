@@ -157,6 +157,21 @@ Result.init({
     timestamps: false
 });
 
+class Tag extends Model {
+}
+
+Tag.init({
+    text: {
+        primaryKey: true,
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+}, {
+    sequelize,
+    modelName: 'Tag',
+    timestamps: false
+});
+
 Quiz.hasMany(Question, { as: 'questions', onDelete: 'cascade', onUpdate: 'cascade' });
 Question.belongsTo(Quiz);
 Question.hasMany(Choice, { as: 'choices', onDelete: 'cascade', onUpdate: 'cascade' });
@@ -165,4 +180,10 @@ Choice.belongsTo(Question);
 Quiz.hasMany(Result, { as: 'results', onDelete: 'cascade', onUpdate: 'cascade' });
 Result.belongsTo(Quiz);
 
-module.exports = { Quiz, Question, Choice, Result };
+// through table for joining Tag and Quiz tables (many-to-many)
+// docs: https://sequelize.org/docs/v6/advanced-association-concepts/advanced-many-to-many/
+const QuizTags = sequelize.define('QuizTags', {}, {timestamps: false});
+Quiz.belongsToMany(Tag, {through: QuizTags, as: 'tags', onDelete: 'cascade', onUpdate: 'cascade'});
+Tag.belongsToMany(Quiz, {through: QuizTags, as: 'quizzes', onDelete: 'cascade', onUpdate: 'cascade'});
+
+module.exports = { Quiz, Question, Choice, Result, Tag, QuizTags };

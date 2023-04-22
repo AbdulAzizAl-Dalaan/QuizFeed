@@ -104,9 +104,14 @@ async function setup() {
         title: 'Result 2',
         description: 'Description 2'
       }
+    ],
+    tags: [
+      { text: "tag 1" },
+      { text: "tag 2" },
+      { text: "tag 3" }
     ]
   }, {
-    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: 'tags' }]
   });
   console.log("Quiz created");
 }
