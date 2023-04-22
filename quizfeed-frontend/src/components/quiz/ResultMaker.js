@@ -47,7 +47,7 @@ function ResultMaker({ index, result }) {
 
     return (
         <Container className="q-darkBlue result-content">
-            <div className='quiz-exit-btn' onClick={deleteResult}>X</div>
+            <div className='quiz-exit-btn' onClick={deleteResult} />
             <Row>
                 <Col
                     className='justify-content-left mb-4 result-title'

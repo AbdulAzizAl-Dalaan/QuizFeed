@@ -3,7 +3,7 @@ const { Quiz, Result } = require('../models/Quiz');
 var router = express.Router();
 
 router.get('/:id', async function (req, res, next) {
-    Quiz.findByPk(req.params.id, { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }] })
+    Quiz.findByPk(req.params.id, { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, {association: "tags"}] })
         .then(quiz => res.json(quiz));
 });
 
@@ -16,7 +16,7 @@ router.get('/:id/:result', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
     Quiz.create(
         req.body,
-        {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]}
+        {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, {association: "tags"}]}
     )
     .then(quiz => res.json(quiz))
     .catch((err)=>res.status(500).json(err));
@@ -39,7 +39,7 @@ router.patch('/:id', async function (req, res, next) {
             delete req.body.id;
             quiz = await Quiz.create(
                 req.body,
-                {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]}
+                {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, {association: "tags"}]}
             );
             res.json(quiz);
         }

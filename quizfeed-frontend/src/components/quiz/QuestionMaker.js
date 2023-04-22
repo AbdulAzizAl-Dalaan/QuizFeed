@@ -60,7 +60,7 @@ function QuestionMaker({ index, question }) {
 
     return (
         <Container className={(question.variant ? question.variant : 'q-darkBlue') + " question-content"}>
-            <div className='quiz-exit-btn' onClick={deleteQuestion}>X</div>
+            <div className='quiz-exit-btn' onClick={deleteQuestion} />
             
             <Row className='question-header' >
                 <Col>

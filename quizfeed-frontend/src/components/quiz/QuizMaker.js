@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import { useNavigate, useParams } from "react-router-dom";
 import QuestionMaker from './QuestionMaker';
 import ResultMaker from './ResultMaker';
+import TagMaker from './TagMaker';
 import StyledButton from '../StyledButton';
 
 export const QuizMakerContext = createContext();
@@ -46,12 +47,13 @@ function QuizMaker() {
             const quiz = {
                 // TODO: replace fake username with user's genuine username
                 creatorUsername: "generic", // fake username so we can post
+                randomizeQuestions: true,
+                allowComments: false,
                 title: "Title",
                 description: "Description",
                 questions: [],
                 results: [],
-                randomizeQuestions: true,
-                allowComments: false
+                tags: []
             }
             setQuizData(quiz);
         }
@@ -149,9 +151,6 @@ function QuizMaker() {
         }
     }
 
-    // function onClickAddTag(e) {
-    // }
-
     function onClickPublish(e) {
         saveQuiz({...quizData, publishedAt: Date.now()});
     }
@@ -185,14 +184,23 @@ function QuizMaker() {
         setQuizData({...quizData, randomizeQuestions: !quizData.randomizeQuestions});
     }
 
+    function onClickAddTag(e) {
+        e.preventDefault();
+        const tag = (i) => ({"text": `Tag ${i}`});
+        setQuizData({
+            ...quizData,
+            tags: [...quizData.tags, tag(quizData.tags.length + 1)]
+        });
+    }
+
     function onClickAddResult(e) {
         e.preventDefault();
-        let result = (i) => ({
+        const result = (i) => ({
             "title": `Result ${i}`,
             "description": "Description"
         });
-        let questions = quizData.questions.map((q_v) => {
-            let c = q_v.choices.map((c_v) => {
+        const questions = quizData.questions.map((q_v) => {
+            const c = q_v.choices.map((c_v) => {
                 return {...c_v, points: [...c_v.points, 0]}
             });
             return {...q_v, choices: c};
@@ -206,7 +214,7 @@ function QuizMaker() {
 
     function onClickAddQuestion(e) {
         e.preventDefault();
-        let question = {
+        const question = {
             "text": "Question?",
             "variant": "q-darkBlue",
             "choices": [
@@ -244,7 +252,19 @@ function QuizMaker() {
                                 <h1 onBlur={updateTitle} style={{ 'fontFamily': 'Montagu Slab, serif' }} contentEditable suppressContentEditableWarning={true}>{quizData.title}</h1>
                             </div>
                             <div>
-                                <p>TAGS</p>
+                                <span id="tags-label">TAGS</span>
+                                <span class="quiz-add-btn" onClick={onClickAddTag} />
+                                { quizData.tags &&
+                                    quizData.tags.map((tag, idx) => {
+                                        return (
+                                            <TagMaker
+                                                key={idx}
+                                                index={idx}
+                                                tag={tag}
+                                            />
+                                        );
+                                    })
+                                }
                             </div>
                             <div>
                                 <StyledButton

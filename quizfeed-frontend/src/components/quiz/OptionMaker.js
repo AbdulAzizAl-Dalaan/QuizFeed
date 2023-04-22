@@ -84,7 +84,7 @@ function OptionMaker({ index, question_index, choice }) {
 
     return (
         <div className={(choice.variant ? choice.variant : 'q-mediumBlue') + " choice-content"}>
-            <div className='quiz-exit-btn' onClick={deleteOption}>X</div>
+            <div className='quiz-exit-btn' onClick={deleteOption} />
             <Container>
                 <Row>
                     <Col

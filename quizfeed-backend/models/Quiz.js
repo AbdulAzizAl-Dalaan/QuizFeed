@@ -183,7 +183,7 @@ Result.belongsTo(Quiz);
 // through table for joining Tag and Quiz tables (many-to-many)
 // docs: https://sequelize.org/docs/v6/advanced-association-concepts/advanced-many-to-many/
 const QuizTags = sequelize.define('QuizTags', {}, {timestamps: false});
-Quiz.belongsToMany(Tag, {through: QuizTags, as: 'tags', onDelete: 'cascade', onUpdate: 'cascade'});
-Tag.belongsToMany(Quiz, {through: QuizTags, as: 'quizzes', onDelete: 'cascade', onUpdate: 'cascade'});
+Quiz.belongsToMany(Tag, {through: QuizTags, as: 'tags'});
+Tag.belongsToMany(Quiz, {through: QuizTags, as: 'quizzes'});
 
 module.exports = { Quiz, Question, Choice, Result, Tag, QuizTags };
