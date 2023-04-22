@@ -111,21 +111,14 @@ router.get('/message/:username', async function(req, res, next) {
 });
 
 router.post('/message/sendmessage/:username', async function(req, res, next) {
-  console.log("SENDING MESSAGE")
-  console.log("1" + req.session.user.username)
-  console.log("1" + req.params.username)
-  console.log("1" + req.body.message)
-  console.log("1" + req.body.content)
   const message = await Message.create({
     sender: req.session.user.username,
     receiver: req.params.username,
     content: req.body.message
   });
   // res.redirect('/friends/message/' + req.params.username)
-  res.json({success: true, message: "Message sent"})
+  res.json({success: true, message: "Message sent", newMessage: message})
 });
-
-
 
 
 module.exports = router;

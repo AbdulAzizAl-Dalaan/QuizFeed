@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 
 function MessageList() {
+  // Initialize messagesData state variable
   const [messagesData, setMessagesData] = React.useState({
     status: "",
     message: "",
@@ -18,11 +19,17 @@ function MessageList() {
     user: "",
     friend: "",
   });
-  const [message, setMessage] = React.useState("");
 
+  // Initialize message and errorMessage state variables
+  const [message, setMessage] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
+  // Get username from URL
   const urlParams = useParams();
 
+  // Fetch messages from backend server
   useEffect(() => {
+    // Obtains messages between current logged in user and user in URL
     const fetchMessages = async (username) => {
       try {
         const response = await fetch(`${urlParams.username}`);
@@ -35,9 +42,12 @@ function MessageList() {
     fetchMessages();
   }, []);
 
+  // Send message to backend server
   const sendMessage = async (event) => {
     event.preventDefault();
+
     try {
+      // Send message to backend server with the url user and the message content
       const response = await fetch(`sendmessage/${urlParams.username}`, {
         method: "POST",
         headers: {
@@ -51,9 +61,17 @@ function MessageList() {
       });
       const data = await response.json();
       if (data.success) {
-        window.location.reload();
+        // if the response is successful, add the new message to the messagesData state variable
+        setMessagesData((prevState) => ({
+          ...prevState,
+          messages: [...prevState.messages, data.newMessage],
+        }));
+
+        // Reset the message and errorMessage state variables
+        setMessage("");
       } else {
-        setMessage(data.message);
+        // if the response is unsuccessful, set the errorMessage state variable
+        setErrorMessage(data.message);
       }
     } catch (err) {
       console.log(err);
@@ -98,7 +116,8 @@ function MessageList() {
             id="content"
             type="text"
             required
-            name="content"
+            value={message} // Set the value of the input to the message state variable
+            onChange={(event) => setMessage(event.target.value)} // Set the message state variable to the value of the input
             placeholder="Type your message..."
           />
           <Button type="submit" className="account-btn">

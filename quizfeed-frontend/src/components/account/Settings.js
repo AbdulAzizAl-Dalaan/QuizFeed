@@ -30,7 +30,6 @@ function Settings() {
   const [password2, setPassword2] = useState("");
   const [message, setMessage] = useState(null);
 
-  const [setStatusMessage, setSetStatusMessage] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
@@ -88,7 +87,9 @@ function Settings() {
 
       if (data.success) {
         setMessage(data.message);
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       } else {
         setMessage(data.message);
       }
@@ -110,13 +111,14 @@ function Settings() {
       const data = await response.json();
 
       if (data.success) {
-        setStatusMessage("Account deleted successfully. Redirecting...");
-        navigate("/login");
+          setMessage(data.message);
+          navigate("/login");
       } else {
-        setStatusMessage("Error deleting account. Please try again.");
+        setMessage(data.message);
       }
     } catch (error) {
-      setStatusMessage("Error deleting account. Please try again.");
+      console.error(error);
+      setMessage(error.name + ": " + error.message);
     }
   };
 
@@ -229,9 +231,6 @@ function Settings() {
             <Button variant="danger" onClick={handleShow}>
               Delete Account
             </Button>
-            {setStatusMessage && (
-              <Alert variant="danger">{setStatusMessage}</Alert>
-            )}
             <Modal show={showModal} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Warning</Modal.Title>
@@ -251,7 +250,8 @@ function Settings() {
             </Modal>
           </div>
           <br />
-          {message && <Alert variant="danger">{message}</Alert>}
+          {message && message == "Account updated, Redirecting back to login" && <Alert variant="success">{message}</Alert>}
+          {message && message !== "Account updated, Redirecting back to login" && <Alert variant="danger">{message}</Alert>}
         </Col>
       </Row>
     </Container>

@@ -137,7 +137,7 @@ router.post('/settings', async function (req, res, next) {
         await User.destroy({ where: { username: req.session.user.username } })
         req.session.destroy()
         // res.redirect('/?msg=account+updated+please+login+again')
-        res.json({ success: true, message: "Account updated, please login again" })
+        res.json({ success: true, message: "Account updated, Redirecting back to login" })
       }
       else {
         console.log("UPDATING USER: " + req.body.username)
@@ -153,7 +153,7 @@ router.post('/settings', async function (req, res, next) {
           }
         })
         // res.redirect('/settings?msg=updated')
-        res.json({ success: true, message: "Account updated" })
+        res.json({ success: true, message: "Account updated, Redirecting back to login" })
       }
     }
   }
@@ -175,11 +175,11 @@ router.post('/deleteaccount', async function (req, res, next) {
     })
     req.session.destroy()
     // res.redirect('/')
-    res.json({ success: true, message: "Account deleted" })
+    res.json({ success: true, message: "Account deleted successfully, redirecting to login" })
   }
   else {
     // res.redirect('/')
-    res.status(400).json({ success: false, message: "User not found" })
+    res.status(400).json({ success: false, message: "Error" })
   }
 });
 

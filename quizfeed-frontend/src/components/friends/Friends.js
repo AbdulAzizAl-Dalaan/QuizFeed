@@ -36,6 +36,17 @@ function FriendsList() {
     fetchData();
   }, []);
 
+  const updateFriendLists = async () => {
+    try {
+      const response = await fetch("/friends");
+      const data = await response.json();
+      setFriendsData(data);
+      setMessage("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const acceptFriend = async (username) => {
     try {
       const response = await fetch(`/friends/acceptfriend/${username}`, {
@@ -49,7 +60,7 @@ function FriendsList() {
       });
       const data = await response.json();
       if (data.success) {
-        window.location.reload();
+        updateFriendLists();
       } else {
         setMessage(data.message);
       }
@@ -71,7 +82,7 @@ function FriendsList() {
       });
       const data = await response.json();
       if (data.success) {
-        window.location.reload();
+        updateFriendLists();
       } else {
         setMessage(data.message);
       }
@@ -98,7 +109,7 @@ function FriendsList() {
       );
       const data = await response.json();
       if (data.success) {
-        window.location.reload();
+        updateFriendLists();
       } else {
         setMessage(data.message);
       }
@@ -141,8 +152,7 @@ function FriendsList() {
                   )}
                   {friendsData.friends_list.map((friend) => (
                     <tr key={friend.username}>
-                      <td>
-                        <div style={{ textAlign: "center" }}>
+                      <td style={{textAlign: 'center'}}>
                           <Button
                             variant="primary"
                             size="sm"
@@ -150,9 +160,8 @@ function FriendsList() {
                           >
                             {friend.username}
                           </Button>
-                        </div>
                       </td>
-                      <td>
+                      <td style={{textAlign: 'center'}}>
                         <Button
                           variant="success"
                           size="sm"
@@ -161,7 +170,7 @@ function FriendsList() {
                           Message
                         </Button>
                       </td>
-                      <td>
+                      <td style={{textAlign: 'center'}}>
                         <Button
                           variant="danger"
                           size="sm"
@@ -207,7 +216,7 @@ function FriendsList() {
                   )}
                   {friendsData.pending_requests_list.map((friend) => (
                     <tr key={friend.username}>
-                      <td>
+                      <td style={{textAlign: 'center'}}>
                         <Button
                           variant="primary"
                           size="sm"
@@ -216,7 +225,7 @@ function FriendsList() {
                           {friend.username}
                         </Button>
                       </td>
-                      <td>
+                      <td style={{textAlign: 'center'}}>
                         <Button
                           variant="success"
                           size="sm"
@@ -225,7 +234,7 @@ function FriendsList() {
                           Accept Friend
                         </Button>
                       </td>
-                      <td>
+                      <td style={{textAlign: 'center'}}>
                         <Button
                           variant="danger"
                           size="sm"
@@ -252,7 +261,7 @@ function FriendsList() {
                   )}
                   {friendsData.my_friend_requests.map((friend) => (
                     <tr key={friend.username}>
-                      <td>
+                      <td style={{textAlign: 'center'}}> 
                         <div style={{ textAlign: "center" }}>
                           <Button
                             variant="primary"
@@ -263,7 +272,7 @@ function FriendsList() {
                           </Button>
                         </div>
                       </td>
-                      <td>
+                      <td style={{textAlign: 'center'}}>
                         <Button
                           variant="danger"
                           size="sm"
