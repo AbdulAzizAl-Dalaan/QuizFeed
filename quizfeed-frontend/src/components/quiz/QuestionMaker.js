@@ -29,6 +29,16 @@ function QuestionMaker({ index, question }) {
         });
     }
 
+    function toggleRandomizeChoices(e) {
+        const left = quizData.questions.slice(0, index);
+        const question = {...quizData.questions[index], randomizeChoices: !quizData.questions[index].randomizeChoices};
+        const right = quizData.questions.slice(index + 1, quizData.questions.length);
+        setQuizData({
+            ...quizData,
+            questions: left.concat([question]).concat(right)
+        });
+    }
+
     function updateQuestionText(e) {
         let questions = quizData.questions.map((v, i) => {
             return i !== index ?  v : {...v, text: txt(e)};
@@ -51,9 +61,19 @@ function QuestionMaker({ index, question }) {
     return (
         <Container className={(question.variant ? question.variant : 'q-darkBlue') + " question-content"}>
             <div className='quiz-exit-btn' onClick={deleteQuestion}>X</div>
+            
             <Row className='question-header' >
-                <Col className='question-title' >
-                    Question {index + 1}
+                <Col>
+                    <span className='question-title'>Question {index + 1}</span>
+                </Col>
+                <Col className="question-toggle">
+                    <span >
+                        <label className="switch">
+                            <input type="checkbox" onChange={toggleRandomizeChoices} checked={quizData.questions[index].randomizeChoices}/>
+                            <span className="slider round"></span>
+                        </label>
+                        <span className="md">Randomize Order of Options</span>
+                    </span>
                 </Col>
             </Row>
             <Row>

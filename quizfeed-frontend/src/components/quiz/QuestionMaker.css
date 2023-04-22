@@ -6,6 +6,7 @@
 
 .question-header {
   margin: 0px;
+  /* background-color: red; */
 }
 
 .question-title {
@@ -15,4 +16,11 @@
 
 .justify-content-between.question-header.row {
   margin: 0px;
+}
+
+.question-toggle {
+  /* background: blue; */
+  text-align: right;
+  padding: 0px 50px 0px 0px;
+  font-size: small;
 }

@@ -49,7 +49,9 @@ function QuizMaker() {
                 title: "Title",
                 description: "Description",
                 questions: [],
-                results: []
+                results: [],
+                randomizeQuestions: true,
+                allowComments: false
             }
             setQuizData(quiz);
         }
@@ -175,6 +177,14 @@ function QuizMaker() {
         navigate("/");
     }
 
+    function toggleComments(e) {
+        setQuizData({...quizData, allowComments: !quizData.allowComments});
+    }
+
+    function toggleRandomizeQuestions(e) {
+        setQuizData({...quizData, randomizeQuestions: !quizData.randomizeQuestions});
+    }
+
     function onClickAddResult(e) {
         e.preventDefault();
         let result = (i) => ({
@@ -202,7 +212,8 @@ function QuizMaker() {
             "choices": [
               { "text": "Option 1", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
               { "text": "Option 2", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
-            ]
+            ],
+            "randomizeChoices": true
         };
         setQuizData({
             ...quizData,
@@ -250,20 +261,28 @@ function QuizMaker() {
                                 <p onBlur={updateDesc} contentEditable suppressContentEditableWarning={true}>{quizData.description}</p>
                             </div>
                             <div>
-                                <p>
+                                <div>
                                     <label className="switch">
-                                        <input type="checkbox"/>
+                                        <input 
+                                            type="checkbox"
+                                            onChange={toggleRandomizeQuestions}
+                                            checked={quizData.randomizeQuestions}
+                                        />
                                         <span className="slider round"></span>
                                     </label>
-                                    Randomize order of questions
-                                </p>
-                                <p>
+                                    <span className="quiz-toggle-label">Randomize Order of Questions</span>
+                                </div>
+                                <div>
                                     <label className="switch">
-                                        <input type="checkbox"/>
+                                        <input
+                                            type="checkbox"
+                                            onChange={toggleComments}
+                                            checked={quizData.allowComments}
+                                        />
                                         <span className="slider round"></span>
                                     </label>
-                                    Comment Section
-                                </p>
+                                    <span className="quiz-toggle-label">Comment Section</span>
+                                </div>
                             </div>
                             <div>
                                 {/* discard current changes */}

@@ -45,6 +45,16 @@ Quiz.init({
         allowNull: false,
         defaultValue: 0
     },
+    randomizeQuestions: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },
+    allowComments: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
     createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -78,6 +88,11 @@ Question.init({
     text: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    randomizeChoices: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
     },
     variant: {
         type: DataTypes.STRING,
