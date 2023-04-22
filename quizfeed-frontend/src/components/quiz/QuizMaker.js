@@ -124,16 +124,18 @@ function QuizMaker({ quiz }) {
 
     function onClickDelete(e) {
         // has id: exists in database and must be deleted from database
-        if (quizData.id !== null)
-        {
+        if (quizData.id != null) {
             deleteData(`/quiz/${quizData.id}`)
             .then((res)=>{console.log(res)})
             .then(navigate("/"))
             .catch((err)=>console.log(err));
+        } else {
+            navigate("/");
         }
     }
 
     function onClickCancel(e) {
+        // leave w/o saving
         navigate("/");
     }
 
