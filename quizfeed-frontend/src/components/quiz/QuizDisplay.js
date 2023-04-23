@@ -1,4 +1,3 @@
-import './QuizDisplay.css';
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Stack from 'react-bootstrap/Stack';
@@ -45,7 +44,7 @@ export default function QuizDisplay() {
 
     // When the user is ready to receive their results, this method is called
     // It checks to make sure all questions have been answered, and if so, calculates the result and redirects accordingly
-    function onClickSubmit(e) {
+    async function onClickSubmit(e) {
         e.preventDefault();
 
         // check to make sure all questions have been answered
@@ -61,12 +60,40 @@ export default function QuizDisplay() {
             const parsedPoints = points.split(',').map(Number);
             totalPoints = totalPoints.map((curPoints, i) => curPoints + parsedPoints[i]);
         }
-        // find index of highest element and that is your result
-        const result = quizData.results[totalPoints.indexOf(Math.max(...totalPoints))].id;
+        // find index of highest element to get result pos, and use that to find result id
+        const resultId = quizData.results[totalPoints.indexOf(Math.max(...totalPoints))].id;
+
+        // No longer needed I think, since we're returning results ordered by position, but just in case I'm leaving it here...
+        /*
+        let resultId = -1;
+        const resultPos = totalPoints.indexOf(Math.max(...totalPoints));
+
+        for (const result of quizData.results) {
+            if (result.position === resultPos) {
+                resultId = result.id;
+                break;
+            }
+        }
+        */
+
+        // update user's results
+        fetch('/history/' + urlParams.id + '/' + 'subu')
+            .then(res => res.json())
+            .then(data => {
+                // If user has not taken it before
+                if (data.length === 0) {
+                    // then create history
+                    fetch('/history/' + urlParams.id + '/' + resultId, {
+                        method: 'POST', body: JSON.stringify({ username: 'subu' }),
+                        headers: { 'Content-type': 'application/json' }
+                    });
+                }
+            });
+
         // update quiz stats
-        fetch('/quiz/' + urlParams.id + '/' + result, { method: 'PATCH' });
+        fetch('/quiz/stats/' + urlParams.id + '/' + resultId, { method: 'PATCH' });
         // redirect to the correct results page
-        navigate('/quiz/' + urlParams.id + '/' + result);
+        navigate('/quiz/' + urlParams.id + '/' + resultId);
     }
 
     return (

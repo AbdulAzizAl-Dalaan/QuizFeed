@@ -9,9 +9,33 @@ const session = require('express-session');
 const sequelize = require('./db');
 const User = require('./models/User');
 const Friends = require('./models/Friends');
-const { Quiz } = require('./models/Quiz');
-const Message = require('./models/Message');
+const Quiz = require('./models/Quiz');
+const Question = require('./models/Question');
+const Choice = require('./models/Choice');
+const Result = require('./models/Result');
+const Comment = require('./models/Comment');
+const History = require('./models/History');
 
+// Model Associations
+Quiz.hasMany(Question, { as: 'questions' });
+Question.belongsTo(Quiz);
+Question.hasMany(Choice, { as: 'choices' });
+Choice.belongsTo(Question);
+
+Quiz.hasMany(Result, { as: 'results' });
+Result.belongsTo(Quiz);
+
+Quiz.hasMany(Comment, { as: 'comments' });
+Comment.belongsTo(Quiz);
+
+User.hasMany(History, { as: 'histories' });
+History.belongsTo(User);
+Quiz.hasMany(History, { as: 'histories' });
+History.belongsTo(Quiz);
+Result.hasMany(History, { as: 'histories' });
+History.belongsTo(Result);
+
+// Routers
 var indexRouter = require('./routes/index');
 var homeRouter = require('./routes/home');
 var searchRouter = require('./routes/search');
@@ -21,7 +45,7 @@ var myAccountRouter = require('./routes/myaccount');
 var newQuizzesRouter = require('./routes/newquizzes');
 var trendingQuizzesRouter = require('./routes/trendingquizzes');
 var quizRouter = require('./routes/quiz');
-
+var historyRouter = require('./routes/history');
 
 var app = express();
 
@@ -52,6 +76,7 @@ app.use('/myaccount', myAccountRouter);
 app.use('/newquizzes', newQuizzesRouter);
 app.use('/trendingquizzes', trendingQuizzesRouter);
 app.use('/quiz', quizRouter);
+app.use('/history', historyRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -97,50 +122,107 @@ async function setup() {
   console.log("User created")
   const quiz1 = await Quiz.create({
     id: 0,
-    title: 'Quiz Title',
-    creatorUsername: 'user who created quiz',
-    description: 'quiz description',
-    takenNum: 0,
-    approval: 56,
+    title: 'What Fruit Are You?',
+    creatorUsername: 'mikalooloo',
+    description: 'Ever wondered what type of fruit you are? Well today is your lucky day!',
     questions: [
       {
-        text: 'question question?',
-        variant: 'q-mediumBlue',
+        text: 'It\'s a Friday night. You\'re probably...',
         choices: [
-          { text: 'choice 1', variant: 'b-mediumBlue', points: '0,3' },
-          { text: 'choice 2', variant: 'b-mediumBlue', points: '3,0' },
-          { text: 'choice 3', variant: 'b-mediumBlue', points: '0,8' },
+          { position: 0, text: 'hanging out at home', points: '0,1,0,1' },
+          { position: 1, text: 'hosting friends/family', points: '0,0,2,0' },
+          { position: 2, text: 'at a local restaurant', points: '1,0,0,0' },
         ]
       },
       {
-        text: 'question?',
-        variant: 'q-mediumBlue',
+        text: 'Your friend calls you in a panic. How do you respond?',
         choices: [
-          { text: 'choice 4', variant: 'b-mediumBlue', points: '0,4' },
-          { text: 'choice 5', variant: 'b-mediumBlue', points: '4,0' },
-          { text: 'choice 6', variant: 'b-mediumBlue', points: '0,8' }
+          { position: 0, text: 'Comfort them', points: '2,0,0,0' },
+          { position: 1, text: 'Think of solutions to their problem', points: '0,0,0,1' },
+          { position: 2, text: 'Distract them', points: '0,0,1,0' },
+          { position: 3, text: 'Tell them I\'m on my way', points: '0,2,0,0' },
+        ]
+      },
+      {
+        text: 'Out of these options, what is your favorite condiment?',
+        choices: [
+          { position: 0, text: 'Ketchup', points: '0,1,0,0' },
+          { position: 1, text: 'BBQ sauce', points: '1,0,1,0' },
+          { position: 2, text: 'Hot sauce', points: '0,0,0,1' },
+        ]
+      },
+      {
+        text: 'Overnight you gained a super power of your choosing. Which one would you pick?',
+        choices: [
+          { position: 0, text: 'Teleportation', points: '0,0,1,0' },
+          { position: 1, text: 'Shapeshifting', points: '0,0,0,2' },
+          { position: 2, text: 'Superhuman strength', points: '0,1,0,0' },
+          { position: 3, text: 'Mindreading', points: '1,0,0,0' },
         ]
       }
     ],
     results: [
       {
-        title: 'Result 1',
-        description: 'Description 1'
+        position: 0,
+        title: 'Strawberry',
+        description: 'You\'re sweet, just like a strawberry!<br/>You are a friendly and outgoing person who brightens up everyone\'s day.'
       },
       {
-        title: 'Result 2',
-        description: 'Description 2'
+        position: 1,
+        title: 'Apple',
+        description: 'You\'re dependable, just like an apple!<br/>You are a reliable and generous person who is always there for everyone, no matter the occassion.'
+      },
+      {
+        position: 2,
+        title: 'Banana',
+        description: 'You\'re wacky, just like a banana!<br/>You are a hilarious and energetic person who loves to entertain their friends and family.'
+      },
+      {
+        position: 3,
+        title: 'Pomegranate',
+        description: 'You\'re enchanting, just like a pomegranate!<br/>You are an insightful and unique person who gives the best advice, no matter the scenario.'
+      },
+    ],
+    comments: [
+      {
+        creatorUsername: 'mikalooloo',
+        text: 'i got my fav character yay'
+      },
+      {
+        creatorUsername: 'legionas56',
+        text: 'this was a great quiz!!'
       }
     ]
   }, {
-    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]
+    include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: 'comments' }]
   });
   console.log("Quiz created");
 }
 
-sequelize.sync({ force: true }).then(() => {
-  console.log("Database synced")
-  setup().then(() => console.log("Setup completed"))
-});
+// If no argument is given, drop db and do fresh setup
+if (process.argv.length === 2) {
+  sequelize.sync({ force: true })
+    .then(() => {
+      console.log('Connected to database');
+      setup()
+        .then(() => console.log("Setup completed"));
+    });
+}
+else {
+  for (let i = 2; i < process.argv.length; i++) {
+    console.log(process.argv[i]);
+    switch (process.argv[i]) {
+      case "keep":
+        sequelize.sync({ force: false })
+          .then(() => console.log('Connected to database'))
+          .catch(err => console.log('Unable to connect to database:', err));
+        break;
+    }
+  }
+}
+
+
+
+
 
 module.exports = app;
