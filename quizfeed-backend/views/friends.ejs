@@ -10,16 +10,90 @@
       .form-group {
         margin:10px;
       }
+      .content
+      {
+        max-width: 1000px;
+        margin: auto;
+      }
     </style>
 </head>
 <%- include('header') %>
-<h2>Friends</h2>
-<p>
-    Once a user is able to perform a login attempt successfully, they should be able to access a page where they can find
-    <br>
-    quiz results friends have received
-    <br>
-    comments friends have made
-    <br>
-    quizzes friends have made
-</p>
+
+<div class="content">
+
+  <h2>Your Friends</h2>
+  <% if (friends_list.length > 0) { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let index = 0; index < friends_list.length; index++ ) { %>
+          <tr>
+            <td><%= friends_list[index].username %></td>
+            <td><a href="friends/message/<%= friends_list[index].username %>">Message</a></td>
+            <td><a href="friends/removefriend/<%= friends_list[index].username %>">Remove</a></td>
+          </tr>
+        <% } %>  
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>You have no Friends</p>
+  <% } %>
+<h2>Pending Requests</h2>
+  <% if (pending_requests_list.length > 0) { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for( let index = 0; index < pending_requests_list.length; index++ ) { %>
+          <tr>
+            <td><%= pending_requests_list[index].username %></td>
+            <td><a href="friends/acceptfriend/<%= pending_requests_list[index].username %>">Accept</a></td>
+            <td><a href="friends/removefriend/<%= pending_requests_list[index].username %>">Reject</a></td>
+          </tr>
+        <% } %>  
+      </tbody>
+    </table>  
+  <% } else {%>
+    <p>You have no Pending Requests</p>  
+  <% } %>
+
+<h2>Your Requests</h2>
+<% if (my_friend_requests.length > 0) { %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for( let index = 0; index < my_friend_requests.length; index++ ) { %>
+        <tr>
+          <td><%= my_friend_requests[index].username %></td>
+          <td><a href="friends/removefriend/<%= my_friend_requests[index].username %>">Cancel</a></td>
+        </tr>
+      <% } %>  
+    </tbody>
+  </table>
+<% } else {%>
+  <p>You have no Sent Requests</p>
+<% } %>
+<h2>Send Friend Request</h2>
+<div>
+      <form action="friends/sendfriendrequest/" method="post">
+        <input type="text" style="max-width: 60%; float: left;" required name="friend_request" class="form-control" placeholder="Enter Username">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+</div>
+
