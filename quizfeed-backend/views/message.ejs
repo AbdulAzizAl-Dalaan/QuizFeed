@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Friends</title>
+    <style>
+      .form-group {
+        margin:10px;
+      }
+      .content
+      {
+        max-width: 1000px;
+        margin: auto;
+      }
+    </style>
+</head>
+<%- include('header') %>
+
+<div class="content">
+    <h2><%= friend %> Messages</h2>
+    <% if (messages.length > 0) { %>
+      <% for( let index = 0; index < messages.length; index++ ) { %>
+        <% if (messages[index].sender === user) { %>
+          <div style="text-align: left;">
+            <h6 style="text-decoration:underline;"><%= user %></h6>
+            <p><%= messages[index].content %></p>
+          </div>
+          
+        <% } else { %>
+          <div style="text-align: right;">
+            <h6 style="text-decoration: underline;"><%= friend %></h6>
+            <p><%= messages[index].content %></p>
+          </div>
+        <% } %>
+      <% } %>
+    <% } else {%>
+      <p>Start you conversation with <%= friend %></p>
+    <% } %>
+    <div class="form-group">
+        <form action="sendmessage/<%= friend %>" method="post">
+            <input type="text" style="max-width: 60%; float: left;" required name="message" class="form-control" placeholder="Enter your message">
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+</div>
+

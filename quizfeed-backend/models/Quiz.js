@@ -35,25 +35,15 @@ Quiz.init({
         allowNull: false,
         defaultValue: 0
     },
-    upvotes: {
+    likes: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
     },
-    downvotes: {
+    dislikes: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
-    },
-    randomizeQuestions: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
-    },
-    allowComments: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -75,103 +65,6 @@ Quiz.init({
     modelName: 'Quiz'
 });
 
-class Question extends Model {
-}
-
-Question.init({
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    text: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    randomizeChoices: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true
-    },
-    variant: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Question',
-    timestamps: false
-});
-
-class Choice extends Model {
-}
-
-Choice.init({
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    text: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    variant: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    points: {
-        // only a string because since sqlite does not support arrays
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Choice',
-    timestamps: false
-});
-
-class Result extends Model {
-}
-
-Result.init({
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Result',
-    timestamps: false
-});
-
-class Tag extends Model {
-}
-
-Tag.init({
-    text: {
-        primaryKey: true,
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Tag',
-    timestamps: false
-});
-
 Quiz.hasMany(Question, { as: 'questions', onDelete: 'cascade', onUpdate: 'cascade' });
 Question.belongsTo(Quiz);
 Question.hasMany(Choice, { as: 'choices', onDelete: 'cascade', onUpdate: 'cascade' });
@@ -180,10 +73,4 @@ Choice.belongsTo(Question);
 Quiz.hasMany(Result, { as: 'results', onDelete: 'cascade', onUpdate: 'cascade' });
 Result.belongsTo(Quiz);
 
-// through table for joining Tag and Quiz tables (many-to-many)
-// docs: https://sequelize.org/docs/v6/advanced-association-concepts/advanced-many-to-many/
-const QuizTags = sequelize.define('QuizTags', {}, {timestamps: false});
-Quiz.belongsToMany(Tag, {through: QuizTags, as: 'tags'});
-Tag.belongsToMany(Quiz, {through: QuizTags, as: 'quizzes'});
-
-module.exports = { Quiz, Question, Choice, Result, Tag, QuizTags };
+module.exports = Quiz;

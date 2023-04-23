@@ -1,16 +1,20 @@
-import './QuizDisplay.css';
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import Question from './Question';
 import StyledButton from '../StyledButton';
+import QuizInfo from './QuizInfo';
 
+// Displays quiz info and questions, allows for the user to select choices for each question and generate results
 export default function QuizDisplay() {
     const urlParams = useParams();
     const navigate = useNavigate();
     const [quizData, setQuizData] = React.useState();
+    // keeps track of what answers the user has selected
     const [userAnswers, setUserAnswers] = React.useState();
+    // used to determine if the submit button should be enabled (only if all questions have been answered)
+    const [answerCounter, setAnswerCounter] = React.useState(false);
 
     // Load the quiz questions and initialize the user's answers to nothing
     React.useEffect(() => {
@@ -26,6 +30,11 @@ export default function QuizDisplay() {
     // Allows for a user to change previous selections
     function onClickChoice(e, question, newAnswer) {
         e.preventDefault();
+
+        // if a choice had not been previously chosen for this question, increment counter
+        // this way when answerCounter equals number of questions, the user can submit
+        if (userAnswers[question] === -1) setAnswerCounter(answerCounter + 1);
+
         setUserAnswers(
             userAnswers.map((answer, idx) => {
                 return (idx === question) ? newAnswer : answer;
@@ -35,8 +44,13 @@ export default function QuizDisplay() {
 
     // When the user is ready to receive their results, this method is called
     // It checks to make sure all questions have been answered, and if so, calculates the result and redirects accordingly
-    function onClickSubmit(e) {
+    async function onClickSubmit(e) {
         e.preventDefault();
+
+        // check to make sure all questions have been answered
+        if (!userAnswers.every((answer) => answer !== -1)) {
+            return;
+        }
 
         let totalPoints = new Array(quizData.results.length).fill(0);
         for (let question = 0; question < quizData.questions.length; question++) {
@@ -46,22 +60,47 @@ export default function QuizDisplay() {
             const parsedPoints = points.split(',').map(Number);
             totalPoints = totalPoints.map((curPoints, i) => curPoints + parsedPoints[i]);
         }
-        // find index of highest element and that is your result
-        const result = totalPoints.indexOf(Math.max(...totalPoints));
+        // find index of highest element to get result pos, and use that to find result id
+        const resultId = quizData.results[totalPoints.indexOf(Math.max(...totalPoints))].id;
+
+        // No longer needed I think, since we're returning results ordered by position, but just in case I'm leaving it here...
+        /*
+        let resultId = -1;
+        const resultPos = totalPoints.indexOf(Math.max(...totalPoints));
+
+        for (const result of quizData.results) {
+            if (result.position === resultPos) {
+                resultId = result.id;
+                break;
+            }
+        }
+        */
+
+        // update user's results
+        fetch('/history/' + urlParams.id + '/' + 'subu')
+            .then(res => res.json())
+            .then(data => {
+                // If user has not taken it before
+                if (data.length === 0) {
+                    // then create history
+                    fetch('/history/' + urlParams.id + '/' + resultId, {
+                        method: 'POST', body: JSON.stringify({ username: 'subu' }),
+                        headers: { 'Content-type': 'application/json' }
+                    });
+                }
+            });
+
+        // update quiz stats
+        fetch('/quiz/stats/' + urlParams.id + '/' + resultId, { method: 'PATCH' });
         // redirect to the correct results page
-        navigate('/quiz/' + urlParams.id + '/' + quizData.results[result].id);
+        navigate('/quiz/' + urlParams.id + '/' + resultId);
     }
 
     return (
         <Container>
             {quizData &&
                 <Stack gap={2}>
-                    <div className='quiz-header mt-3 pt-3 mb-2'>
-                        <h1 style={{ 'fontFamily': 'Montagu Slab, serif' }} >{quizData.title}</h1>
-                        {quizData.creatorUsername}<br /><br />
-                        <p>{quizData.description}</p>
-                        {quizData.takenNum} {quizData.takenNum === 1 ? 'user has' : 'users have'} taken this quiz - {quizData.approval}% approval<br /><br />
-                    </div>
+                    <QuizInfo quizData={quizData} />
                     {quizData.questions &&
                         quizData.questions.map((question, idx) => {
                             return <Question
@@ -77,6 +116,8 @@ export default function QuizDisplay() {
                         <StyledButton
                             variant='b-mediumBlue'
                             onClick={onClickSubmit}
+                            disabled={answerCounter !== quizData.questions.length}
+                            tooltip='Answer all questions to continue'
                         >Generate Results</StyledButton>
                     </div>
                 </Stack>}
