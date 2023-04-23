@@ -32,8 +32,9 @@ export default function QuizDisplay() {
                 .then(res => res.json())
                 .then(data => {
                     setQuizData(data);
-                    setResultData(data.results[urlParams.result - 1]);
-                    setFormattedDescription(formatString(data.results[urlParams.result - 1].description));
+                    console.log(data)
+                    setResultData(data.results[0]);
+                    setFormattedDescription(formatString(data.results[0].description));
                 });
         }
 
