@@ -4,9 +4,12 @@ const Result = require('../models/Result');
 const Comment = require('../models/Comment');
 var router = express.Router();
 
-// **** GET ****
+// With a filter given, return all the Quizzes satisfying the filter
+router.get('/', async function (req, res, next) {
+    Quiz.findAll().then(output => res.json(output))
+});
 
-// With the quiz id given, return the Quiz with Questions, Choices, and Results all included
+// With the id given, return the Quiz with Questions, Choices, and Results all included
 router.get('/:id', async function (req, res, next) {
     Quiz.findByPk(req.params.id, {
         include: [{

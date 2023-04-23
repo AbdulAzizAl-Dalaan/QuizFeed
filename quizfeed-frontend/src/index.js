@@ -22,6 +22,7 @@ import Settings from './components/account/Settings';
 import Messages from './components/friends/Messages';
 import Profile from './components/account/Profile';
 import MyAccount from './components/account/MyAccount';
+import QuizList from './components/quiz/QuizList';
 
 // import ProtectedRoutes from './ProtectedRoutes';
 
@@ -50,6 +51,7 @@ root.render(
             <Route path='logout' element={<Login />} />
             <Route path='quiz/:id' element={<QuizDisplay />} />
             <Route path='quiz/:id/:result' element={<QuizResult />} />
+            <Route path='quizlist' element={<QuizList />} />
           </Route>
       </Routes>
     </Router>

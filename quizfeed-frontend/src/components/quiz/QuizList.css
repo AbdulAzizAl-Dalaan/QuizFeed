@@ -1,0 +1,28 @@
+.list-background {
+    background-color: #8b8bae14;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-bottom: solid 2px #2a2a3314;
+    border-left: solid 2px #2a2a3314;
+    border-right: solid 2px #2a2a3314;
+}
+
+.list-item {
+    background: rgb(2,0,36);
+    background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(0,212,255,1) 100%);
+    color: #F0F4EF;
+}
+
+.list-option {
+    background-color: #38384714;
+}
+
+.list-header {
+    background-color: #2a2a3314;
+}
+
+.list-header-text {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat';
+}
