@@ -1,15 +1,35 @@
 import './QuizList.css'
-import {React, TextField} from 'react';
+import React from 'react';
+import {
+    Alert,
+    Container,
+    Form,
+    Button,
+    FormControl,
+    InputGroup,
+  } from "react-bootstrap";
 
 export default function Searchbar({key='title', updateKey, updateValue}){
+    const [searchValue, setSearchValue] = React.useState("");
+    
     function searchResults(input){
-        updateKey(key)
-        updateValue(input.value)
+        setSearchValue(input.value);
+        updateKey(key);
+        updateValue(input.value);
     }
     
     return (
-        <div>
-            <TextField id="standard-basic" label="Search" variant="standard" onChange={e => searchResults(e.target)} />
-        </div>
+        <Form>
+            <InputGroup className="mb-3 mt-2 ms-2">
+            <FormControl
+                id="content"
+                type="text"
+                required
+                value={searchValue} // Set the value of the input to the message state variable
+                onChange={(event) => searchResults(event.target)} // Set the message state variable to the value of the input
+                placeholder="Search"
+            />
+            </InputGroup>
+        </Form>
     );
 }

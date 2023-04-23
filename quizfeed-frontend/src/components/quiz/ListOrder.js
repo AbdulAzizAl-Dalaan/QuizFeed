@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container';
 
 //small => large
 function defaultOrderFunction(a, b, key) {
-    console.log(a);
     if(a[key] > b[key])
     {
         return 1;
@@ -42,8 +41,8 @@ function ListOrder({updateFunction, updateKey}) {
     return (
         <Container className="mt-2">
             <div class='row'>
-                <div class='col-4 list-header-text'>Order by:</div>
-                <div class='col-6'>
+                <div class='col-4 list-header-text'>Select:</div>
+                <div class='col-8'>
                 <Dropdown>
                     <Dropdown.Toggle>
                         <span id='orderDropdownText'>Order</span>
