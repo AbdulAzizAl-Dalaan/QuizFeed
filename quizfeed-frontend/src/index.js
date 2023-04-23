@@ -1,7 +1,9 @@
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import '@fontsource/montserrat';
+import '@fontsource/montserrat/variable.css';
 import '@fontsource/montagu-slab';
+import '@fontsource/montagu-slab/variable.css';
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
@@ -10,7 +12,19 @@ import App from './App';
 // Routing
 import QuizDisplay from './components/quiz/QuizDisplay';
 import QuizResult from './components/quiz/QuizResult';
+
+import Login from './components/account/Login';
+import Register from './components/account/Register';
+import ForgotPassword from './components/account/ForgotPassword';
+import Home from './components/home/Home';
+import Friends from './components/friends/Friends';
+import Settings from './components/account/Settings';
+import Messages from './components/friends/Messages';
+import Profile from './components/account/Profile';
+import MyAccount from './components/account/MyAccount';
 import QuizList from './components/quiz/QuizList';
+
+// import ProtectedRoutes from './ProtectedRoutes';
 
 const root = ReactDOMClient.createRoot(document.getElementById('root'));
 
@@ -18,12 +32,27 @@ root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path='/' element={<App />}>
+          <Route path='/' element={<App />}>
           {/* Default page: can make it home page when that's created -- <Route index element={ } /> */}
-          <Route path='quizlist' element={<QuizList />} />
-          <Route path='quiz/:id' element={<QuizDisplay />} />
-          <Route path='quiz/:id/:result' element={<QuizResult />} />
-        </Route>
+          
+          <Route path='/login' element={<Login />} />
+          <Route path='forgotpassword' element={<ForgotPassword />} />
+          <Route path='register' element={<Register />} />
+            {/* All the following routes should be encapsulated within 
+                <Route element={<ProtectedRoutes />}> 
+                    Put all the routes that require authentication here.
+                </Route> */}
+            <Route path='home' element={<Home />} />
+            <Route path='friends' element={<Friends />} />
+            <Route path='friends/message/:username' element={<Messages />} />
+            <Route path='myaccount' element={<MyAccount />} />
+            <Route path='profile/:username' element={<Profile />} />
+            <Route path='settings' element={<Settings />} />
+            <Route path='logout' element={<Login />} />
+            <Route path='quiz/:id' element={<QuizDisplay />} />
+            <Route path='quiz/:id/:result' element={<QuizResult />} />
+            <Route path='quizlist' element={<QuizList />} />
+          </Route>
       </Routes>
     </Router>
   </React.StrictMode>,
