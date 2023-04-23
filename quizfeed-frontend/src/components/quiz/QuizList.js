@@ -4,9 +4,10 @@ import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import QuizListItem from './QuizListItem';
 import {ListOrder, defaultOrderFunction} from './ListOrder';
+import Searchbar from './Searchbar';
 
 function defaultFilterFunction(item, key, value){
-    if(key == '' || value == '')
+    if(key === '' || value === '')
     {
         return true;
     }
@@ -17,10 +18,11 @@ function defaultFilterFunction(item, key, value){
     return false;
 }
 
-export default function QuizList({title="Default Title", 
+export default function QuizList({title="heh list of kqs", 
     height=600, 
     customOrderFunction = defaultOrderFunction,
     customOrderKey = '',
+    searchbar = false,
     customFilter = defaultFilterFunction, 
     customFilterKey = '', 
     customFilterValue = ''
@@ -44,7 +46,7 @@ export default function QuizList({title="Default Title",
         return <QuizListItem quizData={quiz} />
     }).filter((item) => filterFunction(item.props.quizData, filterKey, filterValue))
     .sort((a, b) => orderFunction(a.props.quizData, b.props.quizData, orderKey));
-
+    //<div class='col-3'><Searchbar updateKey={setFilterKey} updateValue={setFilterValue}/></div>
     return (
         <Container>
             <Container className="list-header mt-3 pb-3">
@@ -53,6 +55,8 @@ export default function QuizList({title="Default Title",
                         <h3 class='list-header-text' style={{margin: '5px'}}>{title}</h3>
                     </div>
                     <div class='col-3'><ListOrder id='order' updateFunction={setOrderFunction} updateKey={setOrderKey}/></div>
+                    
+                    
                 </div>
             </Container>
             <div className="list-background" style={{height: height.toString() + "px"}}>
@@ -63,6 +67,5 @@ export default function QuizList({title="Default Title",
                 }
             </div>
         </Container>
-
-    )
+    );
 }
