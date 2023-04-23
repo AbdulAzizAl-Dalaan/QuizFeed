@@ -20,10 +20,17 @@ router.get('/', async function(req, res, next) {
   if (req.query.msg)
   {
     res.locals.msg = req.query.msg
-    res.locals.courseid = req.query.courseid
   }
   console.log("CURRENT USER:" + req.session.user.username)
-  res.render('home');
+  // res.render('home');
+  if (res.locals.username)
+  {
+    res.json({msg: res.locals.msg, username: res.locals.username})
+  } 
+  else
+  {
+    res.json({msg: res.locals.msg, username: "none"})
+  }
 });
 
 module.exports = router;
