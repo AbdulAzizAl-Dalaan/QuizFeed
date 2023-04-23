@@ -1,0 +1,21 @@
+.result-content {
+  padding: 5px 7px 0px 7px;
+  border-radius: 15px;
+  position: relative;
+}
+
+.result-title {
+  font-family: 'Montagu Slab, serif';
+  width: 88%;
+  font-size: large;
+  text-align: center;
+}
+
+.result-force-right {
+  position: relative;
+  background-color: red;
+}
+
+.result-desc p {
+  width:100%;
+}

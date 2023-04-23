@@ -34,7 +34,10 @@ User.init({
     {
         type: DataTypes.STRING,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            not: 'myAccount'
+        }
     },
     password:
     {
@@ -45,6 +48,16 @@ User.init({
     {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    bio:
+    {
+        type: DataTypes.STRING,
+        defaultValue: "I am glad to be a part of QuizFeed!"
+    }, 
+    profile_pic:
+    {
+        type: DataTypes.STRING,
+        defaultValue: "https://i.imgur.com/V4RclNb.png"
     },
     number:
     {

@@ -2,6 +2,12 @@ const sequelize = require('../db');
 const { Model, DataTypes } = require('sequelize');
 
 class Quiz extends Model {
+    // returns approval rating percentage in range [0,1]
+    // returns null if there are no votes
+    approval() {
+        // shortcircuiting: if both upvotes and downvotes are null return null, otherwise return computation
+        return (this.upvotes || this.downvotes) && this.upvotes / (this.upvotes + this.downvotes);
+    }
 }
 
 Quiz.init({
@@ -28,8 +34,13 @@ Quiz.init({
         allowNull: false,
         defaultValue: 0
     },
-    approval: {
-        type: DataTypes.FLOAT,
+    likes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    dislikes: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
     },
@@ -53,91 +64,4 @@ Quiz.init({
     modelName: 'Quiz'
 });
 
-class Question extends Model {
-}
-
-Question.init({
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    text: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    variant: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Question'
-});
-
-class Choice extends Model {
-}
-
-Choice.init({
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    text: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    variant: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    points: {
-        // only a string because since sqlite does not support arrays
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    sequelize,
-    modelName: 'Choice'
-});
-
-class Result extends Model {
-}
-
-Result.init({
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    receivedNum: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-    }
-}, {
-    sequelize,
-    modelName: 'Result'
-});
-
-Quiz.hasMany(Question, { as: 'questions' });
-Question.belongsTo(Quiz);
-Question.hasMany(Choice, { as: 'choices' });
-Choice.belongsTo(Question);
-
-Quiz.hasMany(Result, { as: 'results' });
-Result.belongsTo(Quiz);
-
-module.exports = { Quiz, Question, Choice, Result };
+module.exports = Quiz;
