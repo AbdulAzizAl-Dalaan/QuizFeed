@@ -1,6 +1,6 @@
-import './Question.css'; // .q-darkBlue, .q-mediumBlue
+import './Quiz.css'; // .q-darkBlue, .q-mediumBlue
 import './QuestionMaker.css';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,9 +19,9 @@ function QuestionMaker({ index, question }) {
 
     // add another option to question
     function onClickAddOption(e) {
-        let option = (i)=>({"text": `Option ${i}`, "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) });
+        let option = (i) => ({ "text": `Option ${i}`, "variant": "b-mediumBlue", "points": quizData.results.map((_) => { return 0 }) });
         let questions = quizData.questions.map((v, i) => {
-            return i !== index ?  v : {...v, choices: v.choices.concat([option(v.choices.length + 1)])};
+            return i !== index ? v : { ...v, choices: v.choices.concat([option(v.choices.length + 1)]) };
         });
         setQuizData({
             ...quizData,
@@ -31,7 +31,7 @@ function QuestionMaker({ index, question }) {
 
     function toggleRandomizeChoices(e) {
         const left = quizData.questions.slice(0, index);
-        const question = {...quizData.questions[index], randomizeChoices: !quizData.questions[index].randomizeChoices};
+        const question = { ...quizData.questions[index], randomizeChoices: !quizData.questions[index].randomizeChoices };
         const right = quizData.questions.slice(index + 1, quizData.questions.length);
         setQuizData({
             ...quizData,
@@ -41,7 +41,7 @@ function QuestionMaker({ index, question }) {
 
     function updateQuestionText(e) {
         let questions = quizData.questions.map((v, i) => {
-            return i !== index ?  v : {...v, text: txt(e)};
+            return i !== index ? v : { ...v, text: txt(e) };
         });
         setQuizData({
             ...quizData,
@@ -61,7 +61,7 @@ function QuestionMaker({ index, question }) {
     return (
         <Container className={(question.variant ? question.variant : 'q-darkBlue') + " question-content"}>
             <div className='quiz-exit-btn' onClick={deleteQuestion} />
-            
+
             <Row className='question-header' >
                 <Col>
                     <span className='question-title'>Question {index + 1}</span>
@@ -69,7 +69,7 @@ function QuestionMaker({ index, question }) {
                 <Col className="question-toggle">
                     <span >
                         <label className="switch">
-                            <input type="checkbox" onChange={toggleRandomizeChoices} checked={quizData.questions[index].randomizeChoices}/>
+                            <input type="checkbox" onChange={toggleRandomizeChoices} checked={quizData.questions[index].randomizeChoices} />
                             <span className="slider round"></span>
                         </label>
                         <span className="md">Randomize Order of Options</span>
@@ -103,13 +103,13 @@ function QuestionMaker({ index, question }) {
                             </Col>
                         );
                     })}
-                    <Col>
-                        <StyledButton
-                            variant='b-mediumBlue'
-                            onClick={onClickAddOption}>
-                            Add another option
-                        </StyledButton>
-                    </Col>
+                <Col>
+                    <StyledButton
+                        variant='b-mediumBlue'
+                        onClick={onClickAddOption}>
+                        Add another option
+                    </StyledButton>
+                </Col>
             </Row>
         </Container >
     );

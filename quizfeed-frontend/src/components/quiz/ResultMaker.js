@@ -1,7 +1,7 @@
-import './Question.css'; // .q-darkBlue, .q-mediumBlue
+import './Quiz.css'; // .q-darkBlue, .q-mediumBlue
 import './ResultMaker.css';
 import './QuizMaker.css';  // .quiz-exit-btn
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col'
@@ -18,7 +18,7 @@ function ResultMaker({ index, result }) {
 
     function updateResultTitle(e) {
         let results = quizData.results.map((v, i) => {
-            return i !== index ?  v : {...v, title: txt(e)};
+            return i !== index ? v : { ...v, title: txt(e) };
         });
         setQuizData({
             ...quizData,
@@ -28,7 +28,7 @@ function ResultMaker({ index, result }) {
 
     function updateResultDesc(e) {
         let results = quizData.results.map((v, i) => {
-            return i !== index ?  v : {...v, description: txt(e)};
+            return i !== index ? v : { ...v, description: txt(e) };
         });
         setQuizData({
             ...quizData,

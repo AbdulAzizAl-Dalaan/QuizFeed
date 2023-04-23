@@ -4,8 +4,7 @@ const { Model, DataTypes } = require('sequelize');
 class Quiz extends Model {
     // returns approval rating percentage in range [0,1]
     // returns null if there are no votes
-    approval()
-    {
+    approval() {
         // shortcircuiting: if both upvotes and downvotes are null return null, otherwise return computation
         return (this.upvotes || this.downvotes) && this.upvotes / (this.upvotes + this.downvotes);
     }
@@ -64,13 +63,5 @@ Quiz.init({
     sequelize,
     modelName: 'Quiz'
 });
-
-Quiz.hasMany(Question, { as: 'questions', onDelete: 'cascade', onUpdate: 'cascade' });
-Question.belongsTo(Quiz);
-Question.hasMany(Choice, { as: 'choices', onDelete: 'cascade', onUpdate: 'cascade' });
-Choice.belongsTo(Question);
-
-Quiz.hasMany(Result, { as: 'results', onDelete: 'cascade', onUpdate: 'cascade' });
-Result.belongsTo(Quiz);
 
 module.exports = Quiz;

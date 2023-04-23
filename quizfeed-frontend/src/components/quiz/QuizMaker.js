@@ -1,6 +1,6 @@
-import './Question.css'; // .q-darkBlue, .q-mediumBlue
+import './Quiz.css'; // .q-darkBlue, .q-mediumBlue
 import './QuizMaker.css';
-import React, {createContext, useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import { useNavigate, useParams } from "react-router-dom";
@@ -25,24 +25,24 @@ function QuizMaker() {
         // if quiz ID is given, initialize quiz data with quiz from database
         if (urlParams.id) {
             fetch('/quiz/' + urlParams.id)
-            .then(res => {
-                if (!res.ok) {
-                    throw Error(res); // this will send entire object
-                }
-                return res.json();
-            })
-            .then(data => {
-                if (data) {
-                    setQuizData(unpackData(data));
-                }
-                else {
-                    throw Error(`ERROR: quiz with could not load quiz data for quiz with id ${urlParams.id}`);
-                }
-            })
-            .catch((err) => {
-                console.log(err); // TODO make this an error message
-                navigate("/");
-            });
+                .then(res => {
+                    if (!res.ok) {
+                        throw Error(res); // this will send entire object
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data) {
+                        setQuizData(unpackData(data));
+                    }
+                    else {
+                        throw Error(`ERROR: quiz with could not load quiz data for quiz with id ${urlParams.id}`);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err); // TODO make this an error message
+                    navigate("/");
+                });
         } else { // id not given: initilize quiz data with empty quiz
             const quiz = {
                 // TODO: replace fake username with user's genuine username
@@ -60,12 +60,11 @@ function QuizMaker() {
     }, [navigate, urlParams]);
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    async function postData(url = "", data = {})
-    {
+    async function postData(url = "", data = {}) {
         const response = await fetch(url, {
             method: "POST",
             cache: "no-cache",
-            headers: { "Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             redirect: "follow",
             referrerPolicy: "no-referrer",
             body: JSON.stringify(data), // body data type must match "Content-Type" header
@@ -76,12 +75,11 @@ function QuizMaker() {
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    async function patchData(url = "", data = {})
-    {
+    async function patchData(url = "", data = {}) {
         const response = await fetch(url, {
             method: "PATCH",
             cache: "no-cache",
-            headers: { "Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             redirect: "follow",
             referrerPolicy: "no-referrer",
             body: JSON.stringify(data), // body data type must match "Content-Type" header
@@ -92,12 +90,11 @@ function QuizMaker() {
         return response.json(); // parses JSON response into native JavaScript objects
     }
 
-    async function deleteData(url = "")
-    {
+    async function deleteData(url = "") {
         const response = await fetch(url, {
             method: "DELETE",
             cache: "no-cache",
-            headers: { "Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             redirect: "follow",
             referrerPolicy: "no-referrer",
             // body: "", // body data type must match "Content-Type" header
@@ -109,50 +106,46 @@ function QuizMaker() {
     }
 
     // convert data to format required by database
-    function packData(data)
-    {
+    function packData(data) {
         // convert each points array to comma separated string
         let questions = data.questions.map((q_v) => {
             let c = q_v.choices.map((c_v) => {
-                return {...c_v, points: c_v.points.join(",")}
+                return { ...c_v, points: c_v.points.join(",") }
             });
-            return {...q_v, choices: c};
+            return { ...q_v, choices: c };
         });
-        return {...data, questions: questions}
+        return { ...data, questions: questions }
     }
 
     // convert database format to usable format
-    function unpackData(data)
-    {
+    function unpackData(data) {
         // convert each points array from comma separated string to array
         let questions = data.questions.map((q_v) => {
             let c = q_v.choices.map((c_v) => {
-                return {...c_v, points: c_v.points.split(",")}
+                return { ...c_v, points: c_v.points.split(",") }
             });
-            return {...q_v, choices: c};
+            return { ...q_v, choices: c };
         });
-        return {...data, questions: questions}
+        return { ...data, questions: questions }
     }
 
     function saveQuiz(data) {
         // no id: create quiz, get id
-        if (data.id == null)
-        {
+        if (data.id == null) {
             postData("/quiz/", packData(data))
-            .then((resData)=>{setQuizData(unpackData(resData))})
-            .catch((err)=>console.log(err));
+                .then((resData) => { setQuizData(unpackData(resData)) })
+                .catch((err) => console.log(err));
         }
         // id: update quiz using id
-        else
-        {
+        else {
             patchData(`/quiz/${data.id}`, packData(data))
-            .then((resData)=>{setQuizData(unpackData(resData))})
-            .catch((err)=>console.log(err));
+                .then((resData) => { setQuizData(unpackData(resData)) })
+                .catch((err) => console.log(err));
         }
     }
 
     function onClickPublish(e) {
-        saveQuiz({...quizData, publishedAt: Date.now()});
+        saveQuiz({ ...quizData, publishedAt: Date.now() });
     }
 
     function onClickSave(e) {
@@ -163,9 +156,9 @@ function QuizMaker() {
         // has id: exists in database and must be deleted from database
         if (quizData.id != null) {
             deleteData(`/quiz/${quizData.id}`)
-            .then((res)=>{console.log(res)})
-            .then(navigate("/"))
-            .catch((err)=>console.log(err));
+                .then((res) => { console.log(res) })
+                .then(navigate("/"))
+                .catch((err) => console.log(err));
         } else {
             navigate("/");
         }
@@ -177,16 +170,16 @@ function QuizMaker() {
     }
 
     function toggleComments(e) {
-        setQuizData({...quizData, allowComments: !quizData.allowComments});
+        setQuizData({ ...quizData, allowComments: !quizData.allowComments });
     }
 
     function toggleRandomizeQuestions(e) {
-        setQuizData({...quizData, randomizeQuestions: !quizData.randomizeQuestions});
+        setQuizData({ ...quizData, randomizeQuestions: !quizData.randomizeQuestions });
     }
 
     function onClickAddTag(e) {
         e.preventDefault();
-        const tag = (i) => ({"text": `Tag ${i}`});
+        const tag = (i) => ({ "text": `Tag ${i}` });
         setQuizData({
             ...quizData,
             tags: [...quizData.tags, tag(quizData.tags.length + 1)]
@@ -201,9 +194,9 @@ function QuizMaker() {
         });
         const questions = quizData.questions.map((q_v) => {
             const c = q_v.choices.map((c_v) => {
-                return {...c_v, points: [...c_v.points, 0]}
+                return { ...c_v, points: [...c_v.points, 0] }
             });
-            return {...q_v, choices: c};
+            return { ...q_v, choices: c };
         });
         setQuizData({
             ...quizData,
@@ -218,8 +211,8 @@ function QuizMaker() {
             "text": "Question?",
             "variant": "q-darkBlue",
             "choices": [
-              { "text": "Option 1", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
-              { "text": "Option 2", "variant": "b-mediumBlue", "points": quizData.results.map((_)=>{return 0}) },
+                { "text": "Option 1", "variant": "b-mediumBlue", "points": quizData.results.map((_) => { return 0 }) },
+                { "text": "Option 2", "variant": "b-mediumBlue", "points": quizData.results.map((_) => { return 0 }) },
             ],
             "randomizeChoices": true
         };
@@ -235,11 +228,11 @@ function QuizMaker() {
     }
 
     function updateTitle(e) {
-        setQuizData({...quizData, title: txt(e)});
+        setQuizData({ ...quizData, title: txt(e) });
     }
 
     function updateDesc(e) {
-        setQuizData({...quizData, description: txt(e)});
+        setQuizData({ ...quizData, description: txt(e) });
     }
 
     return (
@@ -247,14 +240,14 @@ function QuizMaker() {
             <Container>
                 {
                     <Stack gap={2}>
-                        <div className='quiz-header mt-3 pt-3 mb-2' style={{display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>
+                        <div className='quiz-header mt-3 pt-3 mb-2' style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>
                             <div>
                                 <h1 onBlur={updateTitle} style={{ 'fontFamily': 'Montagu Slab, serif' }} contentEditable suppressContentEditableWarning={true}>{quizData.title}</h1>
                             </div>
                             <div>
                                 <span id="tags-label">TAGS</span>
                                 <span class="quiz-add-btn" onClick={onClickAddTag} />
-                                { quizData.tags &&
+                                {quizData.tags &&
                                     quizData.tags.map((tag, idx) => {
                                         return (
                                             <TagMaker
@@ -283,7 +276,7 @@ function QuizMaker() {
                             <div>
                                 <div>
                                     <label className="switch">
-                                        <input 
+                                        <input
                                             type="checkbox"
                                             onChange={toggleRandomizeQuestions}
                                             checked={quizData.randomizeQuestions}
@@ -319,7 +312,7 @@ function QuizMaker() {
                             </div>
                         </div>
                         <div>
-                            <div style={{display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>
                                 {quizData.results &&
                                     quizData.results.map((result, idx) => {
                                         return <ResultMaker
@@ -356,7 +349,7 @@ function QuizMaker() {
                 }
                 <div>
                     <h1>Quiz values</h1>
-                    { JSON.stringify(quizData) }
+                    {JSON.stringify(quizData)}
                 </div>
             </Container>
         </QuizMakerContext.Provider>

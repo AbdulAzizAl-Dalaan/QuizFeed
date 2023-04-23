@@ -1,7 +1,7 @@
-import './Question.css';   // .q-darkBlue, .q-mediumBlue
+import './Quiz.css';   // .q-darkBlue, .q-mediumBlue
 import './QuizMaker.css';  // .quiz-exit-btn
 import './OptionMaker.css';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -23,9 +23,9 @@ function OptionMaker({ index, question_index, choice }) {
                 return q_v;
             }
             let c = q_v.choices.map((c_v, c_i) => {
-                return c_i !== index ? c_v : {...c_v, text: txt(e)}
+                return c_i !== index ? c_v : { ...c_v, text: txt(e) }
             });
-            return {...q_v, choices: c};
+            return { ...q_v, choices: c };
         });
         setQuizData({
             ...quizData,
@@ -34,13 +34,11 @@ function OptionMaker({ index, question_index, choice }) {
     }
 
     // if new value is not valid, return old value, otherwise return new value as a number
-    function updatePoint(e, old_value)
-    {
+    function updatePoint(e, old_value) {
         let val = Number(txt(e));
-        if (isNaN(val) || val === null || val === undefined)
-        {
-          e.target.textContent = old_value;
-          return old_value;
+        if (isNaN(val) || val === null || val === undefined) {
+            e.target.textContent = old_value;
+            return old_value;
         }
         e.target.textContent = val;
         return val;
@@ -50,7 +48,7 @@ function OptionMaker({ index, question_index, choice }) {
         const choices_left = quizData.questions[question_index].choices.slice(0, index);
         const choices_right = quizData.questions[question_index].choices.slice(index + 1, quizData.questions[question_index].choices.length);
         let questions = quizData.questions.map((v, i) => {
-            return i !== question_index ?  v : {...v, choices: choices_left.concat(choices_right)};
+            return i !== question_index ? v : { ...v, choices: choices_left.concat(choices_right) };
         });
         setQuizData({
             ...quizData,
@@ -65,16 +63,15 @@ function OptionMaker({ index, question_index, choice }) {
                 return q_v;
             }
             let c = q_v.choices.map((c_v, c_i) => {
-                if (c_i !== index)
-                {
+                if (c_i !== index) {
                     return c_v;
                 }
                 let points = c_v.points.map((p_v, p_i) => {
                     return (p_i !== point_index) ? p_v : updatePoint(e, p_v);
                 });
-                return {...c_v, points: points};
+                return { ...c_v, points: points };
             });
-            return {...q_v, choices: c};
+            return { ...q_v, choices: c };
         });
         setQuizData({
             ...quizData,
@@ -101,21 +98,21 @@ function OptionMaker({ index, question_index, choice }) {
                     <Col>RESULT</Col>
                     <Col>POINTS</Col>
                 </Row>
-                { quizData.results &&
-                        quizData.results.map((result, idx)=>{
-                            return(
-                                <Row key={idx} className="result-impact q-darkBlue">
-                                    <Col>{result.title}</Col>
-                                    <Col
-                                        onBlur={(e)=>updateChoicePoints(e, idx)}
-                                        contentEditable
-                                        suppressContentEditableWarning={true}
-                                    >
-                                        {choice.points[idx]}
-                                    </Col>
-                                </Row>
-                            )
-                        })
+                {quizData.results &&
+                    quizData.results.map((result, idx) => {
+                        return (
+                            <Row key={idx} className="result-impact q-darkBlue">
+                                <Col>{result.title}</Col>
+                                <Col
+                                    onBlur={(e) => updateChoicePoints(e, idx)}
+                                    contentEditable
+                                    suppressContentEditableWarning={true}
+                                >
+                                    {choice.points[idx]}
+                                </Col>
+                            </Row>
+                        )
+                    })
                 }
             </Container>
         </div>
