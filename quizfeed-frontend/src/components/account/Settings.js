@@ -18,6 +18,8 @@ import {
   faLock,
   faEnvelope,
   faPhone,
+  faCamera,
+  faBook,
 } from "@fortawesome/free-solid-svg-icons";
 
 function Settings() {
@@ -26,6 +28,8 @@ function Settings() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
+  const [bio, setBio] = useState("");
+  const [profile_pic, setProfile_pic] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [message, setMessage] = useState(null);
@@ -46,6 +50,8 @@ function Settings() {
           setUsername(data.user.username);
           setEmail(data.user.email);
           setNumber(data.user.number);
+          setBio(data.user.bio)
+          setProfile_pic(data.user.profile_pic)
         } else {
           setMessage(data.message);
         }
@@ -77,6 +83,8 @@ function Settings() {
           lastname,
           username,
           email,
+          bio, 
+          profile_pic,
           number,
           password,
           password2,
@@ -88,7 +96,7 @@ function Settings() {
       if (data.success) {
         setMessage(data.message);
         setTimeout(() => {
-          navigate("/login");
+          navigate("/logout");
         }, 3000);
       } else {
         setMessage(data.message);
@@ -107,12 +115,12 @@ function Settings() {
           "Content-Type": "application/json",
         },
       });
-      navigate("/login");
+
       const data = await response.json();
 
       if (data.success) {
           setMessage(data.message);
-          navigate("/login");
+          navigate("/logout");
       } else {
         setMessage(data.message);
       }
@@ -200,6 +208,30 @@ function Settings() {
             </InputGroup>
             <InputGroup className="mb-3">
               <InputGroup.Text>
+                <FontAwesomeIcon icon={faBook} />
+              </InputGroup.Text>
+              <Form.Control
+                as='textarea'
+                rows={5}
+                placeholder="Biography"
+                value={bio}
+                onChange={(event) => setBio(event.target.value)}
+              />
+            </InputGroup>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>
+                <FontAwesomeIcon icon={faCamera} />
+              </InputGroup.Text>
+              <Form.Control
+                type="text"
+                placeholder="Profile Picture enter as hosted image (e.g., https://i.imgur.com/V4RclNb.png )"
+                value={profile_pic}
+                onChange={(event) => setProfile_pic(event.target.value)}
+              />
+            </InputGroup>
+
+            <InputGroup className="mb-3">
+              <InputGroup.Text>
                 <FontAwesomeIcon icon={faLock} />
               </InputGroup.Text>
               <Form.Control
@@ -250,7 +282,7 @@ function Settings() {
             </Modal>
           </div>
           <br />
-          {message && message == "Account updated, Redirecting back to login" && <Alert variant="success">{message}</Alert>}
+          {message && message === "Account updated, Redirecting back to login" && <Alert variant="success">{message}</Alert>}
           {message && message !== "Account updated, Redirecting back to login" && <Alert variant="danger">{message}</Alert>}
         </Col>
       </Row>

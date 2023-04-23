@@ -16,6 +16,8 @@ var indexRouter = require('./routes/index');
 var homeRouter = require('./routes/home');
 var searchRouter = require('./routes/search');
 var friendsRouter = require('./routes/friends');
+var profileRouter = require('./routes/profile');
+var myAccountRouter = require('./routes/myaccount');
 var newQuizzesRouter = require('./routes/newquizzes');
 var trendingQuizzesRouter = require('./routes/trendingquizzes');
 var quizRouter = require('./routes/quiz');
@@ -45,6 +47,8 @@ app.use('/', indexRouter);
 app.use('/home', homeRouter);
 app.use('/search', searchRouter);
 app.use('/friends', friendsRouter);
+app.use('/profile', profileRouter);
+app.use('/myaccount', myAccountRouter);
 app.use('/newquizzes', newQuizzesRouter);
 app.use('/trendingquizzes', trendingQuizzesRouter);
 app.use('/quiz', quizRouter);
@@ -72,17 +76,20 @@ async function setup() {
   hash4 = await bcrypt.hash('1234', saltRounds)
   hash5 = await bcrypt.hash('1234', saltRounds)
 
-  const subu = await User.create({firstname: 'subu',lastname:"Kandaswamy", username: 'subu', password: hash1, email: 'subu@wsu.edu', number: '123-456-7890'})
+  const subu = await User.create({firstname: 'Balasubramanian',lastname:"Kandaswamy", username: 'subu', password: hash1, email: 'subu@wsu.edu', number: '123-456-7890', 
+  profile_pic: "https://s3.wp.wsu.edu/uploads/sites/2447/2022/12/Subu-Kandaswamy.png", bio: 'I like programming and hence, I teach Introduction to programming, Object Oriented Programming and Full Stack Development. In addition, I also teach Artificial Intelligence and Agent Based Modeling, both of which are courses related to my area of research. In my first semester (Spring 2023) at WSU, I will be offering Web Development, Software Testing and the Software Design Project I.'})
   const user1 = await User.create({firstname: 'Jon',lastname:"Doe", username: 'JDoe', password: hash2, email: 'JDoe@gmail.com', number: '123-456-7899'})
   const user2 = await User.create({firstname: 'Sam',lastname:"Hawkins", username: 'SHawk', password: hash3, email: 'Shawk@gmail.com' , number: '123-456-7898'})
   const user3 = await User.create({firstname: 'John',lastname:"Doe", username: 'Johnny', password: hash4, email: 'john@gmail.com', number: '123-456-7897'})
   const user4 = await User.create({firstname: 'Harry',lastname:"Potter", username: 'hp', password: hash5, email: 'hp@hogwarts.edu', number: '123-456-7896'})
   const user5 = await User.create({firstname: 'Ron',lastname:"Weasley", username: 'rw', password: hash5, email: 'rw@hogwarts.edu', number: '123-456-7895'})
 
+
   const friend1 = await Friends.create({sender: 'subu', receiver: 'JDoe', is_friend: true, is_pending: false})
   const friend2 = await Friends.create({sender: 'SHawk', receiver: 'subu', is_friend: true, is_pending: false})
   const friend3 = await Friends.create({sender: 'Johnny', receiver: 'subu', is_friend: false, is_pending: true})
   const friend4 = await Friends.create({sender: 'subu', receiver: 'hp', is_friend: false, is_pending: true})
+  const frined5 = await Friends.create({sender: 'Johnny', receiver: 'rw', is_friend: true, is_pending: false})
 
   const message1 = await Message.create({sender: 'subu', receiver: 'JDoe', content: 'Hello'})
   const message2 = await Message.create({sender: 'JDoe', receiver: 'subu', content: 'Hi'})

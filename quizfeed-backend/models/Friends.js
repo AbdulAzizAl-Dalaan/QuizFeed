@@ -112,6 +112,81 @@ class Friends extends Model
             return null
         }
     }
+
+    static async findFriendship(current_user, other_user)
+    {
+        // find if the current_user is a friend, pending friend, pending request, or none of the above
+        try
+        {
+            const friendship = await Friends.findOne({ where: {
+                [Op.or]: [
+                    {sender: current_user, receiver: other_user, is_friend: true},
+                    {sender: other_user, receiver: current_user, is_friend: true},
+                    {sender: current_user, receiver: other_user, is_pending: true},
+                    {sender: other_user, receiver: current_user, is_pending: true}
+                ]
+            }});
+            if(friendship)
+            {
+                if(friendship.sender == current_user && friendship.is_pending)
+                {
+                    return "pending_request"
+                }
+                else if(friendship.sender == other_user && friendship.is_pending)
+                {
+                    return "pending_friend"
+                }
+                else if(friendship.sender == current_user && friendship.is_friend)
+                {
+                    return "friend"
+                }
+                else if(friendship.sender == other_user && friendship.is_friend)
+                {
+                    return "friend"
+                }
+            }
+            else
+            {
+                return "none"
+            }
+        }
+        catch(error)
+        {
+            console.log(error)
+            return null
+        }
+    }
+
+    static async updateFriends(old_username, new_username)
+    {
+        // if a user changes their username, update all the friends lists
+        try
+        {
+            const friends = await Friends.findAll({where: {
+                [Op.or]: [
+                    {sender: old_username}, {receiver: old_username}
+                ]
+            }})
+            for (let i = 0; i < friends.length; i++)
+            {
+                if(friends[i].sender == old_username)
+                {
+                    friends[i].sender = new_username
+                }
+                else
+                {
+                    friends[i].receiver = new_username
+                }
+                await friends[i].save()
+            }
+            return true
+        }
+        catch(error)
+        {
+            console.log(error)
+            return false
+        }
+    }
 }
 
 Friends.init({

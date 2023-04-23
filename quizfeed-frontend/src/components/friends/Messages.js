@@ -83,6 +83,7 @@ function MessageList() {
       <h2>Messages with {messagesData.friend}</h2>
       <br />
       <div>
+        {messagesData.messages.length === 0 && <h5 style={{textAlign: 'center'}}>Be the first to send something nice!</h5>}
         {messagesData.messages.map((single_message) => (
           <Alert
             key={single_message.id}

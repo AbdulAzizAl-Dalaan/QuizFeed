@@ -39,7 +39,7 @@ export default function GlobalNavbar() {
                 </Nav>
                 <Nav className='ms-auto me-5'>
                     <Nav.Link as={NavLink} to='/friends' className='mx-3'>FRIENDS</Nav.Link>
-                    <Nav.Link as={NavLink} to='/profile'>
+                    <Nav.Link as={NavLink} to='/myAccount'>
                         <FontAwesomeIcon icon={faUser} />
                     </Nav.Link>
                     <Nav.Link as={NavLink} to='/logout' className='mx-3' onClick={handleLogout}>LOGOUT</Nav.Link>

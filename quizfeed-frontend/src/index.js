@@ -18,6 +18,8 @@ import Home from './components/home/Home';
 import Friends from './components/friends/Friends';
 import Settings from './components/account/Settings';
 import Messages from './components/friends/Messages';
+import Profile from './components/account/Profile';
+import MyAccount from './components/account/MyAccount';
 
 // import ProtectedRoutes from './ProtectedRoutes';
 
@@ -40,6 +42,8 @@ root.render(
             <Route path='home' element={<Home />} />
             <Route path='friends' element={<Friends />} />
             <Route path='friends/message/:username' element={<Messages />} />
+            <Route path='myaccount' element={<MyAccount />} />
+            <Route path='profile/:username' element={<Profile />} />
             <Route path='settings' element={<Settings />} />
             <Route path='logout' element={<Login />} />
             <Route path='quiz/:id' element={<QuizDisplay />} />
