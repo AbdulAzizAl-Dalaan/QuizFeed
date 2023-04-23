@@ -12,6 +12,7 @@ import App from './App';
 // Routing
 import QuizDisplay from './components/quiz/QuizDisplay';
 import QuizResult from './components/quiz/QuizResult';
+import QuizMaker from './components/quiz/QuizMaker';
 
 import Login from './components/account/Login';
 import Register from './components/account/Register';
@@ -51,6 +52,8 @@ root.render(
             <Route path='logout' element={<Login />} />
             <Route path='quiz/:id' element={<QuizDisplay />} />
             <Route path='quiz/:id/:result' element={<QuizResult />} />
+            <Route path='quiz/:id/edit' element={<QuizMaker />} />
+            <Route path='quiz/new' element={<QuizMaker />} />
             <Route path='quizlist' element={<QuizList />} />
           </Route>
       </Routes>

@@ -35,6 +35,12 @@ History.belongsTo(Quiz);
 Result.hasMany(History, { as: 'histories' });
 History.belongsTo(Result);
 
+// through table for joining Tag and Quiz tables (many-to-many)
+// docs: https://sequelize.org/docs/v6/advanced-association-concepts/advanced-many-to-many/
+const QuizTags = sequelize.define('QuizTags', {}, {timestamps: false});
+Quiz.belongsToMany(Tag, {through: QuizTags, as: 'tags'});
+Tag.belongsToMany(Quiz, {through: QuizTags, as: 'quizzes'});
+
 // Routers
 var indexRouter = require('./routes/index');
 var homeRouter = require('./routes/home');
@@ -232,6 +238,11 @@ async function setup() {
         title: 'Result 2',
         description: 'Description 2'
       }
+    ],
+    tags: [
+      { text: "tag 1" },
+      { text: "tag 2" },
+      { text: "tag 3" }
     ]
   }, {
     include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]

@@ -4,9 +4,15 @@ const Result = require('../models/Result');
 const Comment = require('../models/Comment');
 var router = express.Router();
 
+<<<<<<< HEAD
+router.get('/:id', async function (req, res, next) {
+    Quiz.findByPk(req.params.id, { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, {association: "tags"}] })
+        .then(quiz => res.json(quiz));
+=======
 // With a filter given, return all the Quizzes satisfying the filter
 router.get('/', async function (req, res, next) {
     Quiz.findAll().then(output => res.json(output))
+>>>>>>> a429b8f09568d6710b0b5d7302a86bb48519c347
 });
 
 // With the id given, return the Quiz with Questions, Choices, and Results all included
@@ -93,6 +99,63 @@ router.delete('/comment/:id/:commentid', async function (req, res, next) {
         .then(comment => {
             if (comment) comment.destroy();
         });
+});
+
+// create quiz
+router.post('/', async function (req, res, next) {
+    Quiz.create(
+        req.body,
+        {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, {association: "tags"}]}
+    )
+    .then(quiz => res.json(quiz))
+    .catch((err)=>res.status(500).json(err));
+});
+
+// update quiz
+// TODO: fix this !!!
+router.patch('/:id', async function (req, res, next) {
+    // const filters = {where: {id: req.params.id}, include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }]};
+    
+    // dumb, but couldn't find any built-in way to update associated table records
+    // deletes all records, then creates everything from scratch (not efficient)
+    // gives a new id
+    try {
+        let quiz = await Quiz.findByPk(req.params.id);
+        if (!quiz) {
+            res.status(422).json({"msg": `quiz id ${req.params.id} not found`});
+        } else {
+            await quiz.destroy();
+            delete req.body.id;
+            quiz = await Quiz.create(
+                req.body,
+                {include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, {association: "tags"}]}
+            );
+            res.json(quiz);
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+
+    // const quiz = await Quiz.findByPk(req.params.id);
+
+    // // update questions
+
+    // // update choices per questions
+    
+    // // update results
+
+    // // return full object
+    // Quiz.findOne(filters)
+    // .then(res.json(quiz))
+    // .catch((err)=>res.status(500).json(err));
+});
+
+// delete quiz
+router.delete('/:id', async function (req, res, next) {
+    Quiz.findByPk(req.params.id)
+    .then(quiz => quiz.destroy())
+    .then(val => res.json(val))
+    .catch((err)=>res.status(500).json(err));
 });
 
 module.exports = router;

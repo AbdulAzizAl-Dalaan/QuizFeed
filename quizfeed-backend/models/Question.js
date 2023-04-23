@@ -15,6 +15,11 @@ Question.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    randomizeChoices: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },
     variant: {
         type: DataTypes.STRING,
         allowNull: true
