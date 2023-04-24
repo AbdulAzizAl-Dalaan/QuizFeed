@@ -24,6 +24,7 @@ import Messages from './components/friends/Messages';
 import Profile from './components/account/Profile';
 import MyAccount from './components/account/MyAccount';
 import QuizList from './components/quiz/QuizList';
+import { inverseOrder } from './components/quiz/ListOrder';
 
 // import ProtectedRoutes from './ProtectedRoutes';
 
@@ -55,6 +56,9 @@ root.render(
             <Route path='quiz/:id/edit' element={<QuizMaker />} />
             <Route path='quiz/new' element={<QuizMaker />} />
             <Route path='quizlist' element={<QuizList />} />
+            <Route path='trendingQuizzes' element={<QuizList title="Trending Quizzes" customOrderKey='likes'customOrderFunction={inverseOrder}/>} />
+            <Route path='newQuizzes' element={<QuizList title="New Quizzes" customOrderKey='publishedAt' customOrderFunction={inverseOrder}/>} />
+            <Route path='searchQuizzes' element={<QuizList title="Search Quizzes" searchbar={true}/>} />
           </Route>
       </Routes>
     </Router>

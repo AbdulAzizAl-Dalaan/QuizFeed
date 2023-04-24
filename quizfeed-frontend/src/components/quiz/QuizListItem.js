@@ -1,5 +1,5 @@
 import './QuizList.css'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Stack from 'react-bootstrap/esm/Stack';
 
@@ -13,7 +13,7 @@ export default function QuizListItem({ quizData }) {
                     <h3 style={{ 'fontFamily': 'Montagu Slab, serif' }} >{quizData.title}</h3>
                     {quizData.creatorUsername}<br /><br />
                     <p>{quizData.description}</p>
-                    {quizData.takenNum} {quizData.takenNum === 1 ? 'user has' : 'users have'} taken this quiz - {quizData.approval}% approval<br /><br />
+                    {quizData.takenNum} {quizData.takenNum === 1 ? 'user has' : 'users have'} taken this quiz - {quizData.likes} likes<br /><br />
                 </div>}
         </Stack>
     )

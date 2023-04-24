@@ -3,7 +3,7 @@ import React from 'react';
 import Stack from 'react-bootstrap/Stack';
 import Container from 'react-bootstrap/Container';
 import QuizListItem from './QuizListItem';
-import {ListOrder, defaultOrderFunction} from './ListOrder';
+import {ListOrder, defaultOrder} from './ListOrder';
 import Searchbar from './Searchbar';
 
 function defaultFilterFunction(item, key, value){
@@ -19,21 +19,24 @@ function defaultFilterFunction(item, key, value){
     return false;
 }
 
-export default function QuizList({title="heh list of kqs", 
+export default function QuizList({title="Default Title", 
     height=600, 
-    customOrderFunction = defaultOrderFunction,
+    customOrderFunction = defaultOrder,
     customOrderKey = '',
     searchbar = false,
-    customFilter = defaultFilterFunction, 
+    customFilterFunction = defaultFilterFunction, 
     customFilterKey = '', 
     customFilterValue = ''
     }) {
+    console.log(customFilterKey);
     const [quizData, setQuizData] = React.useState();
     const [orderFunction, setOrderFunction] = React.useState(() => customOrderFunction);
     const [orderKey, setOrderKey] = React.useState(customOrderKey);
-    const [filterFunction, setFilterFunction] = React.useState(() => customFilter);
+    const [filterFunction, setFilterFunction] = React.useState(() => customFilterFunction);
     const [filterKey, setFilterKey] = React.useState(customFilterKey);
     const [filterValue, setFilterValue] = React.useState(customFilterValue);
+
+    console.log(filterKey);
 
     React.useEffect(() => {
         fetch('/quiz')
@@ -47,8 +50,9 @@ export default function QuizList({title="heh list of kqs",
         return <QuizListItem quizData={quiz} />
     }).filter((item) => filterFunction(item.props.quizData, filterKey, filterValue))
     .sort((a, b) => orderFunction(a.props.quizData, b.props.quizData, orderKey));
-    //<div class='col-3'><Searchbar updateKey={setFilterKey} updateValue={setFilterValue}/></div>
-    console.log(searchbar)
+    
+
+
     return (
         <Container>
             <Container className="list-header mt-3 pb-3">
@@ -64,6 +68,8 @@ export default function QuizList({title="heh list of kqs",
             </Container>
             <div className="list-background" style={{height: height.toString() + "px"}}>
                 {quizData && 
+                    quizListItems.length == 0 ?
+                    <p class='mt-2 ms-2'>No results found...</p> :
                     <Stack>
                     {quizListItems}
                     </Stack>

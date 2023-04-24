@@ -33,9 +33,9 @@ export default function GlobalNavbar() {
             <Navbar.Collapse id='navbar-nav'>
                 <Nav className='me-auto'>
                     <Nav.Link as={NavLink} to='/home' className='mx-3'>HOME <span className='visually-hidden'>(current)</span></Nav.Link>
-                    <Nav.Link as={NavLink} to='/' className='mx-3'>TRENDING QUIZZES</Nav.Link>
-                    <Nav.Link as={NavLink} to='/' className='mx-3'>NEW QUIZZES</Nav.Link>
-                    <Nav.Link as={NavLink} to='/' className='mx-3'>SEARCH</Nav.Link>
+                    <Nav.Link as={NavLink} to='/trendingQuizzes' className='mx-3'>TRENDING QUIZZES</Nav.Link>
+                    <Nav.Link as={NavLink} to='/newQuizzes' className='mx-3'>NEW QUIZZES</Nav.Link>
+                    <Nav.Link as={NavLink} to='/searchQuizzes' className='mx-3'>SEARCH</Nav.Link>
                 </Nav>
                 <Nav className='ms-auto me-5'>
                     <Nav.Link as={NavLink} to='/friends' className='mx-3'>FRIENDS</Nav.Link>
