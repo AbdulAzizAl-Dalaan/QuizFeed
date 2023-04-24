@@ -4,10 +4,6 @@ const Result = require('../models/Result');
 const Comment = require('../models/Comment');
 var router = express.Router();
 
-router.get('/:id', async function (req, res, next) {
-    Quiz.findByPk(req.params.id, { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: "tags" }] })
-        .then(quiz => res.json(quiz));
-});
 // With a filter given, return all the Quizzes satisfying the filter
 router.get('/', async function (req, res, next) {
     Quiz.findAll().then(output => res.json(output))
@@ -36,7 +32,8 @@ router.get('/:id', async function (req, res, next) {
 router.get('/:id/:result', async function (req, res, next) {
     Quiz.findByPk(req.params.id, {
         include: [{
-            association: 'results'
+            association: 'results',
+            where: { position: req.params.result }
         }, {
             association: 'comments',
             separate: true,
@@ -60,7 +57,7 @@ router.post('/comment/:id', async function (req, res, next) {
 
 // **** PATCH ****
 
-// With the quiz id and result id given, update quiz stats
+// With the quiz id and result pos given, update quiz stats
 router.patch('/stats/:id/:result', async function (req, res, next) {
     // Increase quiz taken number by one
     Quiz.increment({ takenNum: 1 }, {
@@ -68,7 +65,7 @@ router.patch('/stats/:id/:result', async function (req, res, next) {
     });
     // Increase result received number by one
     Result.increment({ receivedNum: 1 }, {
-        where: { id: req.params.result, QuizId: req.params.id }
+        where: { position: req.params.result, QuizId: req.params.id }
     });
 });
 
@@ -103,10 +100,10 @@ router.delete('/comment/:id/:commentid', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
     Quiz.create(
         req.body,
-        { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }] }
+        { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: "tags" }] }
     )
         .then(quiz => res.json(quiz))
-        .catch((err) => res.status(500).json(err));
+        .catch((err) => res.status(500).json({err}));
 });
 
 // update quiz
@@ -131,7 +128,7 @@ router.patch('/:id', async function (req, res, next) {
             res.json(quiz);
         }
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({err});
     }
 
     // const quiz = await Quiz.findByPk(req.params.id);
@@ -153,7 +150,7 @@ router.delete('/:id', async function (req, res, next) {
     Quiz.findByPk(req.params.id)
         .then(quiz => quiz.destroy())
         .then(val => res.json(val))
-        .catch((err) => res.status(500).json(err));
+        .catch((err) => res.status(500).json({err}));
 });
 
 module.exports = router;

@@ -22,6 +22,7 @@ export default function QuizDisplay() {
     const [quizData, setQuizData] = React.useState();
     const [resultData, setResultData] = React.useState();
     const [formattedDescription, setFormattedDescription] = React.useState();
+    const [username, setUsername] = React.useState("");
 
     const [refresh, enableRefresh] = React.useState(false);
 
@@ -32,8 +33,17 @@ export default function QuizDisplay() {
                 .then(res => res.json())
                 .then(data => {
                     setQuizData(data);
-                    setResultData(data.results[urlParams.result - 1]);
-                    setFormattedDescription(formatString(data.results[urlParams.result - 1].description));
+                    console.log(data)
+                    setResultData(data.results[0]);
+                    setFormattedDescription(formatString(data.results[0].description));
+                });
+
+            fetch('/home')
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        setUsername(data.username);
+                    }
                 });
         }
 
@@ -58,15 +68,17 @@ export default function QuizDisplay() {
 
     // When the "display on profile" switch is toggled, update history
     function onToggle(e) {
-        fetch('/history/' + urlParams.id + '/' + urlParams.result,
-            {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    username: 'subu',
-                    visible: e.target.checked,
-                }),
-                headers: { 'Content-type': 'application/json' }
-            });
+        if (username) {
+            fetch('/history/' + urlParams.id + '/' + urlParams.result,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        username: username,
+                        visible: e.target.checked,
+                    }),
+                    headers: { 'Content-type': 'application/json' }
+                });
+        }
     }
 
     // When the 'like' or 'dislike' buttons are clicked on feedback, update quiz
@@ -159,7 +171,7 @@ export default function QuizDisplay() {
                         </Col>
                     </Row>
 
-                    <Form className='d-flex justify-content-center mt-3'>
+                    {username && <Form className='d-flex justify-content-center mt-3'>
                         <Stack className='d-flex align-items-center' direction='horizontal' gap={2}>
                             <Form.Check type='switch' id='display-on-profile'>
                                 <Form.Check.Input className='f-toggle' id='display-on-profile' style={{
@@ -175,9 +187,9 @@ export default function QuizDisplay() {
                                 <FontAwesomeIcon icon={faCircleQuestion} size='lg' />
                             </OverlayTrigger>
                         </Stack>
-                    </Form>
+                    </Form>}
 
-                    <Comments comments={quizData.comments} enableRefresh={enableRefresh} />
+                    <Comments username={username} comments={quizData.comments} enableRefresh={enableRefresh} />
                 </Stack>
             }
         </Container>);

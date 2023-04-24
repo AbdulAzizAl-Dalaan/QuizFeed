@@ -39,13 +39,13 @@ export default function GlobalNavbar() {
                     <Nav.Link as={NavLink} to="/home" className="mx-3" disabled={checkPath}>
                         HOME <span className="visually-hidden">(current)</span>
                     </Nav.Link>
-                    <Nav.Link as={NavLink} to="#" className="mx-3" disabled={checkPath}>
+                    <Nav.Link as={NavLink} to="trendingQuizzes" className="mx-3" disabled={checkPath}>
                         TRENDING QUIZZES
                     </Nav.Link>
-                    <Nav.Link as={NavLink} to="#" className="mx-3" disabled={checkPath}>
+                    <Nav.Link as={NavLink} to="newQuizzes" className="mx-3" disabled={checkPath}>
                         NEW QUIZZES
                     </Nav.Link>
-                    <Nav.Link as={NavLink} to="#" className="mx-3" disabled={checkPath}>
+                    <Nav.Link as={NavLink} to="searchQuizzes" className="mx-3" disabled={checkPath}>
                         SEARCH
                     </Nav.Link>
                 </Nav>

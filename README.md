@@ -15,7 +15,7 @@ cd quizfeed-backend
 npm install
 ```
 
-And run this for the frontend:g
+And run this for the frontend:
 ```
 cd quizfeed-frontend
 npm install
@@ -30,6 +30,7 @@ To start up the backend:
 cd quizfeed-backend
 npm start
 ```
+Can optionally add "keep" after `npm start` to keep the current database.
 
 To start up the frontend:
 ```

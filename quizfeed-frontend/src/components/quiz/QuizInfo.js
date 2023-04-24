@@ -8,7 +8,7 @@ export default function QuizInfo({ quizData }) {
     return (
         <Stack gap={2}>
             {quizData &&
-                <div className='quiz-header mt-3 pt-3 mb-2'>
+                <div className='quiz-header text-center mt-3 pt-3 mb-2'>
                     <h1 className='display'>{quizData.title}</h1>
                     <p className='readable' style={{ 'fontSize': '125%' }}>by {quizData.creatorUsername}</p><br />
                     <p className='readable-bold'>{quizData.description}</p>
