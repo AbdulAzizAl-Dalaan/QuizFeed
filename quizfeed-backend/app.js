@@ -134,6 +134,9 @@ async function setup() {
     title: 'What Fruit Are You?',
     creatorUsername: 'mikalooloo',
     description: 'Ever wondered what type of fruit you are? Well today is your lucky day!',
+    likes: 56,
+    dislikes: 8,
+    takenNum: 200,
     questions: [
       {
         text: 'It\'s a Friday night. You\'re probably...',
@@ -215,6 +218,9 @@ async function setup() {
     title: 'What Bird Are You?',
     creatorUsername: 'legionas56',
     description: 'With so many birds out there to choose from, it\'s overwhelming trying to figure out which one you are. We got you covered!',
+    likes: 28,
+    dislikes: 5,
+    takenNum: 120,
     questions: [
       {
         text: 'Out of the following, which flavor of chips would you choose?',
