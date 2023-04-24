@@ -2,6 +2,8 @@ var express = require('express');
 const User = require('../models/User');
 const Friends = require('../models/Friends');
 const  Quiz = require('../models/Quiz');
+const History = require('../models/History');
+const { Op } = require("sequelize");
 /* !!!ADD REQUIED QUIZ TAKEN FIELD HERE!!! */
 var router = express.Router();
 
@@ -31,8 +33,8 @@ router.get('/:username', async function(req, res, next) {
         const quizzes_created = await Quiz.findAll({ where: {creatorUsername: user.username} });
 
         // !!!CHANGE QUERY BELOW TO PROPERLY FIND QUIZZES TAKEN BY USER!!!
-        const quizzes_taken = await Quiz.findAll({ where: {creatorUsername: user.username} });
-
+        const quizzes_history = await History.findAll({ where: {UserUsername: user.username} });
+        const quizzes_taken = await Quiz.findAll({ where: {id: {[Op.in]: quizzes_history.map((quiz) => quiz.QuizId)}} });
         // returns either pending_request, pending_friend, friend, or user
         if (user.username !== req.session.user.username)
         {

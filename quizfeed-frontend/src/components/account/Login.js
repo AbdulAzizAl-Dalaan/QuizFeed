@@ -49,7 +49,7 @@ function Login() {
       if (data.success) {
         console.log("Login successful");
         setMessage(data.message);
-        navigate("/home");
+        navigate("/trendingQuizzes");
       } // if the login failed, display an error message
       else {
         console.log("Login failed");

@@ -19,44 +19,57 @@ function QuizMaker() {
     const urlParams = useParams();
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState({});
+    const [username, setUsername] = React.useState("");
 
     // initialize quiz given url
     useEffect(() => {
         // if quiz ID is given, initialize quiz data with quiz from database
-        if (urlParams.id) {
-            fetch('/quiz/' + urlParams.id)
-                .then(res => {
-                    if (!res.ok) {
-                        throw Error(res); // this will send entire object
+        fetch('/home')
+        .then(res => res.json())
+        .then(data => {
+            if (data) {
+                setUsername(data.username);
+                if (urlParams.id) {
+                    fetch('/quiz/' + urlParams.id)
+                        .then(res => {
+                            if (!res.ok) {
+                                throw Error(res); // this will send entire object
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data) {
+                                setQuizData(unpackData(data));
+                            }
+                            else {
+                                throw Error(`ERROR: quiz with could not load quiz data for quiz with id ${urlParams.id}`);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err); // TODO make this an error message
+                            navigate("/");
+                        });
+                } else { // id not given: initilize quiz data with empty quiz
+                    const quiz = {
+                        // TODO: replace fake username with user's genuine username
+                        creatorUsername: data.username, // fake username so we can post
+                        randomizeQuestions: true,
+                        allowComments: false,
+                        title: "Title",
+                        description: "Description",
+                        questions: [],
+                        results: [],
+                        tags: []
                     }
-                    return res.json();
-                })
-                .then(data => {
-                    if (data) {
-                        setQuizData(unpackData(data));
-                    }
-                    else {
-                        throw Error(`ERROR: quiz with could not load quiz data for quiz with id ${urlParams.id}`);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err); // TODO make this an error message
-                    navigate("/");
-                });
-        } else { // id not given: initilize quiz data with empty quiz
-            const quiz = {
-                // TODO: replace fake username with user's genuine username
-                creatorUsername: "generic", // fake username so we can post
-                randomizeQuestions: true,
-                allowComments: false,
-                title: "Title",
-                description: "Description",
-                questions: [],
-                results: [],
-                tags: []
+                    setQuizData(quiz);
+                }
+
+
+
+
             }
-            setQuizData(quiz);
-        }
+        });
+        
     }, [navigate, urlParams]);
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
@@ -358,10 +371,10 @@ function QuizMaker() {
                         </div>
                     </Stack>
                 }
-                <div>
+                {/* <div>
                     <h1>Quiz values</h1>
                     {JSON.stringify(quizData)}
-                </div>
+                </div> */}
             </Container>
         </QuizMakerContext.Provider>
     );

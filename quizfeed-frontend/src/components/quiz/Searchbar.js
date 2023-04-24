@@ -10,16 +10,16 @@ import {
 export default function Searchbar({key='title', updateKey, updateValue}){
     const [searchValue, setSearchValue] = React.useState("");
 
-    updateKey(key);
+    //updateKey(key);
     
     function searchResults(input){
         setSearchValue(input.value);
         updateValue(input.value);
     }
 
-    function dropdownItemClick(input, key) {
+    function dropdownItemClick(input, searchKey) {
         document.getElementById('searchDropdownText').innerText = input.innerText;
-        updateKey(key);
+        updateKey(searchKey);
     }
     
     return (

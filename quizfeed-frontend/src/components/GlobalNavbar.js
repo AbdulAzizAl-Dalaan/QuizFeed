@@ -11,7 +11,7 @@ export default function GlobalNavbar() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const unAuthPaths = ['/', '/register', '/forgotpassword'];
+    const unAuthPaths = ['/', '/register', '/forgotpassword', '/logout'];
 
     const handleLogout = async () => {
       try {
@@ -36,14 +36,11 @@ export default function GlobalNavbar() {
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link as={NavLink} to="/home" className="mx-3" disabled={checkPath}>
-                        HOME <span className="visually-hidden">(current)</span>
-                    </Nav.Link>
                     <Nav.Link as={NavLink} to="trendingQuizzes" className="mx-3" disabled={checkPath}>
-                        TRENDING QUIZZES
+                        HOME
                     </Nav.Link>
-                    <Nav.Link as={NavLink} to="newQuizzes" className="mx-3" disabled={checkPath}>
-                        NEW QUIZZES
+                    <Nav.Link as={NavLink} to="quiz/new" className="mx-3" disabled={checkPath}>
+                        CREATE QUIZ
                     </Nav.Link>
                     <Nav.Link as={NavLink} to="searchQuizzes" className="mx-3" disabled={checkPath}>
                         SEARCH

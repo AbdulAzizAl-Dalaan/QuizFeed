@@ -7,28 +7,31 @@ import {ListOrder, defaultOrder} from './ListOrder';
 import Searchbar from './Searchbar';
 
 function defaultFilterFunction(item, key, value){
-    if(key === '' || value === '')
+    if (item.publishedAt !== null)
+    {
+        if((key === '' || value === ''))
     {
         return true;
     }
-    console.log("key = " + key + ", value = " + value);
     if(item[key].toUpperCase().includes(value.toUpperCase()))
     {
+
         return true;
-    }
+    }}
+
     return false;
 }
 
 export default function QuizList({title="Default Title", 
     height=600, 
     customOrderFunction = defaultOrder,
-    customOrderKey = '',
+    customOrderKey = 'title',
     searchbar = false,
     customFilterFunction = defaultFilterFunction, 
     customFilterKey = '', 
     customFilterValue = ''
     }) {
-    console.log(customFilterKey);
+
     const [quizData, setQuizData] = React.useState();
     const [orderFunction, setOrderFunction] = React.useState(() => customOrderFunction);
     const [orderKey, setOrderKey] = React.useState(customOrderKey);
