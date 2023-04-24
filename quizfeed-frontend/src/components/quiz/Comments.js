@@ -15,7 +15,7 @@ import Stack from 'react-bootstrap/Stack';
 // Errors appear in console when a user hovers over their own comment, I believe it has to do with the above linked issue
 
 // Pass in enableRefresh to allow site to update when backend is affected
-export default function Comments({ comments, enableRefresh }) {
+export default function Comments({ username, comments, enableRefresh }) {
     const urlParams = useParams();
     const [showMessage, setShowMessage] = React.useState('');
 
@@ -31,12 +31,16 @@ export default function Comments({ comments, enableRefresh }) {
             setShowMessage('Comment cannot be more than 200 characters');
             return;
         }
+        else if (username === '') {
+            setShowMessage('Must be logged in to comment');
+            return;
+        }
 
         // Add comment
         fetch('/quiz/comment/' + urlParams.id, {
             method: 'POST',
             body: JSON.stringify({
-                username: 'subu',
+                username: username,
                 text: e.target.comment.value
             }),
             headers: { 'Content-type': 'application/json' }
@@ -80,7 +84,7 @@ export default function Comments({ comments, enableRefresh }) {
                     comments.map((comment, idx) => {
                         return (
                             <Col key={idx} className='d-flex align-items-center' md='auto'>
-                                {comment.creatorUsername === 'subu' ?
+                                {comment.creatorUsername === username ?
                                     <OverlayTrigger
                                         delay={{ hide: 600 }}
                                         overlay={<CloseButton onClick={(e) => onClickDeleteComment(e, comment.id)} />}

@@ -130,10 +130,13 @@ async function setup() {
   const message2 = await Message.create({ sender: 'JDoe', receiver: 'subu', content: 'Hi' })
   const message3 = await Message.create({ sender: 'subu', receiver: 'JDoe', content: 'How are you?' })
   console.log("User created")
-  const quiz2 = await Quiz.create({
-    title: 'What Shirt Are You?',
-    creatorUsername: 'amikalooloo',
-    description: 'Ever wondered what type of shirt you are? Well today is your lucky day!',
+  const quiz1 = await Quiz.create({
+    title: 'What Fruit Are You?',
+    creatorUsername: 'mikalooloo',
+    description: 'Ever wondered what type of fruit you are? Well today is your lucky day!',
+    likes: 56,
+    dislikes: 8,
+    takenNum: 200,
     questions: [
       {
         text: 'It\'s a Friday night. You\'re probably...',
@@ -195,7 +198,7 @@ async function setup() {
     comments: [
       {
         creatorUsername: 'mikalooloo',
-        text: 'i got my fav character yay'
+        text: 'i got my fav fruit yay'
       },
       {
         creatorUsername: 'legionas56',
@@ -210,77 +213,71 @@ async function setup() {
   }, {
     include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: 'comments' }]
   });
-  const quiz1 = await Quiz.create({
-    id: 0,
-    title: 'What Fruit Are You?',
-    creatorUsername: 'mikalooloo',
-    description: 'Ever wondered what type of fruit you are? Well today is your lucky day!',
+  console.log("Quiz created");
+  const quiz2 = await Quiz.create({
+    title: 'What Bird Are You?',
+    creatorUsername: 'legionas56',
+    description: 'With so many birds out there to choose from, it\'s overwhelming trying to figure out which one you are. We got you covered!',
+    likes: 28,
+    dislikes: 5,
+    takenNum: 120,
     questions: [
       {
-        text: 'It\'s a Friday night. You\'re probably...',
+        text: 'Out of the following, which flavor of chips would you choose?',
         choices: [
-          { position: 0, text: 'hanging out at home', points: '0,1,0,1' },
-          { position: 1, text: 'hosting friends/family', points: '0,0,2,0' },
-          { position: 2, text: 'at a local restaurant', points: '1,0,0,0' },
+          { position: 0, text: 'Salt and vinegar', points: '0,0,0,1' },
+          { position: 1, text: 'Honey barbecue', points: '1,0,0,0' },
+          { position: 2, text: 'Original', points: '0,1,2,0' },
         ]
       },
       {
-        text: 'Your friend calls you in a panic. How do you respond?',
+        text: 'Favorite color?',
         choices: [
-          { position: 0, text: 'Comfort them', points: '2,0,0,0' },
-          { position: 1, text: 'Think of solutions to their problem', points: '0,0,0,1' },
-          { position: 2, text: 'Distract them', points: '0,0,1,0' },
-          { position: 3, text: 'Tell them I\'m on my way', points: '0,2,0,0' },
+          { position: 0, text: 'Pink', points: '0,0,0,1' },
+          { position: 1, text: 'Black', points: '0,2,0,0' },
+          { position: 2, text: 'Red', points: '0,0,1,0' },
+          { position: 3, text: 'Blue', points: '2,0,0,0' },
         ]
       },
       {
-        text: 'Out of these options, what is your favorite condiment?',
+        text: 'What genre of music would you be most likely to listen to?',
         choices: [
-          { position: 0, text: 'Ketchup', points: '0,1,0,0' },
-          { position: 1, text: 'BBQ sauce', points: '1,0,1,0' },
-          { position: 2, text: 'Hot sauce', points: '0,0,0,1' },
-        ]
-      },
-      {
-        text: 'Overnight you gained a super power of your choosing. Which one would you pick?',
-        choices: [
-          { position: 0, text: 'Teleportation', points: '0,0,1,0' },
-          { position: 1, text: 'Shapeshifting', points: '0,0,0,2' },
-          { position: 2, text: 'Superhuman strength', points: '0,1,0,0' },
-          { position: 3, text: 'Mindreading', points: '1,0,0,0' },
+          { position: 0, text: 'Rock', points: '0,1,0,1' },
+          { position: 1, text: 'Jazz', points: '1,0,0,2' },
+          { position: 2, text: 'Pop', points: '1,0,1,0' },
         ]
       }
     ],
     results: [
       {
         position: 0,
-        title: 'Strawberry',
-        description: 'You\'re sweet, just like a strawberry!<br/>You are a friendly and outgoing person who brightens up everyone\'s day.'
+        title: 'Chickadee',
+        description: 'You are friendly and curious, just like a chickadee!'
       },
       {
         position: 1,
-        title: 'Apple',
-        description: 'You\'re dependable, just like an apple!<br/>You are a reliable and generous person who is always there for everyone, no matter the occassion.'
+        title: 'Hawk',
+        description: 'You are patient and outspoken, just like a hawk!'
       },
       {
         position: 2,
-        title: 'Banana',
-        description: 'You\'re wacky, just like a banana!<br/>You are a hilarious and energetic person who loves to entertain their friends and family.'
+        title: 'Robin',
+        description: 'You are eye-catching and reliable, just like a robin!'
       },
       {
         position: 3,
-        title: 'Pomegranate',
-        description: 'You\'re enchanting, just like a pomegranate!<br/>You are an insightful and unique person who gives the best advice, no matter the scenario.'
+        title: 'Hummingbird',
+        description: 'You are quick-witted and protective, just like a hummingbird!'
       },
     ],
     comments: [
       {
-        creatorUsername: 'mikalooloo',
-        text: 'i got my fav character yay'
+        creatorUsername: 'braylosicles',
+        text: 'i got the hummingbird 8)'
       },
       {
-        creatorUsername: 'legionas56',
-        text: 'this was a great quiz!!'
+        creatorUsername: 'nardaguna',
+        text: 'love :)'
       }
     ],
     tags: [
