@@ -108,13 +108,18 @@ function QuizMaker() {
     // convert data to format required by database
     function packData(data) {
         // convert each points array to comma separated string
+        // set choice position given by choice order in each choice array
         let questions = data.questions.map((q_v) => {
-            let c = q_v.choices.map((c_v) => {
-                return { ...c_v, points: c_v.points.join(",") }
+            let c = q_v.choices.map((c_v, c_i) => {
+                return { ...c_v, points: c_v.points.join(","), position: c_i }
             });
             return { ...q_v, choices: c };
         });
-        return { ...data, questions: questions }
+        // set result postiion given by result order in array
+        let results = data.results.map((r_v, i)=> {
+            return { ...r_v, position: i };
+        })
+        return { ...data, questions: questions, results: results }
     }
 
     // convert database format to usable format

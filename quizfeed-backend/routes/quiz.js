@@ -103,10 +103,10 @@ router.delete('/comment/:id/:commentid', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
     Quiz.create(
         req.body,
-        { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }] }
+        { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: "tags" }] }
     )
         .then(quiz => res.json(quiz))
-        .catch((err) => res.status(500).json(err));
+        .catch((err) => res.status(500).json({err}));
 });
 
 // update quiz
@@ -131,7 +131,7 @@ router.patch('/:id', async function (req, res, next) {
             res.json(quiz);
         }
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({err});
     }
 
     // const quiz = await Quiz.findByPk(req.params.id);
@@ -153,7 +153,7 @@ router.delete('/:id', async function (req, res, next) {
     Quiz.findByPk(req.params.id)
         .then(quiz => quiz.destroy())
         .then(val => res.json(val))
-        .catch((err) => res.status(500).json(err));
+        .catch((err) => res.status(500).json({err}));
 });
 
 module.exports = router;
