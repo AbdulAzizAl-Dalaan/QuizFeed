@@ -4,8 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 
 //small => large
-function defaultOrderFunction(a, b, key) {
-    console.log(a);
+function defaultOrder(a, b, key) {
     if(a[key] > b[key])
     {
         return 1;
@@ -32,7 +31,7 @@ function inverseOrder(a, b, key) {
 
 function ListOrder({updateFunction, updateKey}) {
     
-    function DropdownItemClick(item, orderKey, orderFunction=defaultOrderFunction) {
+    function dropdownItemClick(item, orderKey, orderFunction=defaultOrder) {
         var order = document.getElementById('orderDropdownText');
         order.innerText = item.innerText;
         updateFunction(() => orderFunction);
@@ -42,16 +41,17 @@ function ListOrder({updateFunction, updateKey}) {
     return (
         <Container className="mt-2">
             <div class='row'>
-                <div class='col-4 list-header-text'>Order by:</div>
-                <div class='col-6'>
+                <div class='col-4 list-header-text'>Select:</div>
+                <div class='col-8'>
                 <Dropdown>
                     <Dropdown.Toggle>
                         <span id='orderDropdownText'>Order</span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, 'title')}>Title</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, 'approval', inverseOrder)}>Popularity</Dropdown.Item>
-                        <Dropdown.Item onClick={menuItem => DropdownItemClick(menuItem.target, 'creatorUsername')}>Username</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => dropdownItemClick(menuItem.target, 'title')}>Title</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => dropdownItemClick(menuItem.target, 'creatorUsername')}>Username</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => dropdownItemClick(menuItem.target, 'takenNum', inverseOrder)}>Traffic</Dropdown.Item>
+                        <Dropdown.Item onClick={menuItem => dropdownItemClick(menuItem.target, 'likes', inverseOrder)}>Popularity</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 </div>
@@ -61,4 +61,4 @@ function ListOrder({updateFunction, updateKey}) {
     )
 }
 
-export {ListOrder, defaultOrderFunction};
+export {ListOrder, defaultOrder, inverseOrder};
