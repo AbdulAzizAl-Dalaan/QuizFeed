@@ -15,15 +15,28 @@ export default function QuizDisplay() {
     const [userAnswers, setUserAnswers] = React.useState();
     // used to determine if the submit button should be enabled (only if all questions have been answered)
     const [answerCounter, setAnswerCounter] = React.useState(false);
+    const [username, setUsername] = React.useState("");
 
     // Load the quiz questions and initialize the user's answers to nothing
     React.useEffect(() => {
-        fetch('/quiz/' + urlParams.id)
-            .then(res => res.json())
-            .then(data => {
-                setQuizData(data);
-                setUserAnswers(new Array(data.questions.length).fill(-1));
-            });
+        const setData = async () => {
+            fetch('/quiz/' + urlParams.id)
+                .then(res => res.json())
+                .then(data => {
+                    setQuizData(data);
+                    setUserAnswers(new Array(data.questions.length).fill(-1));
+                });
+
+            fetch('/home')
+                .then(res => res.json())
+                .then(data => {
+                    if (data) {
+                        setUsername(data.username);
+                    }
+                });
+        }
+
+        setData();
     }, [urlParams]);
 
     // When a choice is selected for a question, this method is called and updates the user's selections
@@ -63,19 +76,21 @@ export default function QuizDisplay() {
         // find index of highest element to get result pos
         const resultPos = totalPoints.indexOf(Math.max(...totalPoints));
 
-        // update user's results
-        fetch('/history/' + urlParams.id + '/' + 'subu')
-            .then(res => res.json())
-            .then(data => {
-                // If user has not taken it before
-                if (data.length === 0) {
-                    // then create history
-                    fetch('/history/' + urlParams.id + '/' + resultPos, {
-                        method: 'POST', body: JSON.stringify({ username: 'subu' }),
-                        headers: { 'Content-type': 'application/json' }
-                    });
-                }
-            });
+        // update user's results if logged in
+        if (username !== "") {
+            fetch('/history/' + urlParams.id + '/' + username)
+                .then(res => res.json())
+                .then(data => {
+                    // If user has not taken it before
+                    if (data.length === 0) {
+                        // then create history
+                        fetch('/history/' + urlParams.id + '/' + resultPos, {
+                            method: 'POST', body: JSON.stringify({ username: username }),
+                            headers: { 'Content-type': 'application/json' }
+                        });
+                    }
+                });
+        }
 
         // update quiz stats
         fetch('/quiz/stats/' + urlParams.id + '/' + resultPos, { method: 'PATCH' });
