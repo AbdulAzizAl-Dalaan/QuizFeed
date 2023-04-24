@@ -125,13 +125,19 @@ function QuizMaker() {
     // convert database format to usable format
     function unpackData(data) {
         // convert each points array from comma separated string to array
-        let questions = data.questions.map((q_v) => {
-            let c = q_v.choices.map((c_v) => {
+        const questions = data.questions.map((q_v) => {
+            const c = q_v.choices.map((c_v) => {
                 return { ...c_v, points: c_v.points.split(",") }
             });
-            return { ...q_v, choices: c };
+            // choices arrays should be sorted by choice positions
+            return { ...q_v, choices: c.sort((c_v) => (-c_v.position)) };
         });
-        return { ...data, questions: questions }
+        return {
+            ...data,
+            questions: questions,
+            // results array should be sorted by result positions
+            results: data.results.sort((v) => -v.position)
+        }
     }
 
     function saveQuiz(data) {
