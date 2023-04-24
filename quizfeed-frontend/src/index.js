@@ -34,16 +34,11 @@ root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-          <Route path='/' element={<App />}>
+          <Route path='/' element={<App/>}>
           {/* Default page: can make it home page when that's created -- <Route index element={ } /> */}
-          
-          <Route path='/login' element={<Login />} />
-          <Route path='forgotpassword' element={<ForgotPassword />} />
-          <Route path='register' element={<Register />} />
-            {/* All the following routes should be encapsulated within 
-                <Route element={<ProtectedRoutes />}> 
-                    Put all the routes that require authentication here.
-                </Route> */}
+            <Route path='/' element={<Login />} />
+            <Route path='forgotpassword' element={<ForgotPassword />} />
+            <Route path='register' element={<Register />} />
             <Route path='home' element={<Home />} />
             <Route path='friends' element={<Friends />} />
             <Route path='friends/message/:username' element={<Messages />} />

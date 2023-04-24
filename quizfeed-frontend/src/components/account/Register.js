@@ -59,7 +59,7 @@ function Register() {
       // if the registration was successful, redirect to the login page
       if (data.success) {
         console.log("Registration successful");
-        navigate("/login");
+        navigate("/");
       } // otherwise, display the error message
       else {
         console.log("Registration failed");

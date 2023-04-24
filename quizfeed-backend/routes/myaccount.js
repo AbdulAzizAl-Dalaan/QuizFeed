@@ -1,7 +1,7 @@
 var express = require('express');
 const User = require('../models/User');
 const Friends = require('../models/Friends');
-const { Quiz } = require('../models/Quiz');
+const Quiz = require('../models/Quiz');
 /* !!!ADD REQUIED QUIZ TAKEN FIELD HERE!!! */
 var router = express.Router();
 

@@ -41,7 +41,7 @@ function ForgotPassword() {
 
       if (data.success) {
         console.log("Password reset successful");
-        navigate("/login");
+        navigate("/");
       } else {
         console.log("Password reset failed");
         setMessage(data.message);
