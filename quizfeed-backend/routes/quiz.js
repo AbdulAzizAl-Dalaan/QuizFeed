@@ -121,6 +121,12 @@ router.patch('/:id', async function (req, res, next) {
         } else {
             await quiz.destroy();
             delete req.body.id;
+            for (r of req.body.results){delete r.id;}
+            for (t of req.body.tags){delete t.id;}
+            for (q of req.body.questions){
+                delete q.id;
+                for (c of q.choices) {delete c.id;}
+            }
             quiz = await Quiz.create(
                 req.body,
                 { include: [{ association: 'questions', include: ['choices'] }, { association: 'results' }, { association: "tags" }] }
